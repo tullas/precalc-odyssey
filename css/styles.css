@@ -1,0 +1,35 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+    color: #fff;
+}
+
+header {
+    background: rgba(0,0,0,0.8);
+    padding: 1rem;
+    text-align: center;
+}
+
+h1, h2 {
+    color: #00ffcc;
+}
+
+nav a {
+    color: #ffcc00;
+    margin: 0 1rem;
+    text-decoration: none;
+}
+
+.unit-card {
+    background: rgba(255,255,255,0.1);
+    margin: 1rem;
+    padding: 1rem;
+    border-radius: 10px;
+    transition: transform 0.3s;
+}
+
+.unit-card:hover {
+    transform: scale(1.05);
+}
