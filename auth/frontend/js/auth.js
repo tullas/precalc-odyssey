@@ -2,8 +2,8 @@
 // Precalc Odyssey - Auth Client
 // ==============================
 
-// IMPORTANT: Replace this with your deployed Worker URL
-const API_BASE = "https://precalc-odyssey-auth.t-ullas.workers.dev/";
+// Real Worker URL
+const API_BASE = "https://precalc-odyssey-auth.t-ullas.workers.dev";
 
 // ---------- Tab Switching ----------
 document.querySelectorAll(".tab").forEach(tab => {
@@ -49,7 +49,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     localStorage.setItem("precalc_user", JSON.stringify(data.user));
     showMessage("loginMessage", "Login successful! Redirecting...", false);
     setTimeout(() => {
-      window.location.href = "/index.html";   // or your main course page
+      window.location.href = "/index.html";
     }, 1000);
   } else {
     showMessage("loginMessage", data.error || "Login failed", true);
@@ -71,12 +71,11 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
   const { ok, data } = await apiCall("/register", "POST", {
     email,
     password,
-    role: "student"   // default role
+    role: "student"
   });
 
   if (ok) {
     showMessage("regMessage", "Account created! You can now login.", false);
-    // Switch to login tab
     document.querySelector('[data-tab="login"]').click();
   } else {
     showMessage("regMessage", data.error || "Registration failed", true);
@@ -95,7 +94,6 @@ document.getElementById("getTokenBtn").addEventListener("click", async () => {
 
   if (ok) {
     document.getElementById("resetSection").style.display = "block";
-    // For testing we show the token. Remove in production.
     showMessage("forgotMessage", 
       data.reset_token 
         ? `Token generated: ${data.reset_token} (valid 1 hour)` 
