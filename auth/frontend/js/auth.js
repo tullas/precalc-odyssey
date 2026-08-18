@@ -3,7 +3,7 @@
 // ==============================
 
 // IMPORTANT: Replace this with your deployed Worker URL
-const API_BASE = "https://precalc-odyssey-auth.YOUR_SUBDOMAIN.workers.dev";
+const API_BASE = "https://precalc-odyssey-auth.t-ullas.workers.dev/";
 
 // ---------- Tab Switching ----------
 document.querySelectorAll(".tab").forEach(tab => {
