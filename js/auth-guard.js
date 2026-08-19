@@ -5,7 +5,6 @@
 
   // If no token, redirect to login
   if (!token || !user) {
-    // Avoid redirect loop if already on login page
     if (!window.location.pathname.includes("login.html")) {
       window.location.href = "/login.html";
     }

@@ -51,11 +51,11 @@ document.getElementById("loginForm")?.addEventListener("submit", async (e) => {
   const { ok, data } = await apiCall("/login", "POST", { email, password });
 
   if (ok) {
-    localStorage.setItem("precalc_token", data.token);
-    localStorage.setItem("precalc_user", JSON.stringify(data.user));
+    localStorage.setItem("precalc_token", data.token || data.user?.id || "logged-in");
+    localStorage.setItem("precalc_user", JSON.stringify(data.user || { email, role: "student" }));
     showMessage("loginMessage", "Login successful! Redirecting...", false);
     setTimeout(() => {
-      window.location.href = "/index.html";
+      window.location.href = "/course.html";
     }, 800);
   } else {
     showMessage("loginMessage", data.error || "Login failed", true);
@@ -74,8 +74,8 @@ document.getElementById("registerForm")?.addEventListener("submit", async (e) =>
     return;
   }
 
-  if (password.length < 6) {
-    showMessage("regMessage", "Password must be at least 6 characters", true);
+  if (password.length < 8) {
+    showMessage("regMessage", "Password must be at least 8 characters", true);
     return;
   }
 
@@ -97,7 +97,7 @@ document.getElementById("registerForm")?.addEventListener("submit", async (e) =>
   }
 });
 
-// ---------- Forgot Password - Get Token ----------
+// ---------- Forgot Password ----------
 document.getElementById("getTokenBtn")?.addEventListener("click", async () => {
   const email = document.getElementById("forgotEmail").value.trim();
   if (!email) {
@@ -114,7 +114,7 @@ document.getElementById("getTokenBtn")?.addEventListener("click", async () => {
     showMessage("forgotMessage", 
       data.reset_token 
         ? `Token: ${data.reset_token} (valid 1 hour)` 
-        : data.message, 
+        : (data.message || "Token generated"), 
       false
     );
   } else {
