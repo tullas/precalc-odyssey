@@ -2,7 +2,6 @@
 // Precalc Odyssey - Auth Client
 // ==============================
 
-// Real Worker URL
 const API_BASE = "https://precalc-odyssey-auth.t-ullas.workers.dev";
 
 // ---------- Tab Switching ----------
@@ -20,6 +19,7 @@ document.querySelectorAll(".tab").forEach(tab => {
 // ---------- Helpers ----------
 function showMessage(elementId, text, isError = false) {
   const el = document.getElementById(elementId);
+  if (!el) return;
   el.textContent = text;
   el.className = "message " + (isError ? "error" : "success");
 }
@@ -31,16 +31,22 @@ async function apiCall(path, method = "GET", body = null, token = null) {
   const options = { method, headers };
   if (body) options.body = JSON.stringify(body);
 
-  const res = await fetch(`${API_BASE}${path}`, options);
-  const data = await res.json();
-  return { ok: res.ok, status: res.status, data };
+  try {
+    const res = await fetch(`${API_BASE}${path}`, options);
+    const data = await res.json();
+    return { ok: res.ok, status: res.status, data };
+  } catch (err) {
+    return { ok: false, status: 0, data: { error: "Network error. Please check your connection." } };
+  }
 }
 
 // ---------- Login ----------
-document.getElementById("loginForm").addEventListener("submit", async (e) => {
+document.getElementById("loginForm")?.addEventListener("submit", async (e) => {
   e.preventDefault();
   const email = document.getElementById("loginEmail").value.trim();
   const password = document.getElementById("loginPassword").value;
+
+  showMessage("loginMessage", "Logging in...", false);
 
   const { ok, data } = await apiCall("/login", "POST", { email, password });
 
@@ -50,14 +56,14 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     showMessage("loginMessage", "Login successful! Redirecting...", false);
     setTimeout(() => {
       window.location.href = "/index.html";
-    }, 1000);
+    }, 800);
   } else {
     showMessage("loginMessage", data.error || "Login failed", true);
   }
 });
 
 // ---------- Register ----------
-document.getElementById("registerForm").addEventListener("submit", async (e) => {
+document.getElementById("registerForm")?.addEventListener("submit", async (e) => {
   e.preventDefault();
   const email = document.getElementById("regEmail").value.trim();
   const password = document.getElementById("regPassword").value;
@@ -68,6 +74,13 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
     return;
   }
 
+  if (password.length < 6) {
+    showMessage("regMessage", "Password must be at least 6 characters", true);
+    return;
+  }
+
+  showMessage("regMessage", "Creating account...", false);
+
   const { ok, data } = await apiCall("/register", "POST", {
     email,
     password,
@@ -75,20 +88,24 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
   });
 
   if (ok) {
-    showMessage("regMessage", "Account created! You can now login.", false);
-    document.querySelector('[data-tab="login"]').click();
+    showMessage("regMessage", "Account created successfully! You can now login.", false);
+    setTimeout(() => {
+      document.querySelector('[data-tab="login"]')?.click();
+    }, 1500);
   } else {
-    showMessage("regMessage", data.error || "Registration failed", true);
+    showMessage("regMessage", data.error || "Registration failed. Please try again.", true);
   }
 });
 
 // ---------- Forgot Password - Get Token ----------
-document.getElementById("getTokenBtn").addEventListener("click", async () => {
+document.getElementById("getTokenBtn")?.addEventListener("click", async () => {
   const email = document.getElementById("forgotEmail").value.trim();
   if (!email) {
     showMessage("forgotMessage", "Please enter your email", true);
     return;
   }
+
+  showMessage("forgotMessage", "Generating token...", false);
 
   const { ok, data } = await apiCall("/forgot-password", "POST", { email });
 
@@ -96,7 +113,7 @@ document.getElementById("getTokenBtn").addEventListener("click", async () => {
     document.getElementById("resetSection").style.display = "block";
     showMessage("forgotMessage", 
       data.reset_token 
-        ? `Token generated: ${data.reset_token} (valid 1 hour)` 
+        ? `Token: ${data.reset_token} (valid 1 hour)` 
         : data.message, 
       false
     );
@@ -106,7 +123,7 @@ document.getElementById("getTokenBtn").addEventListener("click", async () => {
 });
 
 // ---------- Reset Password ----------
-document.getElementById("resetBtn").addEventListener("click", async () => {
+document.getElementById("resetBtn")?.addEventListener("click", async () => {
   const email = document.getElementById("forgotEmail").value.trim();
   const token = document.getElementById("resetToken").value.trim();
   const newPassword = document.getElementById("newPassword").value;
@@ -125,7 +142,7 @@ document.getElementById("resetBtn").addEventListener("click", async () => {
   if (ok) {
     showMessage("forgotMessage", "Password updated! You can now login.", false);
     setTimeout(() => {
-      document.querySelector('[data-tab="login"]').click();
+      document.querySelector('[data-tab="login"]')?.click();
     }, 1500);
   } else {
     showMessage("forgotMessage", data.error || "Reset failed", true);
