@@ -3,8 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hyper-Scale — Integrated Prototype</title>
+  <title>Hyper-Scale — Math Combat</title>
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Auth Guard: Redirect to login if not authenticated -->
+  <script>
+    (function() {
+      const token = localStorage.getItem('precalc_token');
+      const user  = localStorage.getItem('precalc_user');
+
+      if (!token || !user) {
+        // Not logged in → send to main login page
+        window.location.href = '/login.html';
+      }
+    })();
+  </script>
+
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Rajdhani:wght@500;600&display=swap');
 
@@ -49,20 +63,6 @@
       box-shadow: 0 0 40px rgba(0,240,255,0.12);
     }
 
-    .damage-popup {
-      position: absolute;
-      font-family: 'Orbitron', sans-serif;
-      font-weight: 700;
-      pointer-events: none;
-      animation: floatUp 1.1s ease-out forwards;
-      text-shadow: 0 0 12px currentColor;
-      z-index: 20;
-    }
-    @keyframes floatUp {
-      0%   { opacity: 1; transform: translateY(0) scale(1); }
-      100% { opacity: 0; transform: translateY(-90px) scale(1.5); }
-    }
-
     .overlay {
       position: fixed; inset: 0;
       background: rgba(0,0,0,0.88);
@@ -77,10 +77,18 @@
 
   <!-- Header -->
   <header class="w-full max-w-6xl flex justify-between items-center mb-5">
-    <h1 class="font-orbitron text-3xl md:text-4xl neon-text tracking-widest">HYPER-SCALE</h1>
-    <div class="text-right">
-      <div class="text-xs text-cyan-400/70 uppercase tracking-widest">Target</div>
-      <div id="targetScore" class="font-orbitron text-2xl text-cyan-300">1200</div>
+    <div>
+      <h1 class="font-orbitron text-3xl md:text-4xl neon-text tracking-widest">HYPER-SCALE</h1>
+      <div id="userInfo" class="text-xs text-cyan-400/70 mt-1"></div>
+    </div>
+    <div class="text-right flex items-center gap-4">
+      <div>
+        <div class="text-xs text-cyan-400/70 uppercase tracking-widest">Target</div>
+        <div id="targetScore" class="font-orbitron text-2xl text-cyan-300">1200</div>
+      </div>
+      <button id="logoutBtn" class="text-xs px-3 py-1.5 rounded border border-red-500/50 text-red-400 hover:bg-red-900/30 transition">
+        Logout
+      </button>
     </div>
   </header>
 
@@ -143,7 +151,8 @@
 
 <script>
 /* =====================================================
-   MathEngine
+   MathEngine + Card/Deck + Combat + Juice + GameUI
+   (same complete integrated code as before)
 ===================================================== */
 class MathEngine {
   constructor() {
@@ -197,9 +206,6 @@ class MathEngine {
   }
 }
 
-/* =====================================================
-   Card / Deck / Library / CombatManager
-===================================================== */
 class Card {
   constructor(o) {
     Object.assign(this, {
@@ -211,7 +217,6 @@ class Card {
       rarity: o.rarity || 'common'
     });
   }
-  toMath() { return { type: this.parentType || this.type, a: this.a, h: this.h }; }
   clone() {
     return new Card({ ...this, id: this.id + '_' + Math.random().toString(36).slice(2,6) });
   }
@@ -221,7 +226,6 @@ class Deck {
   constructor(cards=[]) {
     this.drawPile = [...cards];
     this.discardPile = [];
-    this.exhaustPile = [];
     this.hand = [];
     this.shuffle();
   }
@@ -252,9 +256,6 @@ class Deck {
       this.discardPile.push(card);
     }
   }
-  discardHand() {
-    while (this.hand.length) this.discard(this.hand[0]);
-  }
 }
 
 const CardLibrary = {
@@ -262,29 +263,18 @@ const CardLibrary = {
     const list = [];
     const add = (o) => list.push(new Card(o));
 
-    add({ id:'lin', name:'Linear Core', type:'parent', parentType:'linear',
-          description:'f(x)=x', color:'#00f0ff' });
-    add({ id:'quad', name:'Quadratic Surge', type:'parent', parentType:'quadratic',
-          description:'f(x)=x²', color:'#ff00aa', rarity:'uncommon' });
-    add({ id:'exp', name:'Exponential Spike', type:'parent', parentType:'exponential',
-          description:'f(x)=2ˣ', color:'#bf00ff', rarity:'rare' });
-    add({ id:'log', name:'Log Dampen', type:'parent', parentType:'logarithmic',
-          description:'f(x)=log₂(x)', color:'#00ff9f' });
-    add({ id:'rat', name:'Rational Singularity', type:'parent', parentType:'rational',
-          description:'f(x)=1/x', color:'#ffaa00', rarity:'uncommon' });
+    add({ id:'lin', name:'Linear Core', type:'parent', parentType:'linear', color:'#00f0ff' });
+    add({ id:'quad', name:'Quadratic Surge', type:'parent', parentType:'quadratic', color:'#ff00aa', rarity:'uncommon' });
+    add({ id:'exp', name:'Exponential Spike', type:'parent', parentType:'exponential', color:'#bf00ff', rarity:'rare' });
+    add({ id:'log', name:'Log Dampen', type:'parent', parentType:'logarithmic', color:'#00ff9f' });
+    add({ id:'rat', name:'Rational Singularity', type:'parent', parentType:'rational', color:'#ffaa00', rarity:'uncommon' });
 
-    add({ id:'s2', name:'×2 Stretch', type:'modifier', a:2, h:0, color:'#ff6b6b',
-          description:'Vertical stretch ×2' });
-    add({ id:'c05', name:'×0.5 Compress', type:'modifier', a:0.5, h:0, color:'#4ecdc4',
-          description:'Vertical compress' });
-    add({ id:'sh2', name:'Shift +2', type:'modifier', a:1, h:2, color:'#ffe66d',
-          description:'Horizontal +2' });
-    add({ id:'shm3', name:'Shift −3', type:'modifier', a:1, h:-3, color:'#a29bfe',
-          description:'Horizontal −3' });
-    add({ id:'combo', name:'Amplify & Offset', type:'modifier', a:3, h:1, color:'#fd79a8',
-          description:'×3 + shift 1', rarity:'rare' });
+    add({ id:'s2', name:'×2 Stretch', type:'modifier', a:2, h:0, color:'#ff6b6b' });
+    add({ id:'c05', name:'×0.5 Compress', type:'modifier', a:0.5, h:0, color:'#4ecdc4' });
+    add({ id:'sh2', name:'Shift +2', type:'modifier', a:1, h:2, color:'#ffe66d' });
+    add({ id:'shm3', name:'Shift −3', type:'modifier', a:1, h:-3, color:'#a29bfe' });
+    add({ id:'combo', name:'Amplify & Offset', type:'modifier', a:3, h:1, color:'#fd79a8', rarity:'rare' });
 
-    // extras
     list.push(list[0].clone(), list[1].clone(), list[5].clone(), list[6].clone());
     return list;
   }
@@ -297,14 +287,12 @@ class CombatManager {
     this.active = null;
     this.score = 0;
     this.target = 1200;
-    this.running = false;
   }
   start(target=1200) {
     this.deck = new Deck(CardLibrary.createStarterDeck());
     this.active = null;
     this.score = 0;
     this.target = target;
-    this.running = false;
     this.deck.draw(5);
     return this.deck.hand;
   }
@@ -323,16 +311,10 @@ class CombatManager {
   }
   getHand() { return this.deck ? this.deck.hand : []; }
   piles() {
-    return this.deck ? {
-      draw: this.deck.drawPile.length,
-      discard: this.deck.discardPile.length
-    } : { draw:0, discard:0 };
+    return this.deck ? { draw: this.deck.drawPile.length, discard: this.deck.discardPile.length } : { draw:0, discard:0 };
   }
 }
 
-/* =====================================================
-   Juice
-===================================================== */
 class Juice {
   constructor(canvas) {
     this.canvas = canvas;
@@ -365,15 +347,10 @@ class Juice {
       const ang = Math.random() * Math.PI * 2;
       const spd = (opts.speed || 4) * (0.5 + Math.random());
       this.particles.push({
-        x, y,
-        vx: Math.cos(ang)*spd,
-        vy: Math.sin(ang)*spd,
-        life: opts.life || 550,
-        max: opts.life || 550,
+        x, y, vx: Math.cos(ang)*spd, vy: Math.sin(ang)*spd,
+        life: opts.life || 550, max: opts.life || 550,
         size: (opts.size || 3) * (0.6+Math.random()*0.7),
-        color: opts.color || '#00f0ff',
-        g: opts.gravity || 0.09,
-        a: 1
+        color: opts.color || '#00f0ff', g: 0.09, a: 1
       });
     }
   }
@@ -453,9 +430,6 @@ class Juice {
   }
 }
 
-/* =====================================================
-   Integrated GameUI
-===================================================== */
 class GameUI {
   constructor() {
     this.canvas = document.getElementById('graphCanvas');
@@ -471,6 +445,21 @@ class GameUI {
     this.particleT = 0;
     this.particleActive = false;
     this.executing = false;
+
+    // Show logged-in user
+    try {
+      const user = JSON.parse(localStorage.getItem('precalc_user') || 'null');
+      if (user) {
+        document.getElementById('userInfo').textContent = `Logged in as ${user.email} (${user.role || 'student'})`;
+      }
+    } catch(e) {}
+
+    // Logout
+    document.getElementById('logoutBtn').onclick = () => {
+      localStorage.removeItem('precalc_token');
+      localStorage.removeItem('precalc_user');
+      window.location.href = '/login.html';
+    };
 
     this._bind();
     this.startNewRun();
@@ -543,14 +532,11 @@ class GameUI {
 
   _updateActive() {
     const el = document.getElementById('activeDisplay');
-    const list = document.getElementById('transformList');
     if (!this.combat.active) {
       el.innerHTML = '<span class="italic text-cyan-200/40">Slot a Parent Function</span>';
-      list.innerHTML = '';
       return;
     }
     el.innerHTML = `<div class="font-orbitron text-xl text-cyan-300">${this.math.describe(this.combat.active)}</div>`;
-    list.innerHTML = '';
   }
 
   _updatePiles() {
@@ -571,9 +557,7 @@ class GameUI {
     this.combat.score = 0;
     document.getElementById('liveScore').textContent = '0';
 
-    const cont = this.math.validatePiecewiseContinuity(
-      this.combat.active, this.combat.active, 5
-    );
+    const cont = this.math.validatePiecewiseContinuity(this.combat.active, this.combat.active, 5);
     const mult = cont.multiplier;
 
     if (cont.status === 'Continuous') {
@@ -592,10 +576,8 @@ class GameUI {
       this.particleT = t;
       const dmg = this.math.evaluate(this.combat.active, t);
       this.combat.score = Math.round(dmg * (t / 10) * 13 * mult);
-
       document.getElementById('liveScore').textContent = this.combat.score;
 
-      // Map particle to canvas for juice
       const maxY = Math.max(20, ...this.points.map(p => Math.abs(p.y))) * 1.3 || 40;
       const pad = 50;
       const cx = pad + (t / 10) * (this.w - pad * 2);
@@ -605,9 +587,7 @@ class GameUI {
         this.juice.tick(cx, cy);
         if (Math.abs(dmg) > 60) this.juice.shakeScreen(2, 80);
       }
-      if (Math.abs(dmg) > 120 && i % 20 === 0) {
-        this.juice.heavy(cx, cy);
-      }
+      if (Math.abs(dmg) > 120 && i % 20 === 0) this.juice.heavy(cx, cy);
 
       await new Promise(r => setTimeout(r, 26));
     }
@@ -648,7 +628,6 @@ class GameUI {
 
     this.juice.begin(ctx);
 
-    // Dynamic scale
     let maxY = 25;
     if (this.points.length) maxY = Math.max(25, ...this.points.map(p => Math.abs(p.y))) * 1.3;
 
@@ -658,7 +637,6 @@ class GameUI {
     const tx = t => pad + (t / 10) * gw;
     const ty = y => pad + gh / 2 - (y / maxY) * (gh / 2);
 
-    // Grid
     ctx.strokeStyle = 'rgba(0,240,255,0.05)';
     ctx.lineWidth = 1;
     for (let i = 0; i <= 10; i++) {
@@ -673,13 +651,11 @@ class GameUI {
     ctx.lineTo(w - pad, ty(0));
     ctx.stroke();
 
-    // Labels
     ctx.fillStyle = 'rgba(0,240,255,0.45)';
     ctx.font = '11px Orbitron';
     ctx.textAlign = 'center';
     for (let i = 0; i <= 10; i += 2) ctx.fillText(i, tx(i), h - pad + 18);
 
-    // Neon curve
     if (this.points.length > 1) {
       ctx.lineWidth = 7;
       ctx.strokeStyle = 'rgba(0,240,255,0.12)';
@@ -697,7 +673,6 @@ class GameUI {
       ctx.shadowBlur = 0;
     }
 
-    // Particle
     if (this.particleActive && this.combat.active) {
       const y = this.math.evaluate(this.combat.active, this.particleT);
       const cx = tx(this.particleT);
@@ -725,7 +700,7 @@ class GameUI {
 // Boot
 window.addEventListener('DOMContentLoaded', () => {
   window.game = new GameUI();
-  console.log('%c HYPER-SCALE ONLINE ', 'background:#00f0ff;color:#000;font-weight:bold;padding:4px 10px');
+  console.log('%c HYPER-SCALE ONLINE (Auth Protected) ', 'background:#00f0ff;color:#000;font-weight:bold;padding:4px 10px');
 });
 </script>
 </body>
