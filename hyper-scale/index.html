@@ -3,77 +3,49 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hyper-Scale — Math Combat</title>
+  <title>Hyper-Scale — Concept Encounters</title>
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Auth Guard -->
   <script>
     (function () {
       const token = localStorage.getItem('precalc_token');
       const user = localStorage.getItem('precalc_user');
-      if (!token || !user) {
-        window.location.href = '/login.html';
-      }
+      if (!token || !user) window.location.href = '/login.html';
     })();
   </script>
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Rajdhani:wght@500;600&display=swap');
-
-    :root {
-      --neon: #00f0ff;
-      --pink: #ff00aa;
-      --purple: #bf00ff;
-    }
-
+    :root { --neon: #00f0ff; --pink: #ff00aa; }
     body {
       font-family: 'Rajdhani', sans-serif;
       background: radial-gradient(ellipse at 30% 20%, #0d0d2b 0%, #050510 70%);
-      color: #e0e0ff;
-      min-height: 100vh;
+      color: #e0e0ff; min-height: 100vh;
     }
-
     .font-orbitron { font-family: 'Orbitron', sans-serif; }
     .neon-text { text-shadow: 0 0 10px var(--neon), 0 0 20px var(--neon); }
     .neon-box {
-      border: 1px solid rgba(0, 240, 255, 0.4);
-      box-shadow: 0 0 14px rgba(0, 240, 255, 0.12), inset 0 0 10px rgba(0, 240, 255, 0.04);
+      border: 1px solid rgba(0,240,255,0.4);
+      box-shadow: 0 0 14px rgba(0,240,255,0.12), inset 0 0 10px rgba(0,240,255,0.04);
     }
-
     .card {
       transition: transform 0.15s ease, box-shadow 0.15s ease;
-      cursor: pointer;
-      user-select: none;
+      cursor: pointer; user-select: none;
     }
-    .card:hover {
-      transform: translateY(-6px) scale(1.03);
-      box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
-    }
-    .card.parent { border-color: rgba(0, 240, 255, 0.5); }
-    .card.modifier { border-color: rgba(255, 0, 170, 0.45); }
-
-    canvas {
-      background: #03030a;
-      border-radius: 12px;
-      box-shadow: 0 0 35px rgba(0, 240, 255, 0.1);
-    }
-
+    .card:hover { transform: translateY(-6px) scale(1.03); box-shadow: 0 0 20px rgba(0,240,255,0.5); }
+    .card.parent { border-color: rgba(0,240,255,0.55); }
+    .card.modifier { border-color: rgba(255,0,170,0.5); }
+    canvas { background: #03030a; border-radius: 12px; box-shadow: 0 0 35px rgba(0,240,255,0.1); }
     .overlay {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.9);
+      position: fixed; inset: 0; background: rgba(0,0,0,0.9);
       display: flex; align-items: center; justify-content: center;
-      z-index: 60; opacity: 0; pointer-events: none;
-      transition: opacity 0.3s ease;
+      z-index: 60; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
     }
     .overlay.show { opacity: 1; pointer-events: all; }
-
-    .howto-step {
-      background: rgba(0, 240, 255, 0.06);
-      border-left: 3px solid var(--neon);
-      padding: 0.6rem 0.9rem;
-      margin-bottom: 0.5rem;
-      border-radius: 0 8px 8px 0;
+    .mission-card {
+      transition: all 0.2s ease; cursor: pointer;
     }
+    .mission-card:hover { transform: translateY(-4px); box-shadow: 0 0 25px rgba(0,240,255,0.35); }
   </style>
 </head>
 <body class="p-3 md:p-5 flex flex-col items-center">
@@ -85,133 +57,123 @@
       <div id="userInfo" class="text-xs text-cyan-400/60 mt-0.5"></div>
     </div>
     <div class="flex items-center gap-3">
-      <div class="text-right">
-        <div class="text-[10px] text-cyan-400/60 uppercase tracking-widest">Target Damage</div>
-        <div id="targetScore" class="font-orbitron text-xl text-cyan-300">1200</div>
-      </div>
+      <button id="missionsBtn" class="text-xs px-3 py-1.5 rounded border border-cyan-500/40 text-cyan-300 hover:bg-cyan-900/30">Missions</button>
       <button id="helpBtn" class="text-xs px-3 py-1.5 rounded border border-cyan-500/40 text-cyan-300 hover:bg-cyan-900/30">How to Play</button>
       <button id="logoutBtn" class="text-xs px-3 py-1.5 rounded border border-red-500/40 text-red-400 hover:bg-red-900/20">Logout</button>
     </div>
   </header>
 
-  <!-- Mission Brief -->
-  <div class="w-full max-w-6xl neon-box rounded-xl p-4 mb-4 bg-black/40">
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-      <div>
-        <div class="font-orbitron text-sm text-cyan-300 tracking-wider mb-1">MISSION</div>
-        <p class="text-sm text-cyan-100/90 leading-relaxed max-w-3xl">
-          You are a <strong>Function Architect</strong>. Build a mathematical curve by combining a
-          <span class="text-cyan-300">Parent Function</span> with
-          <span class="text-pink-300">Transformations</span>.
-          Then <strong>Execute</strong> the script across a 10-turn timeline.
-          Reach the <strong>Target Damage</strong> to win the encounter.
+  <!-- Mission Select Screen -->
+  <div id="missionSelect" class="w-full max-w-4xl">
+    <h2 class="font-orbitron text-xl text-cyan-300 mb-2 tracking-wider">Select Encounter</h2>
+    <p class="text-sm text-cyan-200/70 mb-6">Each mission teaches a core precalculus idea through a real situation. Build the right function to win.</p>
+
+    <div class="grid md:grid-cols-2 gap-5">
+      <!-- Outbreak -->
+      <div class="mission-card neon-box rounded-xl p-5 bg-black/50" data-mission="outbreak">
+        <div class="text-[10px] uppercase tracking-widest text-pink-400 mb-1">Exponential Growth</div>
+        <h3 class="font-orbitron text-lg text-white mb-2">Outbreak Protocol</h3>
+        <p class="text-sm text-cyan-100/80 leading-relaxed mb-4">
+          A digital virus is doubling every turn. Build an exponential function that matches the infection curve and contain it before turn 10.
         </p>
+        <div class="text-xs text-cyan-400/60">Target Damage: <span class="text-cyan-300 font-bold">1800</span></div>
+        <div class="text-xs text-cyan-400/60 mt-1">Key cards: Exponential + Stretch</div>
       </div>
-      <div class="text-right shrink-0">
-        <div class="text-[10px] text-cyan-400/60 uppercase">Current Score</div>
-        <div id="liveScoreHeader" class="font-orbitron text-3xl text-white">0</div>
+
+      <!-- Hoop Shot -->
+      <div class="mission-card neon-box rounded-xl p-5 bg-black/50" data-mission="hoop">
+        <div class="text-[10px] uppercase tracking-widest text-cyan-400 mb-1">Quadratic / Projectile</div>
+        <h3 class="font-orbitron text-lg text-white mb-2">Hoop Shot</h3>
+        <p class="text-sm text-cyan-100/80 leading-relaxed mb-4">
+          Championship game. Build a quadratic trajectory so the ball passes through the hoop at the right height and time.
+        </p>
+        <div class="text-xs text-cyan-400/60">Target Damage: <span class="text-cyan-300 font-bold">950</span></div>
+        <div class="text-xs text-cyan-400/60 mt-1">Key cards: Quadratic + Shift + Stretch</div>
       </div>
     </div>
   </div>
 
-  <div class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-3 gap-4">
+  <!-- Game Screen (hidden until mission chosen) -->
+  <div id="gameScreen" class="w-full max-w-6xl hidden">
 
-    <!-- Canvas -->
-    <div class="lg:col-span-2 relative">
-      <canvas id="graphCanvas" width="820" height="420" class="w-full"></canvas>
-
-      <div class="absolute top-3 left-3 neon-box bg-black/70 px-3 py-1.5 rounded-lg">
-        <div class="text-[10px] text-cyan-400/70 uppercase">Accumulated Damage</div>
-        <div id="liveScore" class="font-orbitron text-2xl text-white">0</div>
-      </div>
-
-      <div id="continuityBadge" class="absolute top-3 right-3 px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider hidden"></div>
-    </div>
-
-    <!-- Side Panel -->
-    <div class="flex flex-col gap-3">
-      <div class="neon-box rounded-xl p-3 bg-black/40">
-        <h2 class="font-orbitron text-[10px] text-cyan-400 mb-2 tracking-widest">ACTIVE FUNCTION</h2>
-        <div id="activeDisplay" class="min-h-[60px] flex items-center justify-center text-cyan-200/40 text-sm italic">
-          No function selected
+    <!-- Mission Brief -->
+    <div class="neon-box rounded-xl p-4 mb-4 bg-black/40">
+      <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
+        <div>
+          <div class="font-orbitron text-sm text-cyan-300 tracking-wider mb-1" id="missionTitle">MISSION</div>
+          <p class="text-sm text-cyan-100/90 leading-relaxed max-w-3xl" id="missionBrief"></p>
         </div>
-        <div id="transformList" class="mt-2 space-y-1 text-xs text-pink-300/90"></div>
+        <div class="text-right shrink-0">
+          <div class="text-[10px] text-cyan-400/60 uppercase">Target Damage</div>
+          <div id="targetScore" class="font-orbitron text-3xl text-cyan-300">1200</div>
+          <div class="text-[10px] text-cyan-400/60 mt-2 uppercase">Current</div>
+          <div id="liveScoreHeader" class="font-orbitron text-2xl text-white">0</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div class="lg:col-span-2 relative">
+        <canvas id="graphCanvas" width="820" height="400" class="w-full"></canvas>
+        <div class="absolute top-3 left-3 neon-box bg-black/70 px-3 py-1.5 rounded-lg">
+          <div class="text-[10px] text-cyan-400/70 uppercase">Damage</div>
+          <div id="liveScore" class="font-orbitron text-2xl text-white">0</div>
+        </div>
+        <div id="continuityBadge" class="absolute top-3 right-3 px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider hidden"></div>
+        <div id="storyVisual" class="absolute bottom-3 left-3 right-3 text-center text-xs text-cyan-200/70"></div>
       </div>
 
-      <button id="executeBtn"
-        class="w-full py-3.5 font-orbitron font-bold text-base tracking-wider rounded-xl
-               bg-gradient-to-r from-cyan-600 to-fuchsia-700 hover:from-cyan-500 hover:to-fuchsia-600
-               transition shadow-lg disabled:opacity-40 disabled:cursor-not-allowed">
-        EXECUTE SCRIPT
-      </button>
+      <div class="flex flex-col gap-3">
+        <div class="neon-box rounded-xl p-3 bg-black/40">
+          <h2 class="font-orbitron text-[10px] text-cyan-400 mb-2 tracking-widest">ACTIVE FUNCTION</h2>
+          <div id="activeDisplay" class="min-h-[56px] flex items-center justify-center text-cyan-200/40 text-sm italic">No function selected</div>
+          <div id="transformList" class="mt-2 space-y-1 text-xs text-pink-300/90"></div>
+        </div>
 
-      <div class="flex justify-between text-[11px] text-cyan-400/50 px-1">
-        <span>Draw pile: <span id="drawCount">0</span></span>
-        <span>Discard: <span id="discardCount">0</span></span>
+        <button id="executeBtn" disabled
+          class="w-full py-3.5 font-orbitron font-bold text-base tracking-wider rounded-xl
+                 bg-gradient-to-r from-cyan-600 to-fuchsia-700 hover:from-cyan-500 hover:to-fuchsia-600
+                 transition shadow-lg disabled:opacity-40 disabled:cursor-not-allowed">
+          EXECUTE SCRIPT
+        </button>
+
+        <div class="flex justify-between text-[11px] text-cyan-400/50 px-1">
+          <span>Draw: <span id="drawCount">0</span></span>
+          <span>Discard: <span id="discardCount">0</span></span>
+        </div>
+
+        <div id="statusText" class="text-center text-sm text-cyan-300/80 min-h-[20px]"></div>
+
+        <div class="neon-box rounded-lg p-3 bg-black/30 text-xs text-cyan-200/70 leading-relaxed">
+          <div class="font-orbitron text-[10px] text-cyan-400 mb-1 tracking-wider">WHAT TO DO</div>
+          <ol class="list-decimal list-inside space-y-1" id="missionHints"></ol>
+        </div>
+
+        <button id="backToMissions" class="text-xs text-cyan-400/70 hover:text-cyan-300 underline">← Back to Missions</button>
       </div>
+    </div>
 
-      <div id="statusText" class="text-center text-sm text-cyan-300/80 min-h-[20px]"></div>
-
-      <div class="neon-box rounded-lg p-3 bg-black/30 text-xs text-cyan-200/70 leading-relaxed">
-        <div class="font-orbitron text-[10px] text-cyan-400 mb-1 tracking-wider">QUICK RULES</div>
-        <ol class="list-decimal list-inside space-y-1">
-          <li>Click a <span class="text-cyan-300">Parent</span> card to set the base function.</li>
-          <li>Click <span class="text-pink-300">Modifier</span> cards to reshape it.</li>
-          <li>Press <strong>Execute Script</strong> to run turns 1→10.</li>
-          <li>Hit the Target Damage to win.</li>
-        </ol>
+    <div class="mt-5">
+      <div class="flex items-center justify-between mb-2">
+        <h2 class="font-orbitron text-[10px] text-cyan-400 tracking-widest">YOUR HAND</h2>
+        <div class="text-[10px] text-cyan-400/50">Cyan = Parent &nbsp;|&nbsp; Pink = Transformation</div>
       </div>
+      <div id="handContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5"></div>
     </div>
   </div>
 
-  <!-- Hand -->
-  <div class="w-full max-w-6xl mt-6">
-    <div class="flex items-center justify-between mb-2">
-      <h2 class="font-orbitron text-[10px] text-cyan-400 tracking-widest">YOUR HAND</h2>
-      <div class="text-[10px] text-cyan-400/50">Cyan = Parent Function &nbsp;|&nbsp; Pink = Transformation</div>
-    </div>
-    <div id="handContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5"></div>
-  </div>
-
-  <!-- How to Play Overlay -->
+  <!-- Help Overlay -->
   <div id="helpOverlay" class="overlay">
     <div class="neon-box bg-black/95 rounded-2xl p-6 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
-      <h2 class="font-orbitron text-2xl text-cyan-300 mb-4">How to Play Hyper-Scale</h2>
-
-      <div class="howto-step">
-        <strong class="text-cyan-300">Goal</strong><br/>
-        Reach or exceed the <strong>Target Damage</strong> (shown at the top right) by building a powerful mathematical curve and executing it across 10 turns.
+      <h2 class="font-orbitron text-2xl text-cyan-300 mb-4">How Hyper-Scale Works</h2>
+      <div class="space-y-3 text-sm text-cyan-100/90">
+        <p><strong class="text-cyan-300">Goal</strong><br/>Build a mathematical function with cards, then run it across a 10-turn timeline. Reach the Target Damage to win the encounter.</p>
+        <p><strong class="text-cyan-300">1. Parent Function</strong><br/>Cyan cards set the base shape (linear, quadratic, exponential…).</p>
+        <p><strong class="text-cyan-300">2. Transformations</strong><br/>Pink cards stretch, compress, or shift the curve.</p>
+        <p><strong class="text-cyan-300">3. Execute</strong><br/>A particle travels the curve from turn 0 to 10. Height of the curve = damage at that moment.</p>
+        <p><strong class="text-cyan-300">Winning</strong><br/>Final damage ≥ Target → Victory.</p>
       </div>
-
-      <div class="howto-step">
-        <strong class="text-cyan-300">1. Choose a Parent Function</strong><br/>
-        These are the base shapes: Linear (x), Quadratic (x²), Exponential (2ˣ), Logarithmic, and Rational (1/x).
-      </div>
-
-      <div class="howto-step">
-        <strong class="text-cyan-300">2. Apply Transformations</strong><br/>
-        Modifier cards stretch, compress, or shift the curve. Stack them to create bigger numbers.
-      </div>
-
-      <div class="howto-step">
-        <strong class="text-cyan-300">3. Execute the Script</strong><br/>
-        Press the button. A particle travels along your curve from turn 0 to 10 while damage accumulates.
-      </div>
-
-      <div class="howto-step">
-        <strong class="text-cyan-300">Winning</strong><br/>
-        If your final damage ≥ Target → <span class="text-cyan-300">VICTORY</span>.<br/>
-        If not → <span class="text-pink-400">SYSTEM DEFEATED</span>. You can reboot and try a new combination.
-      </div>
-
-      <div class="howto-step">
-        <strong class="text-cyan-300">Continuity Bonus</strong><br/>
-        When the curve is continuous you gain a <strong>×3 multiplier</strong>. Smooth curves = higher scores.
-      </div>
-
-      <button id="closeHelpBtn" class="mt-5 w-full py-2.5 font-orbitron rounded-lg bg-cyan-700 hover:bg-cyan-600 transition">
-        Got it — Let's Play
-      </button>
+      <button id="closeHelpBtn" class="mt-5 w-full py-2.5 font-orbitron rounded-lg bg-cyan-700 hover:bg-cyan-600 transition">Got it</button>
     </div>
   </div>
 
@@ -221,14 +183,15 @@
       <h2 id="resultTitle" class="font-orbitron text-4xl mb-2"></h2>
       <p id="resultScore" class="text-lg text-cyan-300 mb-2"></p>
       <p id="resultHint" class="text-sm text-cyan-200/60 mb-6"></p>
-      <button id="restartBtn" class="px-8 py-2.5 font-orbitron font-bold rounded-lg bg-cyan-700 hover:bg-cyan-600 transition">
-        REBOOT ENCOUNTER
-      </button>
+      <div class="flex gap-3 justify-center">
+        <button id="restartBtn" class="px-6 py-2.5 font-orbitron font-bold rounded-lg bg-cyan-700 hover:bg-cyan-600 transition">Retry</button>
+        <button id="nextMissionBtn" class="px-6 py-2.5 font-orbitron font-bold rounded-lg bg-fuchsia-700 hover:bg-fuchsia-600 transition">Missions</button>
+      </div>
     </div>
   </div>
 
 <script>
-/* ========== MathEngine ========= */
+/* ====== Core Engine (Math + Cards + Combat + Juice) ====== */
 class MathEngine {
   constructor() {
     this.MAX = 1e6; this.MIN = -1e6; this.EPS = 1e-9; this.THRESH = 0.1;
@@ -246,8 +209,7 @@ class MathEngine {
   }
   evaluate(card, x) {
     const type = card.type || card.parentType;
-    const a = card.a ?? 1;
-    const h = card.h ?? 0;
+    const a = card.a ?? 1, h = card.h ?? 0;
     const fn = this.parents[type];
     if (!fn) return 0;
     let raw = fn(x - h);
@@ -255,70 +217,48 @@ class MathEngine {
     if (!Number.isFinite(raw)) return this.clamp(raw > 0 ? this.MAX : this.MIN);
     return this.clamp(a * raw);
   }
-  generatePlotPoints(card, from = 0, to = 10, samples = 50) {
-    const pts = [];
-    const step = 1 / samples;
-    for (let t = from; t <= to + this.EPS; t += step) {
-      pts.push({ x: t, y: this.evaluate(card, t) });
-    }
+  generatePlotPoints(card, from=0, to=10, samples=50) {
+    const pts = []; const step = 1/samples;
+    for (let t=from; t<=to+this.EPS; t+=step) pts.push({x:t, y:this.evaluate(card,t)});
     return pts;
   }
-  validatePiecewiseContinuity(a, b, turn) {
-    const left = this.evaluate(a, turn);
-    const right = this.evaluate(b, turn);
-    const delta = Math.abs(left - right);
-    return delta <= this.THRESH
-      ? { status: 'Continuous', delta, multiplier: 3 }
-      : { status: 'Jump Discontinuity', delta, multiplier: 1 };
+  validatePiecewiseContinuity(a,b,turn) {
+    const left = this.evaluate(a,turn), right = this.evaluate(b,turn);
+    const delta = Math.abs(left-right);
+    return delta <= this.THRESH ? {status:'Continuous', delta, multiplier:3} : {status:'Jump Discontinuity', delta, multiplier:1};
   }
   describe(card) {
-    const map = { linear: 'x', quadratic: 'x²', exponential: '2ˣ', logarithmic: 'log₂(x)', rational: '1/x' };
-    let expr = map[card.type || card.parentType] || '?';
-    const a = card.a ?? 1, h = card.h ?? 0;
-    if (h !== 0) expr = expr.replace(/x/g, `(x${h > 0 ? ' − ' : ' + '}${Math.abs(h)})`);
+    const map = {linear:'x', quadratic:'x²', exponential:'2ˣ', logarithmic:'log₂(x)', rational:'1/x'};
+    let expr = map[card.type||card.parentType] || '?';
+    const a = card.a??1, h = card.h??0;
+    if (h !== 0) expr = expr.replace(/x/g, `(x${h>0?' − ':' + '}${Math.abs(h)})`);
     if (a !== 1) expr = `${a}·${expr}`;
     return expr;
   }
 }
 
-/* ========== Cards / Deck ========= */
 class Card {
   constructor(o) {
-    Object.assign(this, {
-      id: o.id, name: o.name, type: o.type,
-      parentType: o.parentType || null,
-      a: o.a ?? 1, h: o.h ?? 0,
-      description: o.description || '',
-      color: o.color || '#00f0ff',
-      rarity: o.rarity || 'common'
-    });
+    Object.assign(this, { id:o.id, name:o.name, type:o.type, parentType:o.parentType||null,
+      a:o.a??1, h:o.h??0, description:o.description||'', color:o.color||'#00f0ff', rarity:o.rarity||'common' });
   }
-  clone() {
-    return new Card({ ...this, id: this.id + '_' + Math.random().toString(36).slice(2, 6) });
-  }
+  clone() { return new Card({...this, id: this.id+'_'+Math.random().toString(36).slice(2,6)}); }
 }
 
 class Deck {
-  constructor(cards = []) {
-    this.drawPile = [...cards];
-    this.discardPile = [];
-    this.hand = [];
-    this.shuffle();
-  }
+  constructor(cards=[]) { this.drawPile=[...cards]; this.discardPile=[]; this.hand=[]; this.shuffle(); }
   shuffle() {
-    for (let i = this.drawPile.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
+    for (let i=this.drawPile.length-1; i>0; i--) {
+      const j = Math.floor(Math.random()*(i+1));
       [this.drawPile[i], this.drawPile[j]] = [this.drawPile[j], this.drawPile[i]];
     }
   }
-  draw(n = 1) {
-    const out = [];
-    for (let i = 0; i < n; i++) {
+  draw(n=1) {
+    const out=[];
+    for (let i=0;i<n;i++) {
       if (!this.drawPile.length) {
         if (!this.discardPile.length) break;
-        this.drawPile = [...this.discardPile];
-        this.discardPile = [];
-        this.shuffle();
+        this.drawPile=[...this.discardPile]; this.discardPile=[]; this.shuffle();
       }
       const c = this.drawPile.pop();
       if (c) { this.hand.push(c); out.push(c); }
@@ -326,285 +266,205 @@ class Deck {
     return out;
   }
   discard(card) {
-    const i = this.hand.findIndex(c => c.id === card.id);
-    if (i !== -1) {
-      this.hand.splice(i, 1);
-      this.discardPile.push(card);
-    }
+    const i = this.hand.findIndex(c => c.id===card.id);
+    if (i!==-1) { this.hand.splice(i,1); this.discardPile.push(card); }
   }
 }
 
 const CardLibrary = {
   createStarterDeck() {
-    const list = [];
-    const add = (o) => list.push(new Card(o));
-
-    // Parents
-    add({ id: 'lin', name: 'Linear Core', type: 'parent', parentType: 'linear',
-          description: 'f(x)=x — steady growth', color: '#00f0ff' });
-    add({ id: 'quad', name: 'Quadratic Surge', type: 'parent', parentType: 'quadratic',
-          description: 'f(x)=x² — strong late game', color: '#ff00aa', rarity: 'uncommon' });
-    add({ id: 'exp', name: 'Exponential Spike', type: 'parent', parentType: 'exponential',
-          description: 'f(x)=2ˣ — explosive', color: '#bf00ff', rarity: 'rare' });
-    add({ id: 'log', name: 'Log Dampen', type: 'parent', parentType: 'logarithmic',
-          description: 'f(x)=log₂(x) — safe early', color: '#00ff9f' });
-    add({ id: 'rat', name: 'Rational Singularity', type: 'parent', parentType: 'rational',
-          description: 'f(x)=1/x — dangerous near 0', color: '#ffaa00', rarity: 'uncommon' });
-
-    // Modifiers
-    add({ id: 's2', name: '×2 Stretch', type: 'modifier', a: 2, h: 0,
-          description: 'Doubles amplitude', color: '#ff6b6b' });
-    add({ id: 's3', name: '×3 Amplify', type: 'modifier', a: 3, h: 0,
-          description: 'Triples amplitude', color: '#ff4757', rarity: 'uncommon' });
-    add({ id: 'c05', name: '×0.5 Compress', type: 'modifier', a: 0.5, h: 0,
-          description: 'Halves the curve', color: '#4ecdc4' });
-    add({ id: 'sh2', name: 'Shift +2', type: 'modifier', a: 1, h: 2,
-          description: 'Move curve right', color: '#ffe66d' });
-    add({ id: 'shm2', name: 'Shift −2', type: 'modifier', a: 1, h: -2,
-          description: 'Move curve left', color: '#a29bfe' });
-    add({ id: 'shm3', name: 'Shift −3', type: 'modifier', a: 1, h: -3,
-          description: 'Strong left shift', color: '#7c5cff' });
-    add({ id: 'combo', name: 'Amplify & Offset', type: 'modifier', a: 2.5, h: 1,
-          description: '×2.5 + shift 1', color: '#fd79a8', rarity: 'rare' });
-
-    // Extra copies for deck size
-    list.push(list[0].clone(), list[1].clone(), list[5].clone(), list[6].clone(), list[8].clone());
+    const list=[]; const add=o=>list.push(new Card(o));
+    add({id:'lin', name:'Linear Core', type:'parent', parentType:'linear', description:'f(x)=x', color:'#00f0ff'});
+    add({id:'quad', name:'Quadratic Surge', type:'parent', parentType:'quadratic', description:'f(x)=x²', color:'#ff00aa', rarity:'uncommon'});
+    add({id:'exp', name:'Exponential Spike', type:'parent', parentType:'exponential', description:'f(x)=2ˣ', color:'#bf00ff', rarity:'rare'});
+    add({id:'log', name:'Log Dampen', type:'parent', parentType:'logarithmic', description:'f(x)=log₂(x)', color:'#00ff9f'});
+    add({id:'rat', name:'Rational Singularity', type:'parent', parentType:'rational', description:'f(x)=1/x', color:'#ffaa00', rarity:'uncommon'});
+    add({id:'s2', name:'×2 Stretch', type:'modifier', a:2, h:0, description:'Doubles amplitude', color:'#ff6b6b'});
+    add({id:'s3', name:'×3 Amplify', type:'modifier', a:3, h:0, description:'Triples amplitude', color:'#ff4757', rarity:'uncommon'});
+    add({id:'c05', name:'×0.5 Compress', type:'modifier', a:0.5, h:0, description:'Halves curve', color:'#4ecdc4'});
+    add({id:'sh2', name:'Shift +2', type:'modifier', a:1, h:2, description:'Move right', color:'#ffe66d'});
+    add({id:'shm2', name:'Shift −2', type:'modifier', a:1, h:-2, description:'Move left', color:'#a29bfe'});
+    add({id:'shm3', name:'Shift −3', type:'modifier', a:1, h:-3, description:'Strong left shift', color:'#7c5cff'});
+    add({id:'combo', name:'Amplify & Offset', type:'modifier', a:2.5, h:1, description:'×2.5 + shift 1', color:'#fd79a8', rarity:'rare'});
+    list.push(list[0].clone(), list[1].clone(), list[2].clone(), list[5].clone(), list[6].clone(), list[8].clone());
     return list;
   }
 };
 
 class CombatManager {
   constructor(math) {
-    this.math = math;
-    this.deck = null;
-    this.active = null;
-    this.appliedMods = [];
-    this.score = 0;
-    this.target = 1200;
+    this.math = math; this.deck=null; this.active=null; this.appliedMods=[]; this.score=0; this.target=1200;
   }
-  start(target = 1200) {
+  start(target=1200) {
     this.deck = new Deck(CardLibrary.createStarterDeck());
-    this.active = null;
-    this.appliedMods = [];
-    this.score = 0;
-    this.target = target;
-    this.deck.draw(5);
-    return this.deck.hand;
+    this.active=null; this.appliedMods=[]; this.score=0; this.target=target;
+    this.deck.draw(5); return this.deck.hand;
   }
   slotParent(card) {
-    if (card.type !== 'parent') return false;
-    this.active = { type: card.parentType, a: 1, h: 0 };
-    this.appliedMods = [];
-    this.deck.discard(card);
-    return true;
+    if (card.type!=='parent') return false;
+    this.active={type:card.parentType, a:1, h:0}; this.appliedMods=[];
+    this.deck.discard(card); return true;
   }
   applyModifier(card) {
-    if (!this.active || card.type !== 'modifier') return false;
-    this.active.a *= card.a;
-    this.active.h += card.h;
-    this.appliedMods.push(card);
-    this.deck.discard(card);
-    return true;
+    if (!this.active || card.type!=='modifier') return false;
+    this.active.a *= card.a; this.active.h += card.h;
+    this.appliedMods.push(card); this.deck.discard(card); return true;
   }
   getHand() { return this.deck ? this.deck.hand : []; }
-  piles() {
-    return this.deck
-      ? { draw: this.deck.drawPile.length, discard: this.deck.discardPile.length }
-      : { draw: 0, discard: 0 };
-  }
+  piles() { return this.deck ? {draw:this.deck.drawPile.length, discard:this.deck.discardPile.length} : {draw:0,discard:0}; }
 }
 
-/* ========== Juice ========= */
 class Juice {
   constructor(canvas) {
-    this.canvas = canvas;
-    this.particles = [];
-    this.shake = { mag: 0, dur: 0, ox: 0, oy: 0 };
-    this.punch = { x: 0, y: 0 };
-    this.flash = { a: 0, color: '#fff' };
-    this.hitStop = 0;
-    this.timeScale = 1;
+    this.canvas=canvas; this.particles=[]; this.shake={mag:0,dur:0,ox:0,oy:0};
+    this.punch={x:0,y:0}; this.flash={a:0,color:'#fff'}; this.hitStop=0; this.timeScale=1;
   }
-  shakeScreen(mag = 6, dur = 280) {
-    this.shake.mag = Math.max(this.shake.mag, mag);
-    this.shake.dur = Math.max(this.shake.dur, dur);
-  }
-  cameraPunch(dx = 0, dy = -1, force = 12) {
-    this.punch.x += dx * force;
-    this.punch.y += dy * force;
-  }
-  doHitStop(ms = 45) {
-    this.hitStop = ms;
-    this.timeScale = 0.05;
-  }
-  flashScreen(color = '#00f0ff', str = 0.3) {
-    this.flash.color = color;
-    this.flash.a = str;
-  }
-  spawn(x, y, opts = {}) {
-    const n = opts.count || 10;
-    for (let i = 0; i < n; i++) {
-      const ang = Math.random() * Math.PI * 2;
-      const spd = (opts.speed || 3.8) * (0.5 + Math.random());
-      this.particles.push({
-        x, y, vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd,
-        life: opts.life || 500, max: opts.life || 500,
-        size: (opts.size || 2.8) * (0.6 + Math.random() * 0.7),
-        color: opts.color || '#00f0ff', g: 0.08, a: 1
-      });
+  shakeScreen(mag=6,dur=280){ this.shake.mag=Math.max(this.shake.mag,mag); this.shake.dur=Math.max(this.shake.dur,dur); }
+  cameraPunch(dx=0,dy=-1,force=12){ this.punch.x+=dx*force; this.punch.y+=dy*force; }
+  doHitStop(ms=45){ this.hitStop=ms; this.timeScale=0.05; }
+  flashScreen(color='#00f0ff',str=0.3){ this.flash.color=color; this.flash.a=str; }
+  spawn(x,y,opts={}){
+    const n=opts.count||10;
+    for(let i=0;i<n;i++){
+      const ang=Math.random()*Math.PI*2, spd=(opts.speed||3.8)*(0.5+Math.random());
+      this.particles.push({x,y,vx:Math.cos(ang)*spd,vy:Math.sin(ang)*spd,
+        life:opts.life||500,max:opts.life||500,size:(opts.size||2.8)*(0.6+Math.random()*0.7),
+        color:opts.color||'#00f0ff',g:0.08,a:1});
     }
   }
-  heavy(x, y, color = '#ff00aa') {
-    this.shakeScreen(11, 320);
-    this.cameraPunch(0, -1, 16);
-    this.doHitStop(55);
-    this.flashScreen(color, 0.4);
-    this.spawn(x, y, { count: 20, speed: 7, life: 750, color, size: 3.5 });
-  }
-  combo(x, y) {
-    this.shakeScreen(4, 200);
-    this.flashScreen('#00f0ff', 0.28);
-    this.spawn(x, y, { count: 14, speed: 5, color: '#00f0ff', size: 3 });
-  }
-  tick(x, y) {
-    this.spawn(x, y, { count: 3, speed: 2.4, life: 340, color: '#fff', size: 1.8 });
-  }
-  update(dt = 16.6) {
-    if (this.hitStop > 0) {
-      this.hitStop -= dt;
-      if (this.hitStop <= 0) this.timeScale = 1;
+  heavy(x,y,color='#ff00aa'){ this.shakeScreen(11,320); this.cameraPunch(0,-1,16); this.doHitStop(55); this.flashScreen(color,0.4); this.spawn(x,y,{count:20,speed:7,life:750,color,size:3.5}); }
+  combo(x,y){ this.shakeScreen(4,200); this.flashScreen('#00f0ff',0.28); this.spawn(x,y,{count:14,speed:5,color:'#00f0ff',size:3}); }
+  tick(x,y){ this.spawn(x,y,{count:3,speed:2.4,life:340,color:'#fff',size:1.8}); }
+  update(dt=16.6){
+    if(this.hitStop>0){ this.hitStop-=dt; if(this.hitStop<=0) this.timeScale=1; }
+    if(this.shake.dur>0){
+      this.shake.dur-=dt; const p=Math.max(0,this.shake.dur/280);
+      this.shake.ox=(Math.random()-0.5)*2*this.shake.mag*p; this.shake.oy=(Math.random()-0.5)*2*this.shake.mag*p;
+      if(this.shake.dur<=0) this.shake.ox=this.shake.oy=this.shake.mag=0;
     }
-    if (this.shake.dur > 0) {
-      this.shake.dur -= dt;
-      const p = Math.max(0, this.shake.dur / 280);
-      this.shake.ox = (Math.random() - 0.5) * 2 * this.shake.mag * p;
-      this.shake.oy = (Math.random() - 0.5) * 2 * this.shake.mag * p;
-      if (this.shake.dur <= 0) this.shake.ox = this.shake.oy = this.shake.mag = 0;
-    }
-    this.punch.x *= 0.83;
-    this.punch.y *= 0.83;
-    if (this.flash.a > 0) this.flash.a *= 0.88;
-
-    for (let i = this.particles.length - 1; i >= 0; i--) {
-      const p = this.particles[i];
-      p.life -= dt * this.timeScale;
-      p.vy += p.g * this.timeScale;
-      p.x += p.vx * this.timeScale;
-      p.y += p.vy * this.timeScale;
-      p.a = Math.max(0, p.life / p.max);
-      if (p.life <= 0) this.particles.splice(i, 1);
+    this.punch.x*=0.83; this.punch.y*=0.83; if(this.flash.a>0) this.flash.a*=0.88;
+    for(let i=this.particles.length-1;i>=0;i--){
+      const p=this.particles[i]; p.life-=dt*this.timeScale; p.vy+=p.g*this.timeScale;
+      p.x+=p.vx*this.timeScale; p.y+=p.vy*this.timeScale; p.a=Math.max(0,p.life/p.max);
+      if(p.life<=0) this.particles.splice(i,1);
     }
   }
-  begin(ctx) {
-    ctx.save();
-    ctx.translate(this.shake.ox + this.punch.x, this.shake.oy + this.punch.y);
-  }
-  end(ctx) { ctx.restore(); }
-  draw(ctx) {
-    for (const p of this.particles) {
-      ctx.globalAlpha = p.a;
-      ctx.fillStyle = p.color;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.size * p.a, 0, Math.PI * 2);
-      ctx.fill();
+  begin(ctx){ ctx.save(); ctx.translate(this.shake.ox+this.punch.x, this.shake.oy+this.punch.y); }
+  end(ctx){ ctx.restore(); }
+  draw(ctx){
+    for(const p of this.particles){
+      ctx.globalAlpha=p.a; ctx.fillStyle=p.color;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.size*p.a,0,Math.PI*2); ctx.fill();
     }
-    ctx.globalAlpha = 1;
-    if (this.flash.a > 0) {
-      ctx.fillStyle = this.flash.color;
-      ctx.globalAlpha = this.flash.a * 0.3;
-      ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-      ctx.globalAlpha = 1;
-    }
+    ctx.globalAlpha=1;
+    if(this.flash.a>0){ ctx.fillStyle=this.flash.color; ctx.globalAlpha=this.flash.a*0.3; ctx.fillRect(0,0,this.canvas.width,this.canvas.height); ctx.globalAlpha=1; }
   }
-  reset() {
-    this.particles = [];
-    this.shake = { mag: 0, dur: 0, ox: 0, oy: 0 };
-    this.punch = { x: 0, y: 0 };
-    this.flash.a = 0;
-    this.hitStop = 0;
-    this.timeScale = 1;
-  }
+  reset(){ this.particles=[]; this.shake={mag:0,dur:0,ox:0,oy:0}; this.punch={x:0,y:0}; this.flash.a=0; this.hitStop=0; this.timeScale=1; }
 }
 
-/* ========== Sound hooks (silent placeholders) ========= */
-const SFX = {
-  play(name) {
-    // Ready for real audio files later
-    // Example: new Audio(`/sfx/${name}.mp3`).play()
-    console.log('[SFX]', name);
+/* ====== Missions ====== */
+const MISSIONS = {
+  outbreak: {
+    id: 'outbreak',
+    title: 'Outbreak Protocol',
+    brief: 'A digital virus is doubling every turn. Build an exponential function (ideally 2ˣ with stretch) that matches the infection growth and generate enough damage to contain the outbreak before turn 10.',
+    target: 1800,
+    hints: [
+      'Start with the Exponential Spike parent card',
+      'Add Stretch / Amplify modifiers to increase power',
+      'Execute and watch the particle climb the steep curve'
+    ],
+    storyDuring: (t) => t < 3 ? 'Infection spreading slowly…' : t < 7 ? 'Virus doubling rapidly!' : 'Critical containment window!'
+  },
+  hoop: {
+    id: 'hoop',
+    title: 'Hoop Shot',
+    brief: 'Championship final. Build a quadratic trajectory so the ball arcs through the hoop. Use Quadratic + horizontal shift + vertical stretch to shape the perfect shot.',
+    target: 950,
+    hints: [
+      'Start with Quadratic Surge',
+      'Use Shift cards to move the peak (vertex)',
+      'Use Stretch to control how high the ball goes'
+    ],
+    storyDuring: (t) => t < 4 ? 'Ball leaving your hands…' : t < 7 ? 'Climbing toward the rim…' : 'At the hoop!'
   }
 };
 
-/* ========== GameUI ========= */
+/* ====== GameUI ====== */
 class GameUI {
   constructor() {
     this.canvas = document.getElementById('graphCanvas');
     this.ctx = this.canvas.getContext('2d');
-    this.w = this.canvas.width;
-    this.h = this.canvas.height;
+    this.w = this.canvas.width; this.h = this.canvas.height;
 
     this.math = new MathEngine();
     this.combat = new CombatManager(this.math);
     this.juice = new Juice(this.canvas);
 
-    this.points = [];
-    this.particleT = 0;
-    this.particleActive = false;
-    this.executing = false;
+    this.points = []; this.particleT = 0; this.particleActive = false; this.executing = false;
+    this.currentMission = null;
 
-    // User info
     try {
-      const user = JSON.parse(localStorage.getItem('precalc_user') || 'null');
-      if (user) {
-        document.getElementById('userInfo').textContent =
-          `Pilot: ${user.email}  •  Rank: ${user.role || 'student'}`;
-      }
-    } catch (e) {}
+      const user = JSON.parse(localStorage.getItem('precalc_user')||'null');
+      if (user) document.getElementById('userInfo').textContent = `Pilot: ${user.email} • ${user.role||'student'}`;
+    } catch(e){}
 
     document.getElementById('logoutBtn').onclick = () => {
-      localStorage.removeItem('precalc_token');
-      localStorage.removeItem('precalc_user');
+      localStorage.removeItem('precalc_token'); localStorage.removeItem('precalc_user');
       window.location.href = '/login.html';
     };
+    document.getElementById('helpBtn').onclick = () => document.getElementById('helpOverlay').classList.add('show');
+    document.getElementById('closeHelpBtn').onclick = () => document.getElementById('helpOverlay').classList.remove('show');
+    document.getElementById('missionsBtn').onclick = () => this.showMissions();
+    document.getElementById('backToMissions').onclick = () => this.showMissions();
+    document.getElementById('nextMissionBtn').onclick = () => this.showMissions();
 
-    document.getElementById('helpBtn').onclick = () => {
-      document.getElementById('helpOverlay').classList.add('show');
-    };
-    document.getElementById('closeHelpBtn').onclick = () => {
-      document.getElementById('helpOverlay').classList.remove('show');
-    };
-
-    // Show help on first visit
-    if (!localStorage.getItem('hyper_scale_seen_help')) {
-      document.getElementById('helpOverlay').classList.add('show');
-      localStorage.setItem('hyper_scale_seen_help', '1');
-    }
+    document.querySelectorAll('.mission-card').forEach(el => {
+      el.onclick = () => this.startMission(el.dataset.mission);
+    });
 
     this._bind();
-    this.startNewRun();
     this._loop();
   }
 
-  startNewRun() {
-    this.combat.start(1200);
-    this.points = [];
-    this.particleActive = false;
-    this.executing = false;
+  showMissions() {
+    document.getElementById('missionSelect').classList.remove('hidden');
+    document.getElementById('gameScreen').classList.add('hidden');
+    document.getElementById('resultOverlay').classList.remove('show');
+  }
+
+  startMission(id) {
+    this.currentMission = MISSIONS[id];
+    if (!this.currentMission) return;
+
+    document.getElementById('missionSelect').classList.add('hidden');
+    document.getElementById('gameScreen').classList.remove('hidden');
+
+    document.getElementById('missionTitle').textContent = this.currentMission.title;
+    document.getElementById('missionBrief').textContent = this.currentMission.brief;
+    document.getElementById('targetScore').textContent = this.currentMission.target;
+    document.getElementById('missionHints').innerHTML = this.currentMission.hints.map(h => `<li>${h}</li>`).join('');
+
+    this.combat.start(this.currentMission.target);
+    this.points = []; this.particleActive = false; this.executing = false;
     document.getElementById('liveScore').textContent = '0';
     document.getElementById('liveScoreHeader').textContent = '0';
     document.getElementById('continuityBadge').classList.add('hidden');
     document.getElementById('resultOverlay').classList.remove('show');
+    document.getElementById('storyVisual').textContent = '';
     this.juice.reset();
     this._renderHand();
     this._updateActive();
     this._updatePiles();
-    this._status('Choose a Parent Function card to begin');
+    this._status('Select a Parent Function to begin');
     document.getElementById('executeBtn').disabled = true;
   }
 
   _bind() {
     document.getElementById('executeBtn').onclick = () => this.execute();
-    document.getElementById('restartBtn').onclick = () => this.startNewRun();
+    document.getElementById('restartBtn').onclick = () => {
+      if (this.currentMission) this.startMission(this.currentMission.id);
+    };
   }
 
   _renderHand() {
@@ -616,8 +476,7 @@ class GameUI {
       el.innerHTML = `
         <div class="text-[9px] uppercase tracking-wider mb-0.5" style="color:${card.color}">${card.type}</div>
         <div class="font-orbitron text-xs leading-tight">${card.name}</div>
-        <div class="text-[9px] text-cyan-200/40 mt-1 leading-tight">${card.description || ''}</div>
-      `;
+        <div class="text-[9px] text-cyan-200/40 mt-1">${card.description||''}</div>`;
       el.onclick = () => this.onCard(card);
       box.appendChild(el);
     });
@@ -625,54 +484,34 @@ class GameUI {
 
   onCard(card) {
     if (this.executing) return;
-
     if (card.type === 'parent') {
       this.combat.slotParent(card);
-      this.juice.shakeScreen(3, 140);
-      SFX.play('slot');
-      this._status(`Base function set: ${card.name}`);
+      this.juice.shakeScreen(3,140);
+      this._status(`Base set: ${card.name}`);
       document.getElementById('executeBtn').disabled = false;
     } else {
-      if (!this.combat.active) {
-        this._status('First select a Parent Function (cyan cards)');
-        return;
-      }
+      if (!this.combat.active) { this._status('First choose a Parent Function (cyan)'); return; }
       this.combat.applyModifier(card);
-      this.juice.shakeScreen(2.5, 120);
-      this.juice.spawn(this.w / 2, this.h / 2, { count: 7, color: card.color, speed: 3.2 });
-      SFX.play('modify');
-      this._status(`Transformation applied: ${card.name}`);
+      this.juice.shakeScreen(2.5,120);
+      this.juice.spawn(this.w/2, this.h/2, {count:7, color:card.color, speed:3.2});
+      this._status(`Applied: ${card.name}`);
     }
-
-    this._recalc();
-    this._updateActive();
-    this._renderHand();
-    this._updatePiles();
+    this._recalc(); this._updateActive(); this._renderHand(); this._updatePiles();
   }
 
   _recalc() {
-    if (!this.combat.active) {
-      this.points = [];
-      return;
-    }
-    this.points = this.math.generatePlotPoints(this.combat.active, 0, 10, 50);
+    this.points = this.combat.active ? this.math.generatePlotPoints(this.combat.active,0,10,50) : [];
   }
 
   _updateActive() {
     const el = document.getElementById('activeDisplay');
     const list = document.getElementById('transformList');
-
     if (!this.combat.active) {
       el.innerHTML = '<span class="italic text-cyan-200/40">No function selected</span>';
-      list.innerHTML = '';
-      return;
+      list.innerHTML = ''; return;
     }
-
     el.innerHTML = `<div class="font-orbitron text-lg text-cyan-300">${this.math.describe(this.combat.active)}</div>`;
-
-    list.innerHTML = this.combat.appliedMods.map(m =>
-      `<div class="text-pink-300/90">↳ ${m.name}</div>`
-    ).join('');
+    list.innerHTML = this.combat.appliedMods.map(m => `<div>↳ ${m.name}</div>`).join('');
   }
 
   _updatePiles() {
@@ -681,15 +520,11 @@ class GameUI {
     document.getElementById('discardCount').textContent = p.discard;
   }
 
-  _status(msg) {
-    document.getElementById('statusText').textContent = msg;
-  }
+  _status(msg) { document.getElementById('statusText').textContent = msg; }
 
   async execute() {
     if (!this.combat.active || this.executing) return;
-    this.executing = true;
-    this.particleActive = true;
-    this.particleT = 0;
+    this.executing = true; this.particleActive = true; this.particleT = 0;
     this.combat.score = 0;
     document.getElementById('liveScore').textContent = '0';
     document.getElementById('liveScoreHeader').textContent = '0';
@@ -697,164 +532,108 @@ class GameUI {
 
     const cont = this.math.validatePiecewiseContinuity(this.combat.active, this.combat.active, 5);
     const mult = cont.multiplier;
-
     if (cont.status === 'Continuous') {
       const badge = document.getElementById('continuityBadge');
       badge.textContent = 'Continuous ×3';
       badge.className = 'absolute top-3 right-3 px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-cyan-900/80 text-cyan-300 border border-cyan-400';
       badge.classList.remove('hidden');
-      this.juice.combo(this.w * 0.7, this.h * 0.35);
-      SFX.play('combo');
+      this.juice.combo(this.w*0.7, this.h*0.35);
     }
 
-    this._status('Executing script across 10 turns…');
-    SFX.play('execute');
+    this._status('Executing across 10 turns…');
 
     const steps = 100;
-    for (let i = 0; i <= steps; i++) {
-      const t = (i / steps) * 10;
+    for (let i=0; i<=steps; i++) {
+      const t = (i/steps)*10;
       this.particleT = t;
       const dmg = this.math.evaluate(this.combat.active, t);
-      this.combat.score = Math.round(dmg * (t / 10) * 13 * mult);
-
+      this.combat.score = Math.round(dmg * (t/10) * 13 * mult);
       document.getElementById('liveScore').textContent = this.combat.score;
       document.getElementById('liveScoreHeader').textContent = this.combat.score;
 
-      const maxY = Math.max(20, ...this.points.map(p => Math.abs(p.y))) * 1.3 || 40;
-      const pad = 48;
-      const cx = pad + (t / 10) * (this.w - pad * 2);
-      const cy = pad + (this.h - pad * 2) / 2 - (dmg / maxY) * ((this.h - pad * 2) / 2);
-
-      if (i % 12 === 0) {
-        this.juice.tick(cx, cy);
-        if (Math.abs(dmg) > 50) this.juice.shakeScreen(1.8, 70);
+      if (this.currentMission && this.currentMission.storyDuring) {
+        document.getElementById('storyVisual').textContent = this.currentMission.storyDuring(t);
       }
-      if (Math.abs(dmg) > 100 && i % 18 === 0) this.juice.heavy(cx, cy);
+
+      const maxY = Math.max(20, ...this.points.map(p=>Math.abs(p.y)))*1.3 || 40;
+      const pad = 48;
+      const cx = pad + (t/10)*(this.w-pad*2);
+      const cy = pad + (this.h-pad*2)/2 - (dmg/maxY)*((this.h-pad*2)/2);
+
+      if (i%12===0) { this.juice.tick(cx,cy); if (Math.abs(dmg)>50) this.juice.shakeScreen(1.8,70); }
+      if (Math.abs(dmg)>100 && i%18===0) this.juice.heavy(cx,cy);
 
       await new Promise(r => setTimeout(r, 28));
     }
 
-    this.particleActive = false;
-    this.executing = false;
+    this.particleActive = false; this.executing = false;
+    document.getElementById('storyVisual').textContent = '';
 
     const victory = this.combat.score >= this.combat.target;
-    if (victory) {
-      this.juice.heavy(this.w / 2, this.h / 2, '#00f0ff');
-      SFX.play('victory');
-    } else {
-      this.juice.shakeScreen(8, 380);
-      SFX.play('defeat');
-    }
+    if (victory) this.juice.heavy(this.w/2, this.h/2, '#00f0ff');
+    else this.juice.shakeScreen(8,380);
 
     this._showResult(victory, this.combat.score);
   }
 
   _showResult(victory, score) {
-    const ov = document.getElementById('resultOverlay');
     document.getElementById('resultTitle').textContent = victory ? 'VICTORY' : 'SYSTEM DEFEATED';
     document.getElementById('resultTitle').style.color = victory ? '#00f0ff' : '#ff0066';
     document.getElementById('resultScore').textContent = `Final Damage: ${score} / ${this.combat.target}`;
     document.getElementById('resultHint').textContent = victory
-      ? 'You reached the target. The function held under pressure.'
-      : 'Damage fell short. Try a stronger parent or more aggressive transformations.';
-    ov.classList.add('show');
+      ? (this.currentMission?.id==='outbreak' ? 'Outbreak contained. Exponential model matched the growth.' : 'Clean shot. Quadratic trajectory hit the hoop.')
+      : 'Damage fell short. Try a stronger combination of parent + modifiers.';
+    document.getElementById('resultOverlay').classList.add('show');
   }
 
   _loop() {
-    const frame = () => {
-      this.juice.update(16.6);
-      this._draw();
-      requestAnimationFrame(frame);
-    };
+    const frame = () => { this.juice.update(16.6); this._draw(); requestAnimationFrame(frame); };
     requestAnimationFrame(frame);
   }
 
   _draw() {
-    const ctx = this.ctx;
-    const w = this.w, h = this.h;
-
-    ctx.fillStyle = '#03030a';
-    ctx.fillRect(0, 0, w, h);
-
+    const ctx = this.ctx, w=this.w, h=this.h;
+    ctx.fillStyle='#03030a'; ctx.fillRect(0,0,w,h);
     this.juice.begin(ctx);
 
-    let maxY = 25;
-    if (this.points.length) maxY = Math.max(25, ...this.points.map(p => Math.abs(p.y))) * 1.3;
+    let maxY=25;
+    if (this.points.length) maxY = Math.max(25, ...this.points.map(p=>Math.abs(p.y)))*1.3;
 
-    const pad = 48;
-    const gw = w - pad * 2;
-    const gh = h - pad * 2;
-    const tx = t => pad + (t / 10) * gw;
-    const ty = y => pad + gh / 2 - (y / maxY) * (gh / 2);
+    const pad=48, gw=w-pad*2, gh=h-pad*2;
+    const tx = t => pad+(t/10)*gw;
+    const ty = y => pad+gh/2 - (y/maxY)*(gh/2);
 
-    // Grid
-    ctx.strokeStyle = 'rgba(0,240,255,0.05)';
-    ctx.lineWidth = 1;
-    for (let i = 0; i <= 10; i++) {
-      ctx.beginPath();
-      ctx.moveTo(tx(i), pad);
-      ctx.lineTo(tx(i), h - pad);
-      ctx.stroke();
-    }
-    ctx.strokeStyle = 'rgba(0,240,255,0.2)';
-    ctx.beginPath();
-    ctx.moveTo(pad, ty(0));
-    ctx.lineTo(w - pad, ty(0));
-    ctx.stroke();
+    ctx.strokeStyle='rgba(0,240,255,0.05)'; ctx.lineWidth=1;
+    for (let i=0;i<=10;i++){ ctx.beginPath(); ctx.moveTo(tx(i),pad); ctx.lineTo(tx(i),h-pad); ctx.stroke(); }
+    ctx.strokeStyle='rgba(0,240,255,0.2)'; ctx.beginPath(); ctx.moveTo(pad,ty(0)); ctx.lineTo(w-pad,ty(0)); ctx.stroke();
 
-    ctx.fillStyle = 'rgba(0,240,255,0.4)';
-    ctx.font = '10px Orbitron';
-    ctx.textAlign = 'center';
-    for (let i = 0; i <= 10; i += 2) ctx.fillText(i, tx(i), h - pad + 16);
-    ctx.fillText('TURN', w / 2, h - 6);
+    ctx.fillStyle='rgba(0,240,255,0.4)'; ctx.font='10px Orbitron'; ctx.textAlign='center';
+    for (let i=0;i<=10;i+=2) ctx.fillText(i, tx(i), h-pad+16);
 
-    // Curve
-    if (this.points.length > 1) {
-      ctx.lineWidth = 6;
-      ctx.strokeStyle = 'rgba(0,240,255,0.12)';
-      ctx.beginPath();
-      this.points.forEach((p, i) => i ? ctx.lineTo(tx(p.x), ty(p.y)) : ctx.moveTo(tx(p.x), ty(p.y)));
-      ctx.stroke();
-
-      ctx.lineWidth = 2.8;
-      ctx.strokeStyle = '#00f0ff';
-      ctx.shadowColor = '#00f0ff';
-      ctx.shadowBlur = 12;
-      ctx.beginPath();
-      this.points.forEach((p, i) => i ? ctx.lineTo(tx(p.x), ty(p.y)) : ctx.moveTo(tx(p.x), ty(p.y)));
-      ctx.stroke();
-      ctx.shadowBlur = 0;
+    if (this.points.length>1) {
+      ctx.lineWidth=6; ctx.strokeStyle='rgba(0,240,255,0.12)';
+      ctx.beginPath(); this.points.forEach((p,i)=> i?ctx.lineTo(tx(p.x),ty(p.y)):ctx.moveTo(tx(p.x),ty(p.y))); ctx.stroke();
+      ctx.lineWidth=2.8; ctx.strokeStyle='#00f0ff'; ctx.shadowColor='#00f0ff'; ctx.shadowBlur=12;
+      ctx.beginPath(); this.points.forEach((p,i)=> i?ctx.lineTo(tx(p.x),ty(p.y)):ctx.moveTo(tx(p.x),ty(p.y))); ctx.stroke();
+      ctx.shadowBlur=0;
     }
 
-    // Particle
     if (this.particleActive && this.combat.active) {
       const y = this.math.evaluate(this.combat.active, this.particleT);
-      const cx = tx(this.particleT);
-      const cy = ty(y);
-
-      const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, 14);
-      g.addColorStop(0, 'rgba(255,0,200,0.85)');
-      g.addColorStop(1, 'rgba(255,0,200,0)');
-      ctx.fillStyle = g;
-      ctx.beginPath();
-      ctx.arc(cx, cy, 14, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = '#fff';
-      ctx.beginPath();
-      ctx.arc(cx, cy, 3, 0, Math.PI * 2);
-      ctx.fill();
+      const cx=tx(this.particleT), cy=ty(y);
+      const g=ctx.createRadialGradient(cx,cy,0,cx,cy,14);
+      g.addColorStop(0,'rgba(255,0,200,0.85)'); g.addColorStop(1,'rgba(255,0,200,0)');
+      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(cx,cy,14,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(cx,cy,3,0,Math.PI*2); ctx.fill();
     }
 
-    this.juice.end(ctx);
-    this.juice.draw(ctx);
+    this.juice.end(ctx); this.juice.draw(ctx);
   }
 }
 
-// Boot
 window.addEventListener('DOMContentLoaded', () => {
   window.game = new GameUI();
-  console.log('%c HYPER-SCALE — Guided Prototype Online ', 'background:#00f0ff;color:#000;font-weight:bold;padding:4px 8px');
+  console.log('%c HYPER-SCALE — Outbreak + Hoop Shot Online ', 'background:#00f0ff;color:#000;font-weight:bold;padding:4px 8px');
 });
 </script>
 </body>
