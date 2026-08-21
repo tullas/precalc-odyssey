@@ -1,287 +1,164 @@
 /**
- * Hyper-Scale — Practical Real-Life Scenarios
- * Clearer wording, stronger teaching focus.
+ * Hyper-Scale Lab — Practical scenarios
+ * Only the sensible function family is available per scenario.
  */
-
 window.SCENARIOS = [
-  // ===== EXPONENTIAL =====
   {
     id: 'savings',
     family: 'exponential',
     title: 'Compound Interest',
-    brief: 'You put money in a savings account that earns a fixed percentage each year. The balance grows by multiplying — not by adding the same amount. Build an exponential model to see how the money grows over 10 years.',
-    recommend: 'Exponential Spike + Stretch (higher rate)',
-    target: 1600,
-    hints: [
-      'Percentage growth multiplies → Exponential',
-      'Linear would only add a fixed amount each year',
-      'Stretch represents a higher interest rate'
+    context: 'You deposit money in an account that grows by a fixed percentage each year. Growth multiplies the balance — it does not add the same dollar amount every year.',
+    question: 'Using y = a · b^x (a = starting amount, b = growth factor per year), set a = 1000 and find a growth factor b so that the balance is about 2000 after 10 years. What balance does your model give at year 10?',
+    xLabel: 'Years',
+    yLabel: 'Balance ($)',
+    xMin: 0, xMax: 10,
+    params: [
+      { key: 'a', label: 'Starting amount a ($)', min: 100, max: 5000, step: 100, default: 1000 },
+      { key: 'b', label: 'Growth factor b (e.g. 1.07 = 7%)', min: 1.01, max: 1.25, step: 0.01, default: 1.05 }
     ],
-    storyDuring: t => t < 4 ? 'Balance growing slowly at first…' : 'Compounding speeds up',
-    visual: 'bars' // growing height bars
-  },
-  {
-    id: 'views',
-    family: 'exponential',
-    title: 'Viral Video',
-    brief: 'Each person who likes your video shares it with about two friends. Views roughly double with every wave of sharing. Model this doubling to predict when the video will hit a high view count.',
-    recommend: 'Exponential Spike + Stretch',
-    target: 1750,
-    hints: [
-      'Each wave doubles viewers → Exponential',
-      'Linear would mean a fixed number of new views each turn',
-      'Use Exponential Spike'
-    ],
-    storyDuring: t => t < 4 ? 'Early shares…' : 'Going viral!',
-    visual: 'dots' // multiplying dots
+    form: 'y = a · b^x',
+    eval: (p, x) => p.a * Math.pow(p.b, x),
+    answer: { type: 'numeric', target: 2000, tol: 150, atX: 10, prompt: 'Balance at year 10 ($)' },
+    motion: null,
+    hints: ['b > 1 means growth each year', 'Try b around 1.07 (about 7% per year)', 'Read the value at x = 10 on the graph']
   },
   {
     id: 'bacteria',
     family: 'exponential',
     title: 'Kitchen Bacteria',
-    brief: 'Bacteria on a dish roughly double every few hours in the right conditions. After several doublings the colony is huge. Build the exponential growth curve so you can see why “just a few hours” matters.',
-    recommend: 'Exponential Spike + Amplify',
-    target: 1700,
-    hints: [
-      'Doubling each interval → Exponential',
-      'A straight line would badly underestimate later growth',
-      'Stretch / Amplify = faster doubling'
+    context: 'Bacteria roughly double every time unit under good conditions. After several doublings the colony is huge — linear growth would badly underestimate that.',
+    question: 'Model y = a · 2^x (doubling each turn). With a = 1, what is the colony size at turn 8?',
+    xLabel: 'Time units',
+    yLabel: 'Colony size',
+    xMin: 0, xMax: 10,
+    params: [
+      { key: 'a', label: 'Starting size a', min: 1, max: 10, step: 1, default: 1 },
+      { key: 'b', label: 'Growth factor b (2 = double)', min: 1.5, max: 2.5, step: 0.1, default: 2 }
     ],
-    storyDuring: t => t < 4 ? 'Colony still small…' : 'Colony exploding!',
-    visual: 'colonies'
+    form: 'y = a · b^x',
+    eval: (p, x) => p.a * Math.pow(p.b, x),
+    answer: { type: 'numeric', target: 256, tol: 20, atX: 8, prompt: 'Size at turn 8' },
+    motion: 'colonies',
+    hints: ['Doubling means b = 2', 'At x = 8, 1 · 2^8 = 256']
   },
-  {
-    id: 'medicine',
-    family: 'exponential',
-    title: 'Medicine Level',
-    brief: 'Many medicines leave the blood at a rate proportional to how much is still there (a constant fraction each hour). That is exponential decay. Model the falling level over time.',
-    recommend: 'Exponential Spike + Compress or Stretch',
-    target: 820,
-    hints: [
-      'Constant fraction remaining → Exponential decay',
-      'Not a straight drop (linear)',
-      'Exponential parent still models this'
-    ],
-    storyDuring: t => 'Concentration falling…',
-    visual: 'fade'
-  },
-  {
-    id: 'streaming',
-    family: 'exponential',
-    title: 'App Subscribers',
-    brief: 'A new app gains a steady percentage of new users each month (word of mouth). That is exponential growth, not “+1000 users every month.” Model the subscriber curve.',
-    recommend: 'Exponential Spike + Stretch',
-    target: 1650,
-    hints: [
-      'Percentage growth → Exponential',
-      'Linear would be a fixed number of new users each month',
-      'Use Exponential Spike'
-    ],
-    storyDuring: t => 'Subscriber base growing…',
-    visual: 'bars'
-  },
-
-  // ===== QUADRATIC =====
   {
     id: 'hoop',
     family: 'quadratic',
     title: 'Basketball Shot',
-    brief: 'A basketball follows a curved path (a parabola) under gravity. Build a quadratic function so the height of the ball matches an arc that can go through the hoop.',
-    recommend: 'Quadratic Surge + Shift + Stretch',
-    target: 950,
-    hints: [
-      'Projectile under gravity → Quadratic',
-      'Shift moves where the peak of the arc is',
-      'Stretch changes how high the ball goes'
+    context: 'A basketball under gravity follows a parabolic path. Height vs horizontal position (or time) is quadratic.',
+    question: 'Use y = a(x − h)² + k. Set a negative so the arc opens downward. Adjust so the peak is near x = 5 and height about 12. What height does your model give at x = 5?',
+    xLabel: 'Horizontal position',
+    yLabel: 'Height',
+    xMin: 0, xMax: 10,
+    params: [
+      { key: 'a', label: 'Curvature a (negative = opens down)', min: -2, max: -0.1, step: 0.05, default: -0.5 },
+      { key: 'h', label: 'Peak position h', min: 2, max: 8, step: 0.25, default: 5 },
+      { key: 'k', label: 'Peak height k', min: 5, max: 20, step: 0.5, default: 12 }
     ],
-    storyDuring: t => t < 4 ? 'Ball in the air…' : t < 7 ? 'Near the rim…' : 'At the hoop',
-    visual: 'ball'
+    form: 'y = a(x − h)² + k',
+    eval: (p, x) => p.a * Math.pow(x - p.h, 2) + p.k,
+    answer: { type: 'numeric', target: 12, tol: 1.5, atX: 5, prompt: 'Height at x = 5' },
+    motion: 'ball',
+    hints: ['Peak is at x = h, height = k', 'a must be negative for a downward arc']
   },
-  {
-    id: 'hose',
-    family: 'quadratic',
-    title: 'Garden Hose',
-    brief: 'Water from a hose aimed upward follows a parabola and falls back down. Model the stream so it lands on the far flower bed instead of the path.',
-    recommend: 'Quadratic Surge + Shift + Stretch',
-    target: 910,
-    hints: [
-      'Arcing water → Quadratic',
-      'Shift aims the landing point',
-      'Stretch sets maximum height'
-    ],
-    storyDuring: t => t < 5 ? 'Stream rising…' : 'Falling toward the flowers',
-    visual: 'ball'
-  },
-  {
-    id: 'phone',
-    family: 'quadratic',
-    title: 'Dropped Phone',
-    brief: 'When you drop a phone, its height above the ground falls faster and faster (accelerated by gravity). Height vs time is roughly quadratic. Model the fall.',
-    recommend: 'Quadratic Surge',
-    target: 850,
-    hints: [
-      'Free fall height vs time → Quadratic',
-      'Not linear (that would be constant speed)',
-      'Quadratic Surge is the right parent'
-    ],
-    storyDuring: t => t < 5 ? 'Phone falling…' : 'About to hit the ground',
-    visual: 'ball'
-  },
-  {
-    id: 'profit',
-    family: 'quadratic',
-    title: 'Lemonade Pricing',
-    brief: 'If you set the price too low you sell a lot but earn little per cup; too high and few people buy. Profit often rises then falls — a downward-opening parabola. Find a quadratic that peaks at a sensible price.',
-    recommend: 'Quadratic + Stretch + Shift',
-    target: 920,
-    hints: [
-      'Profit vs price often peaks then falls → Quadratic',
-      'Shift moves the best price',
-      'Stretch changes how sharp the peak is'
-    ],
-    storyDuring: t => 'Scanning price vs profit…',
-    visual: 'bars'
-  },
-
-  // ===== LINEAR =====
   {
     id: 'taxi',
     family: 'linear',
     title: 'Taxi Fare',
-    brief: 'A taxi charges a starting fee plus a fixed amount per kilometre. Total cost rises at a constant rate. Model the fare with a linear function.',
-    recommend: 'Linear Core + Stretch (rate) + Shift (base fee)',
-    target: 700,
-    hints: [
-      'Constant rate per km → Linear',
-      'Shift can represent the flag-fall fee',
-      'Stretch is the per-km rate'
+    context: 'A taxi charges a fixed start fee plus a constant rate per kilometre. Total cost rises at a steady rate — a straight line.',
+    question: 'Model y = mx + c with c = 3 (start fee) and m = 2 ($ per km). What is the fare for a 7 km trip?',
+    xLabel: 'Distance (km)',
+    yLabel: 'Fare ($)',
+    xMin: 0, xMax: 10,
+    params: [
+      { key: 'm', label: 'Rate m ($ per km)', min: 0.5, max: 5, step: 0.1, default: 2 },
+      { key: 'c', label: 'Start fee c ($)', min: 0, max: 10, step: 0.5, default: 3 }
     ],
-    storyDuring: t => 'Meter running…',
-    visual: 'line'
+    form: 'y = mx + c',
+    eval: (p, x) => p.m * x + p.c,
+    answer: { type: 'numeric', target: 17, tol: 1, atX: 7, prompt: 'Fare for 7 km ($)' },
+    motion: null,
+    hints: ['At x = 7: y = 2·7 + 3 = 17']
+  },
+  {
+    id: 'richter',
+    family: 'logarithmic',
+    title: 'Earthquake Magnitude',
+    context: 'On a Richter-style scale, each step up of 1 means far more energy. The scale is logarithmic: large energy changes become smaller steps on the scale.',
+    question: 'Model y = a · log₂(x) for x ≥ 1. With a = 2, what is y when x = 8?',
+    xLabel: 'Relative energy x',
+    yLabel: 'Magnitude reading',
+    xMin: 1, xMax: 16,
+    params: [
+      { key: 'a', label: 'Scale factor a', min: 0.5, max: 4, step: 0.1, default: 2 },
+      { key: 'k', label: 'Offset k', min: -2, max: 2, step: 0.1, default: 0 }
+    ],
+    form: 'y = a · log₂(x) + k',
+    eval: (p, x) => (x <= 0 ? NaN : p.a * Math.log2(x) + p.k),
+    answer: { type: 'numeric', target: 6, tol: 0.4, atX: 8, prompt: 'Reading at x = 8' },
+    motion: 'scale',
+    hints: ['log₂(8) = 3, so 2·3 = 6']
+  },
+  {
+    id: 'pizza',
+    family: 'rational',
+    title: 'Sharing a Pizza',
+    context: 'One pizza shared equally: amount per person = total ÷ number of people. That is a 1/n (rational) relationship.',
+    question: 'Model y = a / x with a = 8 (slices). How many slices per person when 4 people share?',
+    xLabel: 'Number of people',
+    yLabel: 'Slices each',
+    xMin: 1, xMax: 10,
+    params: [
+      { key: 'a', label: 'Total slices a', min: 4, max: 16, step: 1, default: 8 },
+      { key: 'h', label: 'Shift h (usually 0)', min: -1, max: 1, step: 0.5, default: 0 }
+    ],
+    form: 'y = a / (x − h)',
+    eval: (p, x) => {
+      const d = x - p.h;
+      return Math.abs(d) < 1e-9 ? NaN : p.a / d;
+    },
+    answer: { type: 'numeric', target: 2, tol: 0.2, atX: 4, prompt: 'Slices each when 4 people' },
+    motion: 'slices',
+    hints: ['8 slices ÷ 4 people = 2 each']
   },
   {
     id: 'walk',
     family: 'linear',
     title: 'Walk to School',
-    brief: 'You walk at a nearly constant speed. Distance from home increases steadily with time. Model this with a linear function to see when you arrive.',
-    recommend: 'Linear Core + Stretch',
-    target: 680,
-    hints: [
-      'Constant speed → Linear',
-      'Stretch = walking speed',
-      'Not exponential (you are not accelerating)'
+    context: 'You walk at a nearly constant speed. Distance from home increases steadily with time — linear.',
+    question: 'Model y = mx with m = 1.2 km per time unit. How far have you walked at t = 5?',
+    xLabel: 'Time',
+    yLabel: 'Distance (km)',
+    xMin: 0, xMax: 10,
+    params: [
+      { key: 'm', label: 'Speed m (km per unit)', min: 0.5, max: 3, step: 0.1, default: 1.2 },
+      { key: 'c', label: 'Start position c', min: 0, max: 2, step: 0.1, default: 0 }
     ],
-    storyDuring: t => 'Steps adding up at a steady pace…',
-    visual: 'line'
+    form: 'y = mx + c',
+    eval: (p, x) => p.m * x + p.c,
+    answer: { type: 'numeric', target: 6, tol: 0.4, atX: 5, prompt: 'Distance at t = 5 (km)' },
+    motion: null,
+    hints: ['1.2 × 5 = 6']
   },
   {
-    id: 'allowance',
-    family: 'linear',
-    title: 'Weekly Allowance',
-    brief: 'You save a fixed amount every week and earn no interest. The total saved is just “amount × weeks” — a straight line. Model it.',
-    recommend: 'Linear Core + Stretch',
-    target: 720,
-    hints: [
-      'Same amount each week → Linear',
-      'If it earned interest it would be exponential',
-      'Linear Core is correct here'
+    id: 'phone',
+    family: 'quadratic',
+    title: 'Dropped Phone',
+    context: 'In free fall, height vs time is roughly quadratic (accelerated motion), not a straight line.',
+    question: 'Use y = a(x − h)² + k with a = −0.8, h = 0, k = 20 (drop from height 20). What is height at t = 3?',
+    xLabel: 'Time',
+    yLabel: 'Height',
+    xMin: 0, xMax: 6,
+    params: [
+      { key: 'a', label: 'a (negative for falling)', min: -2, max: -0.2, step: 0.05, default: -0.8 },
+      { key: 'h', label: 'h', min: 0, max: 2, step: 0.25, default: 0 },
+      { key: 'k', label: 'Start height k', min: 10, max: 30, step: 1, default: 20 }
     ],
-    storyDuring: t => 'Savings growing by the same amount each week…',
-    visual: 'bars'
-  },
-
-  // ===== LOGARITHMIC =====
-  {
-    id: 'richter',
-    family: 'logarithmic',
-    title: 'Earthquake Magnitude',
-    brief: 'On the Richter scale, each step up of 1 means about 10 times more energy. That is a logarithmic scale: large energy changes become smaller steps on the scale. Model the relationship with a log function.',
-    recommend: 'Log Dampen + Stretch',
-    target: 600,
-    hints: [
-      'Richter scale is logarithmic',
-      'Log turns multiplication into addition on the scale',
-      'Use Log Dampen'
-    ],
-    storyDuring: t => 'Measuring seismic intensity…',
-    visual: 'scale'
-  },
-  {
-    id: 'volume',
-    family: 'logarithmic',
-    title: 'Speaker Loudness',
-    brief: 'Loudness in decibels is logarithmic in sound power. Doubling the power does not double the perceived loudness. Model this with a log function.',
-    recommend: 'Log Dampen + Stretch',
-    target: 580,
-    hints: [
-      'Decibels are a log scale',
-      'Human hearing compresses large power changes',
-      'Log parent'
-    ],
-    storyDuring: t => 'Volume dial turning…',
-    visual: 'scale'
-  },
-  {
-    id: 'search',
-    family: 'logarithmic',
-    title: 'Dictionary Lookup',
-    brief: 'In a sorted dictionary you can find a word by repeatedly jumping to the middle of the remaining section. The number of steps grows very slowly (logarithmically) even for a huge book. Model that with a log function.',
-    recommend: 'Log Dampen + Stretch',
-    target: 620,
-    hints: [
-      'Halving the search range each time → Logarithmic',
-      'Steps stay small even for millions of entries',
-      'Log Dampen is the parent'
-    ],
-    storyDuring: t => 'Halving the remaining pages…',
-    visual: 'scale'
-  },
-
-  // ===== RATIONAL =====
-  {
-    id: 'pizza',
-    family: 'rational',
-    title: 'Sharing a Pizza',
-    brief: 'One pizza shared equally among more friends means each person gets less. Amount per person = total ÷ number of people (a 1/n relationship). Model this with a rational function.',
-    recommend: 'Rational Singularity + Stretch',
-    target: 750,
-    hints: [
-      'Amount per person = 1 / n → Rational',
-      'More people → less each',
-      'Rational Singularity is the parent'
-    ],
-    storyDuring: t => 'More friends arriving…',
-    visual: 'slices'
-  },
-  {
-    id: 'traffic',
-    family: 'rational',
-    title: 'Traffic Speed',
-    brief: 'When a road gets crowded, average speed drops. A simple model is “speed ≈ constant / density.” That is a rational (1/x) relationship. Build it.',
-    recommend: 'Rational Singularity + Stretch + Shift',
-    target: 800,
-    hints: [
-      'Speed falls as density rises ≈ 1/x',
-      'Rational parent',
-      'Shift can move where the jam becomes severe'
-    ],
-    storyDuring: t => t < 5 ? 'Traffic building…' : 'Near gridlock',
-    visual: 'cars'
-  },
-  {
-    id: 'workers',
-    family: 'rational',
-    title: 'Team Work Rate',
-    brief: 'A job takes a fixed amount of work. More workers finish it faster: time ≈ work ÷ number of workers. Model time vs workers with a rational function.',
-    recommend: 'Rational Singularity + Shift',
-    target: 780,
-    hints: [
-      'Time = work / workers → Rational',
-      'More workers → less time',
-      'Rational Singularity'
-    ],
-    storyDuring: t => 'Team size changing…',
-    visual: 'bars'
+    form: 'y = a(x − h)² + k',
+    eval: (p, x) => p.a * Math.pow(x - p.h, 2) + p.k,
+    answer: { type: 'numeric', target: 12.8, tol: 1.5, atX: 3, prompt: 'Height at t = 3' },
+    motion: 'ball',
+    hints: ['y = −0.8·(3)² + 20 = −7.2 + 20 = 12.8']
   }
 ];
 
