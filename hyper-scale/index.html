@@ -36,7 +36,9 @@
 
   <header class="flex flex-wrap items-center justify-between gap-3 mb-6">
     <div>
-      <h1 class="text-xl md:text-2xl font-semibold tracking-tight text-white">Hyper-Scale Lab</h1>
+      <h1 class="text-xl md:text-2xl font-semibold tracking-tight">
+        <a href="/" class="text-white hover:text-sky-300 transition">Hyper-Scale Lab</a>
+      </h1>
       <p class="text-sm text-slate-400">Self-study · model real situations with one function family</p>
     </div>
     <div class="flex items-center gap-2">
@@ -85,7 +87,7 @@
     <div class="grid lg:grid-cols-5 gap-4">
       <div class="lg:col-span-3 panel p-3">
         <canvas id="graph" width="720" height="400"></canvas>
-        <p id="graphNote" class="text-xs text-slate-500 text-center mt-1">Solution marker appears after a correct answer or 3 attempts.</p>
+        <p class="text-xs text-slate-500 text-center mt-1">Solution marker appears after a correct answer or 3 attempts.</p>
       </div>
 
       <div class="lg:col-span-2 space-y-3">
@@ -118,12 +120,11 @@
     </div>
   </div>
 
-  <!-- Solution modal -->
   <div id="solutionModal" class="modal-backdrop hidden">
     <div class="panel max-w-md w-full p-6 shadow-2xl border-sky-800/50">
       <h3 id="modalTitle" class="text-lg font-semibold text-white mb-3">Solution</h3>
       <div id="modalBody" class="text-sm text-slate-300 space-y-3 leading-relaxed"></div>
-      <button id="modalClose" class="mt-5 w-full py-2.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-sm font-medium">Continue</button>
+      <button id="modalClose" class="mt-5 w-full py-2.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-sm font-medium">Next problem (same type)</button>
     </div>
   </div>
 
@@ -137,7 +138,7 @@
   let params = {};
   let attempts = 0;
   let solved = false;
-  let revealSolution = false; // show marker on graph
+  let revealSolution = false;
   let animT = null;
   let animId = null;
 
@@ -147,13 +148,24 @@
     location.href = '/login.html';
   };
 
-  document.getElementById('pickBtn').onclick = () => start(null);
+  document.getElementById('pickBtn').onclick = () => openScenario(window.pickScenario(null));
   document.getElementById('backBtn').onclick = showPicker;
+
+  // After solution: same scenario type, new parameters
   document.getElementById('modalClose').onclick = () => {
     document.getElementById('solutionModal').classList.add('hidden');
+    if (scenario && window.rerollScenario) {
+      openScenario(window.rerollScenario(scenario.id));
+    } else {
+      openScenario(window.pickScenario(scenario ? scenario.family : null));
+    }
   };
+
   document.querySelectorAll('#picker [data-f]').forEach(btn => {
-    btn.onclick = () => start(btn.dataset.f === 'all' ? null : btn.dataset.f);
+    btn.onclick = () => {
+      const f = btn.dataset.f === 'all' ? null : btn.dataset.f;
+      openScenario(window.pickScenario(f));
+    };
   });
 
   function showPicker() {
@@ -178,8 +190,8 @@
     }
   }
 
-  function start(familyFilter) {
-    scenario = window.pickScenario(familyFilter);
+  function openScenario(s) {
+    scenario = s;
     if (!scenario) return;
 
     params = {};
@@ -201,7 +213,6 @@
     document.getElementById('answerInput').disabled = false;
     document.getElementById('checkBtn').disabled = false;
 
-    // Hints hidden until 2 failed attempts
     document.getElementById('hintsPanel').classList.add('hidden');
     document.getElementById('hints').innerHTML = (scenario.hints || []).map(h => `<li>${h}</li>`).join('');
 
@@ -240,24 +251,26 @@
     });
   }
 
+  function idealParams() {
+    return scenario.idealParams || Object.fromEntries(scenario.params.map(p => [p.key, p.default]));
+  }
+
   function buildSolutionExplanation() {
     const a = scenario.answer;
     const atX = a.atX;
     const target = a.target;
-    // Ideal params: use defaults which are set to produce the intended answer in our scenarios
-    const ideal = {};
-    scenario.params.forEach(p => { ideal[p.key] = p.default; });
+    const ideal = idealParams();
     const modelY = window.LabMath.valueAt(scenario, ideal, atX);
 
     let steps = `<p><strong class="text-white">Target:</strong> about <span class="mono text-sky-300">${target}</span> at <span class="mono">x = ${atX}</span>.</p>`;
     steps += `<p><strong class="text-white">Model:</strong> <span class="mono text-sky-300">${scenario.form}</span></p>`;
-    steps += `<p><strong class="text-white">Suggested parameters:</strong></p><ul class="list-disc list-inside text-slate-400">`;
+    steps += `<p><strong class="text-white">Parameters that work:</strong></p><ul class="list-disc list-inside text-slate-400">`;
     scenario.params.forEach(p => {
-      steps += `<li>${p.label}: <span class="mono text-sky-300">${p.default}</span></li>`;
+      steps += `<li>${p.label}: <span class="mono text-sky-300">${ideal[p.key]}</span></li>`;
     });
     steps += `</ul>`;
     if (modelY != null) {
-      steps += `<p>Plug in x = ${atX}: the model gives <span class="mono text-emerald-400">y ≈ ${modelY.toFixed(2)}</span>.</p>`;
+      steps += `<p>At x = ${atX}: <span class="mono text-emerald-400">y ≈ ${modelY.toFixed(2)}</span>.</p>`;
     }
     if (scenario.hints && scenario.hints.length) {
       steps += `<p class="text-slate-400"><strong class="text-white">Reasoning:</strong> ${scenario.hints[scenario.hints.length - 1]}</p>`;
@@ -304,7 +317,6 @@
       return;
     }
 
-    // Failed attempt
     if (attempts === 2) {
       document.getElementById('hintsPanel').classList.remove('hidden');
     }
@@ -345,11 +357,9 @@
 
     window.HyperGraph.drawCurve(ctx, pts, plot.tx, plot.ty, '#3db8ff');
 
-    // Solution marker ONLY after correct or 3 fails
     if (revealSolution && scenario.answer && scenario.answer.atX != null) {
       const ax = scenario.answer.atX;
-      const ideal = {};
-      scenario.params.forEach(p => { ideal[p.key] = p.default; });
+      const ideal = idealParams();
       const y = window.LabMath.valueAt(scenario, ideal, ax);
       const px = plot.tx(ax);
       ctx.strokeStyle = 'rgba(52, 211, 153, 0.55)';
