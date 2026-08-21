@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hyper-Scale — Concept Encounters</title>
+  <title>Hyper-Scale — 25 Real-Life Scenarios</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="visuals.js"></script>
+  <script src="scenarios.js"></script>
   <script>
     (function () {
       const token = localStorage.getItem('precalc_token');
@@ -46,25 +47,46 @@
     </div>
   </header>
 
+  <!-- Mission Select -->
   <div id="missionSelect" class="w-full max-w-4xl">
-    <h2 class="font-orbitron text-xl text-cyan-300 mb-2 tracking-wider">Select Encounter</h2>
-    <p class="text-sm text-cyan-200/70 mb-6">Each mission matches a real situation to one main type of function. Build the right function family to win.</p>
-    <div class="grid md:grid-cols-2 gap-5">
-      <div class="mission-card neon-box rounded-xl p-5 bg-black/50" data-mission="outbreak">
-        <div class="text-[10px] uppercase tracking-widest text-pink-400 mb-1">Exponential Growth</div>
-        <h3 class="font-orbitron text-lg text-white mb-2">Outbreak Protocol</h3>
-        <p class="text-sm text-cyan-100/80 leading-relaxed mb-3">A digital virus is <strong>doubling</strong> every turn. You need an <strong>exponential</strong> function.</p>
-        <div class="text-xs text-cyan-400/60">Target: <span class="text-cyan-300 font-bold">1800</span> &nbsp;|&nbsp; Use: Exponential Spike + Stretch</div>
+    <h2 class="font-orbitron text-xl text-cyan-300 mb-2 tracking-wider">Real-Life Function Encounters</h2>
+    <p class="text-sm text-cyan-200/70 mb-6">25 everyday situations. Each one is randomly chosen and teaches how a specific type of function behaves.</p>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="mission-card neon-box rounded-xl p-5 bg-black/50" data-filter="all">
+        <div class="text-[10px] uppercase tracking-widest text-cyan-400 mb-1">Random</div>
+        <h3 class="font-orbitron text-lg text-white mb-2">Any Scenario</h3>
+        <p class="text-sm text-cyan-100/80">Pick from all 25 real-life situations.</p>
       </div>
-      <div class="mission-card neon-box rounded-xl p-5 bg-black/50" data-mission="hoop">
-        <div class="text-[10px] uppercase tracking-widest text-cyan-400 mb-1">Quadratic / Projectile</div>
-        <h3 class="font-orbitron text-lg text-white mb-2">Hoop Shot</h3>
-        <p class="text-sm text-cyan-100/80 leading-relaxed mb-3">A basketball follows a curved path. You need a <strong>quadratic</strong> function.</p>
-        <div class="text-xs text-cyan-400/60">Target: <span class="text-cyan-300 font-bold">950</span> &nbsp;|&nbsp; Use: Quadratic Surge + Shift / Stretch</div>
+      <div class="mission-card neon-box rounded-xl p-5 bg-black/50" data-filter="exponential">
+        <div class="text-[10px] uppercase tracking-widest text-pink-400 mb-1">Exponential</div>
+        <h3 class="font-orbitron text-lg text-white mb-2">Growth & Decay</h3>
+        <p class="text-sm text-cyan-100/80">Virus, savings, bacteria, views, cooling…</p>
+      </div>
+      <div class="mission-card neon-box rounded-xl p-5 bg-black/50" data-filter="quadratic">
+        <div class="text-[10px] uppercase tracking-widest text-fuchsia-400 mb-1">Quadratic</div>
+        <h3 class="font-orbitron text-lg text-white mb-2">Curves & Projectiles</h3>
+        <p class="text-sm text-cyan-100/80">Basketball, fountain, bridge, dropped phone…</p>
+      </div>
+      <div class="mission-card neon-box rounded-xl p-5 bg-black/50" data-filter="linear">
+        <div class="text-[10px] uppercase tracking-widest text-sky-400 mb-1">Linear</div>
+        <h3 class="font-orbitron text-lg text-white mb-2">Steady Change</h3>
+        <p class="text-sm text-cyan-100/80">Taxi fare, data plan, walking, allowance…</p>
+      </div>
+      <div class="mission-card neon-box rounded-xl p-5 bg-black/50" data-filter="logarithmic">
+        <div class="text-[10px] uppercase tracking-widest text-emerald-400 mb-1">Logarithmic</div>
+        <h3 class="font-orbitron text-lg text-white mb-2">Scales & Senses</h3>
+        <p class="text-sm text-cyan-100/80">Richter, volume, pH, binary search…</p>
+      </div>
+      <div class="mission-card neon-box rounded-xl p-5 bg-black/50" data-filter="rational">
+        <div class="text-[10px] uppercase tracking-widest text-amber-400 mb-1">Rational</div>
+        <h3 class="font-orbitron text-lg text-white mb-2">Rates & Sharing</h3>
+        <p class="text-sm text-cyan-100/80">Traffic, pizza, work rate, lens…</p>
       </div>
     </div>
   </div>
 
+  <!-- Game Screen -->
   <div id="gameScreen" class="w-full max-w-6xl hidden">
     <div class="neon-box rounded-xl p-4 mb-4 bg-black/40">
       <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
@@ -126,7 +148,7 @@
     <div class="mt-5">
       <div class="flex items-center justify-between mb-2">
         <h2 class="font-orbitron text-[10px] text-cyan-400 tracking-widest">YOUR HAND</h2>
-        <div class="text-[10px] text-cyan-400/50">Green glow = recommended for this mission</div>
+        <div class="text-[10px] text-cyan-400/50">Green glow = recommended for this scenario</div>
       </div>
       <div id="handContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5"></div>
     </div>
@@ -134,12 +156,15 @@
 
   <div id="helpOverlay" class="overlay">
     <div class="neon-box bg-black/95 rounded-2xl p-6 max-w-lg w-full mx-4">
-      <h2 class="font-orbitron text-2xl text-cyan-300 mb-4">How Hyper-Scale Works</h2>
+      <h2 class="font-orbitron text-2xl text-cyan-300 mb-4">How It Works</h2>
       <div class="space-y-3 text-sm text-cyan-100/90">
-        <p><strong class="text-cyan-300">Goal</strong><br/>Match the right type of function to the situation, then reach the Target Damage.</p>
-        <p><strong class="text-cyan-300">Outbreak</strong> needs Exponential (doubling growth).<br/>
-        <strong class="text-cyan-300">Hoop Shot</strong> needs Quadratic (curved trajectory).</p>
-        <p>Recommended cards glow green in your hand.</p>
+        <p>You get a real-life situation. Your job is to pick the function family that matches how the quantity changes.</p>
+        <p><strong class="text-cyan-300">Exponential</strong> — doubles / percentage growth or decay<br/>
+        <strong class="text-cyan-300">Quadratic</strong> — arcs, projectiles, peaks<br/>
+        <strong class="text-cyan-300">Linear</strong> — steady rate<br/>
+        <strong class="text-cyan-300">Logarithmic</strong> — scales like Richter or decibels<br/>
+        <strong class="text-cyan-300">Rational</strong> — rates, sharing, 1/x relationships</p>
+        <p>Recommended cards glow green. Reach the Target Damage to win.</p>
       </div>
       <button id="closeHelpBtn" class="mt-5 w-full py-2.5 font-orbitron rounded-lg bg-cyan-700 hover:bg-cyan-600">Got it</button>
     </div>
@@ -151,8 +176,8 @@
       <p id="resultScore" class="text-lg text-cyan-300 mb-2"></p>
       <p id="resultHint" class="text-sm text-cyan-200/70 mb-6 leading-relaxed"></p>
       <div class="flex gap-3 justify-center">
-        <button id="restartBtn" class="px-6 py-2.5 font-orbitron font-bold rounded-lg bg-cyan-700 hover:bg-cyan-600">Retry</button>
-        <button id="nextMissionBtn" class="px-6 py-2.5 font-orbitron font-bold rounded-lg bg-fuchsia-700 hover:bg-fuchsia-600">Missions</button>
+        <button id="restartBtn" class="px-6 py-2.5 font-orbitron font-bold rounded-lg bg-cyan-700 hover:bg-cyan-600">Retry Same</button>
+        <button id="nextMissionBtn" class="px-6 py-2.5 font-orbitron font-bold rounded-lg bg-fuchsia-700 hover:bg-fuchsia-600">New Scenario</button>
       </div>
     </div>
   </div>
@@ -167,7 +192,6 @@ class MathEngine {
   validatePiecewiseContinuity(a,b,turn){ const left=this.evaluate(a,turn), right=this.evaluate(b,turn), delta=Math.abs(left-right); return delta<=this.THRESH?{status:'Continuous',delta,multiplier:3}:{status:'Jump Discontinuity',delta,multiplier:1}; }
   describe(card){ const map={linear:'x',quadratic:'x²',exponential:'2ˣ',logarithmic:'log₂(x)',rational:'1/x'}; let expr=map[card.type||card.parentType]||'?'; const a=card.a??1,h=card.h??0; if(h!==0) expr=expr.replace(/x/g,`(x${h>0?' − ':' + '}${Math.abs(h)})`); if(a!==1) expr=`${a}·${expr}`; return expr; }
 }
-
 class Card { constructor(o){ Object.assign(this,{id:o.id,name:o.name,type:o.type,parentType:o.parentType||null,a:o.a??1,h:o.h??0,description:o.description||'',color:o.color||'#00f0ff',rarity:o.rarity||'common'}); } clone(){ return new Card({...this,id:this.id+'_'+Math.random().toString(36).slice(2,6)}); } }
 class Deck {
   constructor(cards=[]){ this.drawPile=[...cards]; this.discardPile=[]; this.hand=[]; this.shuffle(); }
@@ -178,10 +202,10 @@ class Deck {
 const CardLibrary = {
   createStarterDeck(){
     const list=[]; const add=o=>list.push(new Card(o));
-    add({id:'lin',name:'Linear Core',type:'parent',parentType:'linear',description:'f(x)=x',color:'#00f0ff'});
-    add({id:'quad',name:'Quadratic Surge',type:'parent',parentType:'quadratic',description:'f(x)=x²',color:'#ff00aa',rarity:'uncommon'});
+    add({id:'lin',name:'Linear Core',type:'parent',parentType:'linear',description:'f(x)=x — steady',color:'#00f0ff'});
+    add({id:'quad',name:'Quadratic Surge',type:'parent',parentType:'quadratic',description:'f(x)=x² — arc',color:'#ff00aa',rarity:'uncommon'});
     add({id:'exp',name:'Exponential Spike',type:'parent',parentType:'exponential',description:'f(x)=2ˣ — doubles',color:'#bf00ff',rarity:'rare'});
-    add({id:'log',name:'Log Dampen',type:'parent',parentType:'logarithmic',description:'f(x)=log₂(x)',color:'#00ff9f'});
+    add({id:'log',name:'Log Dampen',type:'parent',parentType:'logarithmic',description:'f(x)=log₂(x) — slow',color:'#00ff9f'});
     add({id:'rat',name:'Rational Singularity',type:'parent',parentType:'rational',description:'f(x)=1/x — decays',color:'#ffaa00',rarity:'uncommon'});
     add({id:'s2',name:'×2 Stretch',type:'modifier',a:2,h:0,description:'Doubles amplitude',color:'#ff6b6b'});
     add({id:'s3',name:'×3 Amplify',type:'modifier',a:3,h:0,description:'Triples amplitude',color:'#ff4757',rarity:'uncommon'});
@@ -190,8 +214,7 @@ const CardLibrary = {
     add({id:'shm2',name:'Shift −2',type:'modifier',a:1,h:-2,description:'Move left',color:'#a29bfe'});
     add({id:'shm3',name:'Shift −3',type:'modifier',a:1,h:-3,description:'Strong left shift',color:'#7c5cff'});
     add({id:'combo',name:'Amplify & Offset',type:'modifier',a:2.5,h:1,description:'×2.5 + shift 1',color:'#fd79a8',rarity:'rare'});
-    // Extra copies of key parents so they appear more often
-    list.push(list[1].clone(), list[2].clone(), list[2].clone(), list[5].clone(), list[6].clone());
+    list.push(list[0].clone(),list[1].clone(),list[2].clone(),list[2].clone(),list[3].clone(),list[4].clone(),list[5].clone(),list[6].clone());
     return list;
   }
 };
@@ -220,74 +243,17 @@ class Juice {
   reset(){ this.particles=[]; this.shake={mag:0,dur:0,ox:0,oy:0}; this.punch={x:0,y:0}; this.flash.a=0; this.hitStop=0; this.timeScale=1; }
 }
 
-const MISSIONS = {
-  outbreak: {
-    id: 'outbreak',
-    title: 'Outbreak Protocol',
-    brief: 'A digital virus is doubling every turn. You must build an exponential function that grows the same way and generate enough damage to contain the outbreak.',
-    recommend: 'Recommended: Exponential Spike + ×2 Stretch or ×3 Amplify',
-    requiredFamily: 'exponential',
-    target: 1800,
-    hints: [
-      'Play the Exponential Spike card (it doubles each turn)',
-      'Add Stretch / Amplify to increase power',
-      'Avoid Rational or Log — those shrink or grow too slowly'
-    ],
-    storyDuring: t => t<3 ? 'Infection spreading slowly…' : t<7 ? 'Virus doubling rapidly!' : 'Critical containment window!'
-  },
-  hoop: {
-    id: 'hoop',
-    title: 'Hoop Shot',
-    brief: 'The ball follows a curved (parabolic) path. Build a quadratic function so the trajectory arcs through the hoop.',
-    recommend: 'Recommended: Quadratic Surge + Shift and/or Stretch',
-    requiredFamily: 'quadratic',
-    target: 950,
-    hints: [
-      'Play the Quadratic Surge card',
-      'Use Shift to move the peak of the arc',
-      'Use Stretch to control height'
-    ],
-    storyDuring: t => t<4 ? 'Ball leaving your hands…' : t<7 ? 'Climbing toward the rim…' : 'At the hoop!'
-  }
-};
-
-// Smart feedback based on function family used vs required
-function buildFeedback(mission, usedType, victory, score, target) {
-  const names = {
-    linear: 'Linear (steady, not accelerating)',
-    quadratic: 'Quadratic (parabolic arc)',
-    exponential: 'Exponential (doubling growth)',
-    logarithmic: 'Logarithmic (slow growth)',
-    rational: 'Rational (1/x — starts high then collapses)'
-  };
+function buildFeedback(mission, usedType, victory) {
+  const names = { linear:'Linear (steady rate)', quadratic:'Quadratic (arc / peak)', exponential:'Exponential (doubling / % growth)', logarithmic:'Logarithmic (compressing scale)', rational:'Rational (1/x — sharing / rates)' };
   const usedName = names[usedType] || usedType;
-  const need = mission.requiredFamily;
-
+  const need = mission.family;
   if (victory) {
-    if (usedType === need) {
-      return mission.id === 'outbreak'
-        ? 'Perfect. You matched the doubling virus with an exponential model.'
-        : 'Clean shot. The quadratic arc matched the ball’s trajectory.';
-    }
-    return `You reached the score, but you used ${usedName}. The intended model for this mission is ${need}.`;
+    return usedType === need
+      ? `Correct family (${usedName}). You matched the real-life situation.`
+      : `You hit the score, but this situation is best modeled by ${need}. You used ${usedName}.`;
   }
-
-  // Defeat feedback
-  if (usedType === need) {
-    return `You used the right family (${usedName}) but needed more power. Add Stretch or Amplify and try again.`;
-  }
-  if (mission.id === 'outbreak') {
-    if (usedType === 'rational') return 'Rational (1/x) decays — it falls toward zero. The virus is growing. Use Exponential Spike instead.';
-    if (usedType === 'logarithmic') return 'Log grows too slowly for a doubling virus. Use Exponential Spike.';
-    if (usedType === 'linear') return 'Linear grows at a constant rate. A doubling virus needs Exponential.';
-    if (usedType === 'quadratic') return 'Quadratic curves up, but not by doubling. For this outbreak use Exponential.';
-  }
-  if (mission.id === 'hoop') {
-    if (usedType === 'exponential') return 'Exponential rises too sharply for a basketball arc. Use Quadratic Surge.';
-    if (usedType === 'linear') return 'A straight line will not go through the hoop. You need a quadratic arc.';
-    if (usedType === 'rational') return 'Rational collapses — not a projectile path. Use Quadratic.';
-  }
-  return `You used ${usedName}. This mission expects ${need}. Check the recommended cards (green glow).`;
+  if (usedType === need) return `Right family (${usedName}) but not enough power. Add Stretch or Amplify.`;
+  return `This scenario needs ${need}. You used ${usedName}. Check the green-glow recommended cards.`;
 }
 
 class GameUI {
@@ -295,7 +261,8 @@ class GameUI {
     this.canvas=document.getElementById('graphCanvas'); this.ctx=this.canvas.getContext('2d');
     this.w=this.canvas.width; this.h=this.canvas.height;
     this.math=new MathEngine(); this.combat=new CombatManager(this.math); this.juice=new Juice(this.canvas);
-    this.points=[]; this.particleT=0; this.particleActive=false; this.executing=false; this.currentMission=null;
+    this.points=[]; this.particleT=0; this.particleActive=false; this.executing=false;
+    this.currentMission=null; this.lastFilter='all';
 
     try{ const user=JSON.parse(localStorage.getItem('precalc_user')||'null'); if(user) document.getElementById('userInfo').textContent=`Pilot: ${user.email} • ${user.role||'student'}`; }catch(e){}
 
@@ -304,42 +271,54 @@ class GameUI {
     document.getElementById('closeHelpBtn').onclick=()=>document.getElementById('helpOverlay').classList.remove('show');
     document.getElementById('missionsBtn').onclick=()=>this.showMissions();
     document.getElementById('backToMissions').onclick=()=>this.showMissions();
-    document.getElementById('nextMissionBtn').onclick=()=>this.showMissions();
-    document.querySelectorAll('.mission-card').forEach(el=>el.onclick=()=>this.startMission(el.dataset.mission));
+    document.getElementById('nextMissionBtn').onclick=()=>this.startRandom(this.lastFilter);
+
+    document.querySelectorAll('.mission-card').forEach(el=>{
+      el.onclick=()=>this.startRandom(el.dataset.filter||'all');
+    });
+
     this._bind(); this._loop();
   }
 
   showMissions(){ document.getElementById('missionSelect').classList.remove('hidden'); document.getElementById('gameScreen').classList.add('hidden'); document.getElementById('resultOverlay').classList.remove('show'); }
 
-  startMission(id){
-    this.currentMission=MISSIONS[id]; if(!this.currentMission) return;
+  startRandom(filter){
+    this.lastFilter = filter || 'all';
+    const family = filter === 'all' ? null : filter;
+    const scenario = window.pickScenario ? window.pickScenario(family) : null;
+    if (!scenario) { alert('Scenarios failed to load'); return; }
+    this.startMission(scenario);
+  }
+
+  startMission(scenario){
+    this.currentMission = scenario;
     document.getElementById('missionSelect').classList.add('hidden');
     document.getElementById('gameScreen').classList.remove('hidden');
-    document.getElementById('missionTitle').textContent=this.currentMission.title;
-    document.getElementById('missionBrief').textContent=this.currentMission.brief;
-    document.getElementById('missionRecommend').textContent=this.currentMission.recommend;
-    document.getElementById('targetScore').textContent=this.currentMission.target;
-    document.getElementById('missionHints').innerHTML=this.currentMission.hints.map(h=>`<li>${h}</li>`).join('');
-    this.combat.start(this.currentMission.target);
+    document.getElementById('missionTitle').textContent = scenario.title;
+    document.getElementById('missionBrief').textContent = scenario.brief;
+    document.getElementById('missionRecommend').textContent = scenario.recommend;
+    document.getElementById('targetScore').textContent = scenario.target;
+    document.getElementById('missionHints').innerHTML = (scenario.hints||[]).map(h=>`<li>${h}</li>`).join('');
+
+    this.combat.start(scenario.target);
     this.points=[]; this.particleActive=false; this.executing=false;
     document.getElementById('liveScore').textContent='0'; document.getElementById('liveScoreHeader').textContent='0';
     document.getElementById('continuityBadge').classList.add('hidden');
     document.getElementById('resultOverlay').classList.remove('show');
     document.getElementById('storyVisual').textContent='';
     this.juice.reset(); this._renderHand(); this._updateActive(); this._updatePiles();
-    this._status('Select the recommended Parent Function');
+    this._status('Select the recommended Parent Function (green glow)');
     document.getElementById('executeBtn').disabled=true;
   }
 
   _bind(){
     document.getElementById('executeBtn').onclick=()=>this.execute();
-    document.getElementById('restartBtn').onclick=()=>{ if(this.currentMission) this.startMission(this.currentMission.id); };
+    document.getElementById('restartBtn').onclick=()=>{ if(this.currentMission) this.startMission(this.currentMission); };
   }
 
   _isRecommended(card){
     if(!this.currentMission) return false;
-    if(card.type==='parent') return card.parentType === this.currentMission.requiredFamily;
-    // Modifiers are generally useful
+    if(card.type==='parent') return card.parentType === this.currentMission.family;
     return card.type==='modifier' && (card.a>1 || Math.abs(card.h)>0);
   }
 
@@ -358,8 +337,8 @@ class GameUI {
     if(this.executing) return;
     if(card.type==='parent'){
       this.combat.slotParent(card); this.juice.shakeScreen(3,140);
-      const ok = card.parentType === this.currentMission?.requiredFamily;
-      this._status(ok ? `Good choice: ${card.name}` : `Slotted ${card.name} — this mission prefers ${this.currentMission?.requiredFamily}`);
+      const ok = card.parentType === this.currentMission?.family;
+      this._status(ok ? `Good: ${card.name}` : `Slotted ${card.name} — this scenario prefers ${this.currentMission?.family}`);
       document.getElementById('executeBtn').disabled=false;
     } else {
       if(!this.combat.active){ this._status('First choose a Parent Function'); return; }
@@ -396,7 +375,7 @@ class GameUI {
       this.juice.combo(this.w*0.7,this.h*0.35);
     }
 
-    this._status('Executing across 10 turns…');
+    this._status('Executing…');
     const steps=100;
     for(let i=0;i<=steps;i++){
       const t=(i/steps)*10; this.particleT=t;
@@ -427,7 +406,7 @@ class GameUI {
     document.getElementById('resultTitle').textContent = victory ? 'VICTORY' : 'SYSTEM DEFEATED';
     document.getElementById('resultTitle').style.color = victory ? '#00f0ff' : '#ff0066';
     document.getElementById('resultScore').textContent = `Final Damage: ${score} / ${this.combat.target}`;
-    document.getElementById('resultHint').textContent = buildFeedback(this.currentMission, usedType, victory, score, this.combat.target);
+    document.getElementById('resultHint').textContent = buildFeedback(this.currentMission, usedType, victory);
     document.getElementById('resultOverlay').classList.add('show');
   }
 
@@ -451,7 +430,8 @@ class GameUI {
     ctx.fillStyle='rgba(0,240,255,0.4)'; ctx.font='10px Orbitron'; ctx.textAlign='center';
     for(let i=0;i<=10;i+=2) ctx.fillText(i,tx(i),h-pad+16);
 
-    if(this.particleActive && this.currentMission?.id==='outbreak' && window.HyperVisuals){
+    const fam = this.currentMission?.family;
+    if(this.particleActive && fam==='exponential' && window.HyperVisuals){
       window.HyperVisuals.drawOutbreak(ctx, this.particleT, tx, ty, h);
     }
 
@@ -467,7 +447,7 @@ class GameUI {
     if(this.particleActive && this.combat.active){
       const y=this.math.evaluate(this.combat.active, this.particleT);
       ballX=tx(this.particleT); ballY=ty(y);
-      if(!(this.currentMission?.id==='hoop' && window.HyperVisuals)){
+      if(!(fam==='quadratic' && window.HyperVisuals)){
         const g=ctx.createRadialGradient(ballX,ballY,0,ballX,ballY,14);
         g.addColorStop(0,'rgba(255,0,200,0.85)'); g.addColorStop(1,'rgba(255,0,200,0)');
         ctx.fillStyle=g; ctx.beginPath(); ctx.arc(ballX,ballY,14,0,Math.PI*2); ctx.fill();
@@ -475,7 +455,7 @@ class GameUI {
       }
     }
 
-    if(this.currentMission?.id==='hoop' && window.HyperVisuals){
+    if(fam==='quadratic' && window.HyperVisuals){
       window.HyperVisuals.drawHoop(ctx, this.particleT, this.particleActive, ballX, ballY, w, h, pad);
     }
 
@@ -485,7 +465,7 @@ class GameUI {
 
 window.addEventListener('DOMContentLoaded',()=>{
   window.game=new GameUI();
-  console.log('%c HYPER-SCALE — Quality-aligned missions online ', 'background:#00f0ff;color:#000;font-weight:bold;padding:4px 8px');
+  console.log('%c HYPER-SCALE — 25 Real-Life Scenarios Online ', 'background:#00f0ff;color:#000;font-weight:bold;padding:4px 8px');
 });
 </script>
 </body>
