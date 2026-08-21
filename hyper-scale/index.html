@@ -15,6 +15,8 @@
   <script src="scenarios-trigonometry.js"></script>
   <script src="scenarios-honors-sequences.js"></script>
   <script src="scenarios-honors-conics.js"></script>
+  <script src="scenarios-honors-vectors.js"></script>
+  <script src="scenarios-honors-adv-trig.js"></script>
   <script src="lab.js"></script>
   <script src="lab-solution.js"></script>
   <script>
@@ -168,8 +170,8 @@
     document.getElementById('levelPicker').classList.add('hidden');
     document.getElementById('unitPicker').classList.remove('hidden');
     document.getElementById('lab').classList.add('hidden');
-    const title = document.getElementById('unitPickerTitle');
-    title.textContent = (currentLevel === 'honors' ? 'Honors' : 'Standard') + ' — choose a section';
+    document.getElementById('unitPickerTitle').textContent =
+      (currentLevel === 'honors' ? 'Honors' : 'Standard') + ' — choose a section';
     const box = document.getElementById('unitCards');
     box.innerHTML = '';
     const counts = window.countByUnit ? window.countByUnit(currentLevel) : {};
