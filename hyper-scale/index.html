@@ -10,6 +10,8 @@
   <script src="curriculum.js"></script>
   <script src="scenarios.js"></script>
   <script src="scenarios-functions.js"></script>
+  <script src="scenarios-poly-rational.js"></script>
+  <script src="scenarios-exp-log.js"></script>
   <script src="lab.js"></script>
   <script>
     (function () {
@@ -52,13 +54,11 @@
     </div>
   </header>
 
-  <!-- Level select -->
   <div id="levelPicker" class="mb-6">
     <h2 class="text-sm uppercase tracking-wide text-slate-500 mb-3">Choose level</h2>
     <div class="grid sm:grid-cols-3 gap-3" id="levelCards"></div>
   </div>
 
-  <!-- Unit select (Standard) -->
   <div id="unitPicker" class="hidden mb-6">
     <button id="backLevel" class="text-sm text-slate-400 hover:text-sky-300 mb-3">← Levels</button>
     <h2 class="text-sm uppercase tracking-wide text-slate-500 mb-3">Standard — choose a section</h2>
@@ -151,18 +151,12 @@
     location.href = '/login.html';
   };
 
-  // Level cards
   const levelBox = document.getElementById('levelCards');
   (window.CURRICULUM.levels || []).forEach(L => {
     const btn = document.createElement('button');
     btn.className = 'panel p-4 text-left transition ' + (L.available ? 'hover:border-sky-500/50' : 'locked');
     btn.innerHTML = `<div class="font-medium text-white">${L.name}</div><div class="text-xs text-slate-400 mt-1">${L.blurb}</div>`;
-    if (L.available) {
-      btn.onclick = () => {
-        currentLevel = L.id;
-        showUnits();
-      };
-    }
+    if (L.available) btn.onclick = () => { currentLevel = L.id; showUnits(); };
     levelBox.appendChild(btn);
   });
 
@@ -181,28 +175,17 @@
       btn.innerHTML = `<div class="font-medium text-white">${U.name}</div>
         <div class="text-xs text-slate-400 mt-1">${U.blurb}</div>
         <div class="text-xs mt-2 ${ready ? 'text-emerald-400' : 'text-slate-500'}">${n} / ${U.targetCount} scenarios</div>`;
-      if (ready) {
-        btn.onclick = () => {
-          currentUnit = U.id;
-          openScenario(window.pickScenario(currentLevel, currentUnit));
-        };
-      }
+      if (ready) btn.onclick = () => { currentUnit = U.id; openScenario(window.pickScenario(currentLevel, currentUnit)); };
       box.appendChild(btn);
     });
   }
 
   document.getElementById('backLevel').onclick = goHome;
-  document.getElementById('backBtn').onclick = () => {
-    document.getElementById('lab').classList.add('hidden');
-    showUnits();
-    stopAnim();
-  };
-
+  document.getElementById('backBtn').onclick = () => { document.getElementById('lab').classList.add('hidden'); showUnits(); stopAnim(); };
   document.getElementById('pickBtn').onclick = () => {
     if (currentUnit) openScenario(window.pickScenario(currentLevel, currentUnit));
     else if (currentLevel) showUnits();
   };
-
   document.getElementById('modalClose').onclick = () => {
     document.getElementById('solutionModal').classList.add('hidden');
     openScenario(window.pickScenario(currentLevel, currentUnit || (scenario && scenario.unit)));
@@ -219,8 +202,7 @@
   function renderGlossary() {
     const g = scenario.symbolGlossary || [];
     document.getElementById('glossary').innerHTML = g.map(item =>
-      `<div><span class="mono text-sky-400">${item.sym}</span> — ${item.mean}</div>`
-    ).join('');
+      `<div><span class="mono text-sky-400">${item.sym}</span> — ${item.mean}</div>`).join('');
   }
 
   function openScenario(s) {
