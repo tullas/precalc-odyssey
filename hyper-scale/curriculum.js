@@ -1,5 +1,5 @@
 /**
- * Curriculum navigation — levels and Standard units
+ * Curriculum navigation — levels and units
  */
 window.CURRICULUM = {
   levels: [
@@ -12,8 +12,8 @@ window.CURRICULUM = {
     {
       id: 'honors',
       name: 'Honors',
-      blurb: 'Coming next — deeper extensions',
-      available: false
+      blurb: 'Sequences, conics, vectors, advanced trig',
+      available: true
     },
     {
       id: 'ap',
@@ -46,6 +46,32 @@ window.CURRICULUM = {
         id: 'trigonometry',
         name: 'Trigonometry',
         blurb: 'Angles, unit circle, graphs, identities, triangle laws',
+        targetCount: 25
+      }
+    ],
+    honors: [
+      {
+        id: 'sequences',
+        name: 'Sequences & Series',
+        blurb: 'Arithmetic & geometric sequences, partial sums',
+        targetCount: 25
+      },
+      {
+        id: 'conics',
+        name: 'Conic Sections',
+        blurb: 'Parabolas, circles, ellipses, hyperbolas',
+        targetCount: 25
+      },
+      {
+        id: 'vectors',
+        name: 'Vectors',
+        blurb: 'Components, magnitude, direction, basic operations',
+        targetCount: 25
+      },
+      {
+        id: 'adv-trig',
+        name: 'Advanced Trig',
+        blurb: 'Identities, equations, deeper applications',
         targetCount: 25
       }
     ]
