@@ -1,6 +1,8 @@
 /**
- * Scenario engine + legacy practical set + unit filters
- * Load scenarios-functions.js after this for Standard Functions (25).
+ * Scenario engine — templates loaded from unit packs:
+ *   scenarios-functions.js
+ *   scenarios-poly-rational.js
+ *   scenarios-exp-log.js
  */
 
 function roundNice(v, decimals) {
@@ -16,60 +18,6 @@ function randBetween(min, max, step) {
 }
 
 window.SCENARIO_TEMPLATES = window.SCENARIO_TEMPLATES || [];
-
-// Keep a few classic practical templates tagged exp-log / general for mixed practice
-(function seedPractical() {
-  const practical = [
-    {
-      id: 'savings', level: 'standard', unit: 'exp-log', family: 'exponential',
-      title: 'Savings Account',
-      context: 'You put money in a savings account. Each year the bank multiplies your balance by the same growth factor.',
-      xLabel: 'Years (x)', yLabel: 'Balance in $ (y)', xMin: 0, xMax: 10,
-      form: 'y = a · b^x',
-      symbolGlossary: [
-        { sym: 'x', mean: 'time in years' }, { sym: 'y', mean: 'balance ($)' },
-        { sym: 'a', mean: 'starting amount' }, { sym: 'b', mean: 'yearly growth factor' }
-      ],
-      eval: (p, x) => p.a * Math.pow(p.b, x), motion: null,
-      paramDefs: [
-        { key: 'a', label: 'a — Starting amount ($)', min: 500, max: 2000, step: 100 },
-        { key: 'b', label: 'b — Growth factor', min: 1.04, max: 1.12, step: 0.01 }
-      ],
-      build(p) {
-        const target = roundNice(p.a * Math.pow(p.b, 10), 0);
-        return {
-          question: `You start with $${p.a}. Aim for about $${target} after 10 years. Adjust sliders and enter the balance at year 10.`,
-          answer: { type: 'numeric', target, tol: Math.max(50, target * 0.08), atX: 10, prompt: 'Balance at year 10 ($)' },
-          hints: ['b > 1 means growth', `Read y at x = 10`]
-        };
-      }
-    },
-    {
-      id: 'pizza', level: 'standard', unit: 'poly-rational', family: 'rational',
-      title: 'Sharing a Pizza',
-      context: 'One pizza split evenly: more people means fewer slices each.',
-      xLabel: 'People (x)', yLabel: 'Slices each (y)', xMin: 1, xMax: 10,
-      form: 'y = a / x',
-      symbolGlossary: [
-        { sym: 'x', mean: 'people' }, { sym: 'y', mean: 'slices each' }, { sym: 'a', mean: 'total slices' }
-      ],
-      eval: (p, x) => p.a / x, motion: 'slices',
-      paramDefs: [
-        { key: 'a', label: 'a — Total slices', min: 6, max: 12, step: 1 },
-        { key: 'h', label: 'h', min: 0, max: 0, step: 1 }
-      ],
-      build(p) {
-        const target = roundNice(p.a / 4, 2);
-        return {
-          question: `Pizza has ${p.a} slices shared by 4 people. How many does each get?`,
-          answer: { type: 'numeric', target, tol: 0.25, atX: 4, prompt: 'Slices each (4 people)' },
-          hints: [`${p.a} ÷ 4 = ${target}`]
-        };
-      }
-    }
-  ];
-  practical.forEach(t => window.SCENARIO_TEMPLATES.push(t));
-})();
 
 window.instantiateScenario = function (template, fixedParams) {
   const params = {};
@@ -120,13 +68,13 @@ window.filterTemplates = function (level, unit) {
   let pool = window.SCENARIO_TEMPLATES || [];
   if (level) pool = pool.filter(t => (t.level || 'standard') === level);
   if (unit) pool = pool.filter(t => t.unit === unit);
-  return pool.length ? pool : (window.SCENARIO_TEMPLATES || []);
+  return pool.length ? pool : [];
 };
 
 window.pickScenario = function (level, unit) {
   const pool = window.filterTemplates(level || 'standard', unit || null);
   if (!pool.length) return null;
-  for (let i = 0; i < 15; i++) {
+  for (let i = 0; i < 20; i++) {
     const t = pool[Math.floor(Math.random() * pool.length)];
     const s = window.instantiateScenario(t);
     if (window.verifyScenarioMath(s).ok) return s;
