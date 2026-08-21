@@ -4,31 +4,27 @@ Every new encounter MUST pass this checklist before being added.
 
 ## 1. Story ↔ Math Alignment
 - [ ] The real-world situation genuinely requires the target function family
-- [ ] Example: "doubling virus" → Exponential; "ball trajectory" → Quadratic
 
-## 2. Intended Card Path
+## 2. Intended Card Path (CRITICAL)
 - [ ] Player can win using the recommended Parent + 1–2 Modifiers
-- [ ] Recommended cards are clearly mentioned in the mission hints
+- [ ] **Opening hand ALWAYS contains at least one card of the required parent family**
+- [ ] Recommended cards are clearly marked (green glow)
 
 ## 3. Educational Failure Feedback
 - [ ] If the player uses the wrong function family, the result screen explains the mismatch
-- [ ] Feedback names the family used vs the family needed
 
 ## 4. Target Score Calibration
 - [ ] Intended strategy reaches the target most of the time
 - [ ] Clearly wrong strategies usually fail
 
 ## 5. Visual Reinforcement
-- [ ] Visuals during Execute match the story (virus clusters, ball+hoop, etc.)
+- [ ] Visuals during Execute match the story when applicable
 
 ## 6. Single Learning Goal
 - [ ] One primary concept per mission
 
 ---
 
-## Current Missions
+## Enforcement in code
 
-| Mission | Required Family | Recommended Path | Status |
-|---------|-----------------|------------------|--------|
-| Outbreak Protocol | Exponential | Exponential + Stretch/Amplify | Fixed |
-| Hoop Shot | Quadratic | Quadratic + Shift + Stretch | Fixed |
+`CombatManager.start(target, requiredFamily)` guarantees that after the opening draw, the hand contains at least one parent card whose `parentType === requiredFamily`. If the random draw missed it, one is injected from the deck.

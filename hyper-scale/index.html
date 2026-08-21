@@ -47,10 +47,9 @@
     </div>
   </header>
 
-  <!-- Mission Select -->
   <div id="missionSelect" class="w-full max-w-4xl">
     <h2 class="font-orbitron text-xl text-cyan-300 mb-2 tracking-wider">Real-Life Function Encounters</h2>
-    <p class="text-sm text-cyan-200/70 mb-6">25 everyday situations. Each one is randomly chosen and teaches how a specific type of function behaves.</p>
+    <p class="text-sm text-cyan-200/70 mb-6">25 everyday situations. Each one is randomly chosen and teaches how a specific type of function behaves. The correct parent card is always in your opening hand.</p>
 
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
       <div class="mission-card neon-box rounded-xl p-5 bg-black/50" data-filter="all">
@@ -86,7 +85,6 @@
     </div>
   </div>
 
-  <!-- Game Screen -->
   <div id="gameScreen" class="w-full max-w-6xl hidden">
     <div class="neon-box rounded-xl p-4 mb-4 bg-black/40">
       <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
@@ -148,7 +146,7 @@
     <div class="mt-5">
       <div class="flex items-center justify-between mb-2">
         <h2 class="font-orbitron text-[10px] text-cyan-400 tracking-widest">YOUR HAND</h2>
-        <div class="text-[10px] text-cyan-400/50">Green glow = recommended for this scenario</div>
+        <div class="text-[10px] text-cyan-400/50">Green glow = required parent (always present)</div>
       </div>
       <div id="handContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5"></div>
     </div>
@@ -158,13 +156,9 @@
     <div class="neon-box bg-black/95 rounded-2xl p-6 max-w-lg w-full mx-4">
       <h2 class="font-orbitron text-2xl text-cyan-300 mb-4">How It Works</h2>
       <div class="space-y-3 text-sm text-cyan-100/90">
-        <p>You get a real-life situation. Your job is to pick the function family that matches how the quantity changes.</p>
-        <p><strong class="text-cyan-300">Exponential</strong> — doubles / percentage growth or decay<br/>
-        <strong class="text-cyan-300">Quadratic</strong> — arcs, projectiles, peaks<br/>
-        <strong class="text-cyan-300">Linear</strong> — steady rate<br/>
-        <strong class="text-cyan-300">Logarithmic</strong> — scales like Richter or decibels<br/>
-        <strong class="text-cyan-300">Rational</strong> — rates, sharing, 1/x relationships</p>
-        <p>Recommended cards glow green. Reach the Target Damage to win.</p>
+        <p>You get a real-life situation. Pick the function family that matches how the quantity changes.</p>
+        <p>The <strong class="text-emerald-300">correct parent card is always in your opening hand</strong> (green glow).</p>
+        <p>Reach the Target Damage to win.</p>
       </div>
       <button id="closeHelpBtn" class="mt-5 w-full py-2.5 font-orbitron rounded-lg bg-cyan-700 hover:bg-cyan-600">Got it</button>
     </div>
@@ -198,6 +192,49 @@ class Deck {
   shuffle(){ for(let i=this.drawPile.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [this.drawPile[i],this.drawPile[j]]=[this.drawPile[j],this.drawPile[i]]; } }
   draw(n=1){ const out=[]; for(let i=0;i<n;i++){ if(!this.drawPile.length){ if(!this.discardPile.length) break; this.drawPile=[...this.discardPile]; this.discardPile=[]; this.shuffle(); } const c=this.drawPile.pop(); if(c){ this.hand.push(c); out.push(c);} } return out; }
   discard(card){ const i=this.hand.findIndex(c=>c.id===card.id); if(i!==-1){ this.hand.splice(i,1); this.discardPile.push(card);} }
+  /** Ensure at least one parent of the given family is in hand */
+  ensureParentInHand(family) {
+    const has = this.hand.some(c => c.type === 'parent' && c.parentType === family);
+    if (has) return;
+    // Find one in draw pile
+    const idx = this.drawPile.findIndex(c => c.type === 'parent' && c.parentType === family);
+    if (idx !== -1) {
+      const [card] = this.drawPile.splice(idx, 1);
+      // Replace a random non-matching card in hand if hand is full, else just add
+      if (this.hand.length >= 5) {
+        const replaceIdx = this.hand.findIndex(c => !(c.type === 'parent' && c.parentType === family));
+        if (replaceIdx !== -1) {
+          this.drawPile.push(this.hand[replaceIdx]);
+          this.hand[replaceIdx] = card;
+        } else {
+          this.hand.push(card);
+        }
+      } else {
+        this.hand.push(card);
+      }
+      return;
+    }
+    // Fallback: create a fresh one and inject
+    const templates = {
+      linear: { id:'lin_g', name:'Linear Core', type:'parent', parentType:'linear', description:'f(x)=x — steady', color:'#00f0ff' },
+      quadratic: { id:'quad_g', name:'Quadratic Surge', type:'parent', parentType:'quadratic', description:'f(x)=x² — arc', color:'#ff00aa' },
+      exponential: { id:'exp_g', name:'Exponential Spike', type:'parent', parentType:'exponential', description:'f(x)=2ˣ — doubles', color:'#bf00ff' },
+      logarithmic: { id:'log_g', name:'Log Dampen', type:'parent', parentType:'logarithmic', description:'f(x)=log₂(x) — slow', color:'#00ff9f' },
+      rational: { id:'rat_g', name:'Rational Singularity', type:'parent', parentType:'rational', description:'f(x)=1/x — decays', color:'#ffaa00' }
+    };
+    const t = templates[family];
+    if (!t) return;
+    const card = new Card(t);
+    if (this.hand.length >= 5) {
+      const replaceIdx = this.hand.findIndex(c => c.type !== 'parent' || c.parentType !== family);
+      if (replaceIdx !== -1) {
+        this.drawPile.push(this.hand[replaceIdx]);
+        this.hand[replaceIdx] = card;
+      }
+    } else {
+      this.hand.push(card);
+    }
+  }
 }
 const CardLibrary = {
   createStarterDeck(){
@@ -214,13 +251,22 @@ const CardLibrary = {
     add({id:'shm2',name:'Shift −2',type:'modifier',a:1,h:-2,description:'Move left',color:'#a29bfe'});
     add({id:'shm3',name:'Shift −3',type:'modifier',a:1,h:-3,description:'Strong left shift',color:'#7c5cff'});
     add({id:'combo',name:'Amplify & Offset',type:'modifier',a:2.5,h:1,description:'×2.5 + shift 1',color:'#fd79a8',rarity:'rare'});
-    list.push(list[0].clone(),list[1].clone(),list[2].clone(),list[2].clone(),list[3].clone(),list[4].clone(),list[5].clone(),list[6].clone());
+    list.push(list[0].clone(),list[1].clone(),list[2].clone(),list[2].clone(),list[3].clone(),list[3].clone(),list[4].clone(),list[5].clone(),list[6].clone());
     return list;
   }
 };
 class CombatManager {
   constructor(math){ this.math=math; this.deck=null; this.active=null; this.appliedMods=[]; this.score=0; this.target=1200; }
-  start(target=1200){ this.deck=new Deck(CardLibrary.createStarterDeck()); this.active=null; this.appliedMods=[]; this.score=0; this.target=target; this.deck.draw(5); return this.deck.hand; }
+  /** @param {number} target @param {string} requiredFamily - e.g. 'logarithmic' */
+  start(target=1200, requiredFamily=null){
+    this.deck = new Deck(CardLibrary.createStarterDeck());
+    this.active=null; this.appliedMods=[]; this.score=0; this.target=target;
+    this.deck.draw(5);
+    if (requiredFamily) {
+      this.deck.ensureParentInHand(requiredFamily);
+    }
+    return this.deck.hand;
+  }
   slotParent(card){ if(card.type!=='parent') return false; this.active={type:card.parentType,a:1,h:0}; this.appliedMods=[]; this.deck.discard(card); return true; }
   applyModifier(card){ if(!this.active||card.type!=='modifier') return false; this.active.a*=card.a; this.active.h+=card.h; this.appliedMods.push(card); this.deck.discard(card); return true; }
   getHand(){ return this.deck?this.deck.hand:[]; }
@@ -253,7 +299,7 @@ function buildFeedback(mission, usedType, victory) {
       : `You hit the score, but this situation is best modeled by ${need}. You used ${usedName}.`;
   }
   if (usedType === need) return `Right family (${usedName}) but not enough power. Add Stretch or Amplify.`;
-  return `This scenario needs ${need}. You used ${usedName}. Check the green-glow recommended cards.`;
+  return `This scenario needs ${need}. You used ${usedName}. The green-glow card was the intended parent.`;
 }
 
 class GameUI {
@@ -300,14 +346,16 @@ class GameUI {
     document.getElementById('targetScore').textContent = scenario.target;
     document.getElementById('missionHints').innerHTML = (scenario.hints||[]).map(h=>`<li>${h}</li>`).join('');
 
-    this.combat.start(scenario.target);
+    // CRITICAL: pass required family so opening hand always has the correct parent
+    this.combat.start(scenario.target, scenario.family);
+
     this.points=[]; this.particleActive=false; this.executing=false;
     document.getElementById('liveScore').textContent='0'; document.getElementById('liveScoreHeader').textContent='0';
     document.getElementById('continuityBadge').classList.add('hidden');
     document.getElementById('resultOverlay').classList.remove('show');
     document.getElementById('storyVisual').textContent='';
     this.juice.reset(); this._renderHand(); this._updateActive(); this._updatePiles();
-    this._status('Select the recommended Parent Function (green glow)');
+    this._status('Select the green-glow Parent Function');
     document.getElementById('executeBtn').disabled=true;
   }
 
@@ -465,7 +513,7 @@ class GameUI {
 
 window.addEventListener('DOMContentLoaded',()=>{
   window.game=new GameUI();
-  console.log('%c HYPER-SCALE — 25 Real-Life Scenarios Online ', 'background:#00f0ff;color:#000;font-weight:bold;padding:4px 8px');
+  console.log('%c HYPER-SCALE — Guaranteed correct parent in hand ', 'background:#00f0ff;color:#000;font-weight:bold;padding:4px 8px');
 });
 </script>
 </body>
