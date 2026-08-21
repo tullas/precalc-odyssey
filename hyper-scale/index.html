@@ -7,7 +7,9 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="graph.js"></script>
   <script src="visuals.js"></script>
+  <script src="curriculum.js"></script>
   <script src="scenarios.js"></script>
+  <script src="scenarios-functions.js"></script>
   <script src="lab.js"></script>
   <script>
     (function () {
@@ -24,14 +26,11 @@
     input[type=range] { width: 100%; accent-color: #3db8ff; }
     canvas { width: 100%; border-radius: 10px; background: #080c10; }
     .chip { font-size: 11px; padding: 2px 8px; border-radius: 999px; background: #1a2836; color: #8ec8ef; }
-    .modal-backdrop {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.75);
-      display: flex; align-items: center; justify-content: center;
-      z-index: 50; padding: 1rem;
-    }
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.75); display: flex; align-items: center; justify-content: center; z-index: 50; padding: 1rem; }
     .modal-backdrop.hidden { display: none; }
     a.home-link { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
     a.home-link:hover { color: #7dd3fc; }
+    .locked { opacity: 0.45; pointer-events: none; }
   </style>
 </head>
 <body class="p-4 md:p-6 max-w-6xl mx-auto">
@@ -43,41 +42,27 @@
       </h1>
       <p class="text-sm text-slate-400">
         <a href="/hyper-scale/" class="text-sky-400 hover:text-sky-300 underline underline-offset-2" id="homeLink">← Home</a>
-        · Self-study lab
+        · Precalculus · self-study
       </p>
     </div>
     <div class="flex items-center gap-2">
-      <a href="/hyper-scale/" class="text-sm px-3 py-1.5 rounded-lg border border-slate-600 text-slate-300 hover:border-sky-500 hover:text-sky-300" id="homeBtn">Home</a>
+      <a href="/hyper-scale/" class="text-sm px-3 py-1.5 rounded-lg border border-slate-600 text-slate-300" id="homeBtn">Home</a>
       <button id="pickBtn" class="text-sm px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white">New scenario</button>
       <button id="logoutBtn" class="text-sm px-3 py-1.5 rounded-lg border border-slate-600 text-slate-300">Logout</button>
     </div>
   </header>
 
-  <div id="picker" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
-    <button data-f="all" class="panel p-4 text-left hover:border-sky-500/50 transition">
-      <div class="text-xs text-sky-400 mb-1">Random</div>
-      <div class="font-medium">Any scenario</div>
-    </button>
-    <button data-f="exponential" class="panel p-4 text-left hover:border-sky-500/50 transition">
-      <div class="text-xs text-pink-400 mb-1">Exponential</div>
-      <div class="font-medium">Growth & decay</div>
-    </button>
-    <button data-f="quadratic" class="panel p-4 text-left hover:border-sky-500/50 transition">
-      <div class="text-xs text-fuchsia-400 mb-1">Quadratic</div>
-      <div class="font-medium">Curves & projectiles</div>
-    </button>
-    <button data-f="linear" class="panel p-4 text-left hover:border-sky-500/50 transition">
-      <div class="text-xs text-sky-400 mb-1">Linear</div>
-      <div class="font-medium">Steady change</div>
-    </button>
-    <button data-f="logarithmic" class="panel p-4 text-left hover:border-sky-500/50 transition">
-      <div class="text-xs text-emerald-400 mb-1">Logarithmic</div>
-      <div class="font-medium">Scales</div>
-    </button>
-    <button data-f="rational" class="panel p-4 text-left hover:border-sky-500/50 transition">
-      <div class="text-xs text-amber-400 mb-1">Rational</div>
-      <div class="font-medium">Rates & sharing</div>
-    </button>
+  <!-- Level select -->
+  <div id="levelPicker" class="mb-6">
+    <h2 class="text-sm uppercase tracking-wide text-slate-500 mb-3">Choose level</h2>
+    <div class="grid sm:grid-cols-3 gap-3" id="levelCards"></div>
+  </div>
+
+  <!-- Unit select (Standard) -->
+  <div id="unitPicker" class="hidden mb-6">
+    <button id="backLevel" class="text-sm text-slate-400 hover:text-sky-300 mb-3">← Levels</button>
+    <h2 class="text-sm uppercase tracking-wide text-slate-500 mb-3">Standard — choose a section</h2>
+    <div class="grid sm:grid-cols-2 gap-3" id="unitCards"></div>
   </div>
 
   <div id="lab" class="hidden space-y-4">
@@ -85,6 +70,7 @@
       <div class="flex flex-wrap items-center gap-2 mb-2">
         <h2 id="title" class="text-lg font-semibold text-white"></h2>
         <span id="familyChip" class="chip"></span>
+        <span id="unitChip" class="chip"></span>
       </div>
       <p id="context" class="text-sm text-slate-300 leading-relaxed mb-3"></p>
       <p id="question" class="text-sm text-sky-100/90 leading-relaxed border-l-2 border-sky-500 pl-3"></p>
@@ -93,9 +79,8 @@
     <div class="grid lg:grid-cols-5 gap-4">
       <div class="lg:col-span-3 panel p-3">
         <canvas id="graph" width="720" height="400"></canvas>
-        <p class="text-xs text-slate-500 text-center mt-1">Solution marker appears after a correct answer or 3 attempts.</p>
+        <p class="text-xs text-slate-500 text-center mt-1">Solution marker after correct answer or 3 attempts.</p>
       </div>
-
       <div class="lg:col-span-2 space-y-3">
         <div class="panel p-4">
           <div class="text-xs uppercase tracking-wide text-slate-500 mb-1">Model</div>
@@ -103,7 +88,6 @@
           <div id="glossary" class="text-xs text-slate-400 space-y-1 mb-4 leading-snug"></div>
           <div id="controls" class="space-y-4"></div>
         </div>
-
         <div class="panel p-4" id="answerPanel">
           <div class="flex justify-between items-center mb-2">
             <div class="text-xs uppercase tracking-wide text-slate-500">Check your reading</div>
@@ -116,13 +100,11 @@
           </div>
           <p id="feedback" class="text-sm mt-2 min-h-[1.25rem]"></p>
         </div>
-
         <div class="panel p-4 hidden" id="hintsPanel">
           <div class="text-xs uppercase tracking-wide text-slate-500 mb-2">Hints</div>
           <ul id="hints" class="text-sm text-slate-400 space-y-1 list-disc list-inside"></ul>
         </div>
-
-        <button id="backBtn" class="text-sm text-slate-400 hover:text-sky-300">← All scenarios</button>
+        <button id="backBtn" class="text-sm text-slate-400 hover:text-sky-300">← Sections</button>
       </div>
     </div>
   </div>
@@ -131,7 +113,7 @@
     <div class="panel max-w-md w-full p-6 shadow-2xl border-sky-800/50">
       <h3 id="modalTitle" class="text-lg font-semibold text-white mb-3">Solution</h3>
       <div id="modalBody" class="text-sm text-slate-300 space-y-3 leading-relaxed"></div>
-      <button id="modalClose" class="mt-5 w-full py-2.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-sm font-medium">Next problem (same type)</button>
+      <button id="modalClose" class="mt-5 w-full py-2.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-sm font-medium">Next problem (same section)</button>
     </div>
   </div>
 
@@ -148,13 +130,17 @@
   let revealSolution = false;
   let animT = null;
   let animId = null;
+  let currentLevel = 'standard';
+  let currentUnit = null;
 
   function goHome(e) {
     if (e) e.preventDefault();
-    showPicker();
-    history.replaceState(null, '', '/hyper-scale/');
+    document.getElementById('lab').classList.add('hidden');
+    document.getElementById('unitPicker').classList.add('hidden');
+    document.getElementById('levelPicker').classList.remove('hidden');
+    document.getElementById('solutionModal').classList.add('hidden');
+    stopAnim();
   }
-
   document.getElementById('titleHome').onclick = goHome;
   document.getElementById('homeLink').onclick = goHome;
   document.getElementById('homeBtn').onclick = goHome;
@@ -165,52 +151,74 @@
     location.href = '/login.html';
   };
 
-  document.getElementById('pickBtn').onclick = () => openScenario(window.pickScenario(null));
-  document.getElementById('backBtn').onclick = showPicker;
+  // Level cards
+  const levelBox = document.getElementById('levelCards');
+  (window.CURRICULUM.levels || []).forEach(L => {
+    const btn = document.createElement('button');
+    btn.className = 'panel p-4 text-left transition ' + (L.available ? 'hover:border-sky-500/50' : 'locked');
+    btn.innerHTML = `<div class="font-medium text-white">${L.name}</div><div class="text-xs text-slate-400 mt-1">${L.blurb}</div>`;
+    if (L.available) {
+      btn.onclick = () => {
+        currentLevel = L.id;
+        showUnits();
+      };
+    }
+    levelBox.appendChild(btn);
+  });
+
+  function showUnits() {
+    document.getElementById('levelPicker').classList.add('hidden');
+    document.getElementById('unitPicker').classList.remove('hidden');
+    document.getElementById('lab').classList.add('hidden');
+    const box = document.getElementById('unitCards');
+    box.innerHTML = '';
+    const counts = window.countByUnit ? window.countByUnit(currentLevel) : {};
+    (window.CURRICULUM.units[currentLevel] || []).forEach(U => {
+      const n = counts[U.id] || 0;
+      const ready = n > 0;
+      const btn = document.createElement('button');
+      btn.className = 'panel p-4 text-left transition ' + (ready ? 'hover:border-sky-500/50' : 'locked');
+      btn.innerHTML = `<div class="font-medium text-white">${U.name}</div>
+        <div class="text-xs text-slate-400 mt-1">${U.blurb}</div>
+        <div class="text-xs mt-2 ${ready ? 'text-emerald-400' : 'text-slate-500'}">${n} / ${U.targetCount} scenarios</div>`;
+      if (ready) {
+        btn.onclick = () => {
+          currentUnit = U.id;
+          openScenario(window.pickScenario(currentLevel, currentUnit));
+        };
+      }
+      box.appendChild(btn);
+    });
+  }
+
+  document.getElementById('backLevel').onclick = goHome;
+  document.getElementById('backBtn').onclick = () => {
+    document.getElementById('lab').classList.add('hidden');
+    showUnits();
+    stopAnim();
+  };
+
+  document.getElementById('pickBtn').onclick = () => {
+    if (currentUnit) openScenario(window.pickScenario(currentLevel, currentUnit));
+    else if (currentLevel) showUnits();
+  };
 
   document.getElementById('modalClose').onclick = () => {
     document.getElementById('solutionModal').classList.add('hidden');
-    if (scenario && window.rerollScenario) {
-      openScenario(window.rerollScenario(scenario.id));
-    } else {
-      openScenario(window.pickScenario(scenario ? scenario.family : null));
-    }
+    openScenario(window.pickScenario(currentLevel, currentUnit || (scenario && scenario.unit)));
   };
-
-  document.querySelectorAll('#picker [data-f]').forEach(btn => {
-    btn.onclick = () => {
-      const f = btn.dataset.f === 'all' ? null : btn.dataset.f;
-      openScenario(window.pickScenario(f));
-    };
-  });
-
-  function showPicker() {
-    document.getElementById('picker').classList.remove('hidden');
-    document.getElementById('lab').classList.add('hidden');
-    document.getElementById('solutionModal').classList.add('hidden');
-    stopAnim();
-  }
 
   function updateAttemptsUI() {
     const left = MAX_ATTEMPTS - attempts;
     const el = document.getElementById('attemptsLabel');
-    if (solved) {
-      el.textContent = 'Solved';
-      el.className = 'text-xs text-emerald-400';
-    } else if (attempts >= MAX_ATTEMPTS) {
-      el.textContent = 'No attempts left';
-      el.className = 'text-xs text-rose-400';
-    } else {
-      el.textContent = left + ' attempt' + (left === 1 ? '' : 's') + ' left (max ' + MAX_ATTEMPTS + ')';
-      el.className = 'text-xs text-amber-400/90';
-    }
+    if (solved) { el.textContent = 'Solved'; el.className = 'text-xs text-emerald-400'; }
+    else if (attempts >= MAX_ATTEMPTS) { el.textContent = 'No attempts left'; el.className = 'text-xs text-rose-400'; }
+    else { el.textContent = left + ' attempt' + (left === 1 ? '' : 's') + ' left (max ' + MAX_ATTEMPTS + ')'; el.className = 'text-xs text-amber-400/90'; }
   }
 
   function renderGlossary() {
     const g = scenario.symbolGlossary || [];
-    const el = document.getElementById('glossary');
-    if (!g.length) { el.innerHTML = ''; return; }
-    el.innerHTML = g.map(item =>
+    document.getElementById('glossary').innerHTML = g.map(item =>
       `<div><span class="mono text-sky-400">${item.sym}</span> — ${item.mean}</div>`
     ).join('');
   }
@@ -218,18 +226,18 @@
   function openScenario(s) {
     scenario = s;
     if (!scenario) return;
-
+    currentUnit = scenario.unit || currentUnit;
     params = {};
     scenario.params.forEach(p => { params[p.key] = p.default; });
-    attempts = 0;
-    solved = false;
-    revealSolution = false;
+    attempts = 0; solved = false; revealSolution = false;
 
-    document.getElementById('picker').classList.add('hidden');
+    document.getElementById('levelPicker').classList.add('hidden');
+    document.getElementById('unitPicker').classList.add('hidden');
     document.getElementById('lab').classList.remove('hidden');
     document.getElementById('solutionModal').classList.add('hidden');
     document.getElementById('title').textContent = scenario.title;
     document.getElementById('familyChip').textContent = scenario.family;
+    document.getElementById('unitChip').textContent = scenario.unit || '';
     document.getElementById('context').textContent = scenario.context;
     document.getElementById('question').textContent = scenario.question;
     document.getElementById('form').textContent = scenario.form;
@@ -238,22 +246,18 @@
     document.getElementById('answerInput').value = '';
     document.getElementById('answerInput').disabled = false;
     document.getElementById('checkBtn').disabled = false;
-
     document.getElementById('hintsPanel').classList.add('hidden');
     document.getElementById('hints').innerHTML = (scenario.hints || []).map(h => `<li>${h}</li>`).join('');
 
     if (scenario.answer && scenario.answer.type === 'numeric') {
       document.getElementById('answerPanel').classList.remove('hidden');
       document.getElementById('answerPrompt').textContent = scenario.answer.prompt || 'Your answer';
-    } else {
-      document.getElementById('answerPanel').classList.add('hidden');
-    }
+    } else document.getElementById('answerPanel').classList.add('hidden');
 
     updateAttemptsUI();
     buildControls();
     draw();
-    if (scenario.motion) startAnim();
-    else stopAnim();
+    if (scenario.motion) startAnim(); else stopAnim();
   }
 
   function buildControls() {
@@ -266,8 +270,7 @@
           <span>${p.label}</span>
           <span class="mono text-sky-300" id="val_${p.key}">${params[p.key]}</span>
         </div>
-        <input type="range" min="${p.min}" max="${p.max}" step="${p.step}" value="${params[p.key]}" data-key="${p.key}" />
-      `;
+        <input type="range" min="${p.min}" max="${p.max}" step="${p.step}" value="${params[p.key]}" />`;
       box.appendChild(wrap);
       wrap.querySelector('input').oninput = (e) => {
         params[p.key] = parseFloat(e.target.value);
@@ -283,28 +286,17 @@
 
   function buildSolutionExplanation() {
     const a = scenario.answer;
-    const atX = a.atX;
-    const target = a.target;
     const ideal = idealParams();
-    const modelY = window.LabMath.valueAt(scenario, ideal, atX);
-
-    let steps = `<p><strong class="text-white">Target:</strong> about <span class="mono text-sky-300">${target}</span> at <span class="mono">x = ${atX}</span>.</p>`;
+    const modelY = window.LabMath.valueAt(scenario, ideal, a.atX);
+    let steps = `<p><strong class="text-white">Target:</strong> about <span class="mono text-sky-300">${a.target}</span> at <span class="mono">x = ${a.atX}</span>.</p>`;
     steps += `<p><strong class="text-white">Model:</strong> <span class="mono text-sky-300">${scenario.form}</span></p>`;
-    if (scenario.symbolGlossary && scenario.symbolGlossary.length) {
-      steps += `<ul class="list-none text-slate-400 text-xs space-y-1">`;
-      scenario.symbolGlossary.forEach(g => {
-        steps += `<li><span class="mono text-sky-400">${g.sym}</span> — ${g.mean}</li>`;
-      });
-      steps += `</ul>`;
+    if (scenario.symbolGlossary) {
+      steps += scenario.symbolGlossary.map(g => `<div class="text-xs"><span class="mono text-sky-400">${g.sym}</span> — ${g.mean}</div>`).join('');
     }
-    steps += `<p><strong class="text-white">Parameters that work:</strong></p><ul class="list-disc list-inside text-slate-400">`;
-    scenario.params.forEach(p => {
-      steps += `<li>${p.label}: <span class="mono text-sky-300">${ideal[p.key]}</span></li>`;
-    });
+    steps += `<p class="mt-2"><strong class="text-white">Parameters:</strong></p><ul class="list-disc list-inside text-slate-400">`;
+    scenario.params.forEach(p => { steps += `<li>${p.label}: <span class="mono text-sky-300">${ideal[p.key]}</span></li>`; });
     steps += `</ul>`;
-    if (modelY != null) {
-      steps += `<p>At x = ${atX}: <span class="mono text-emerald-400">y ≈ ${modelY.toFixed(2)}</span>.</p>`;
-    }
+    if (modelY != null) steps += `<p>At x = ${a.atX}: <span class="mono text-emerald-400">y ≈ ${modelY.toFixed(2)}</span>.</p>`;
     return steps;
   }
 
@@ -316,109 +308,68 @@
 
   document.getElementById('checkBtn').onclick = () => {
     if (!scenario || !scenario.answer || solved || attempts >= MAX_ATTEMPTS) return;
-
-    const raw = document.getElementById('answerInput').value;
-    const userVal = parseFloat(raw);
+    const userVal = parseFloat(document.getElementById('answerInput').value);
     const fb = document.getElementById('feedback');
-
-    if (Number.isNaN(userVal)) {
-      fb.className = 'text-sm mt-2 text-amber-400';
-      fb.textContent = 'Enter a number.';
-      return;
-    }
-
-    attempts += 1;
-    updateAttemptsUI();
-
-    const target = scenario.answer.target;
-    const tol = scenario.answer.tol ?? 1;
-    const ok = Math.abs(userVal - target) <= tol;
-
+    if (Number.isNaN(userVal)) { fb.className = 'text-sm mt-2 text-amber-400'; fb.textContent = 'Enter a number.'; return; }
+    attempts += 1; updateAttemptsUI();
+    const ok = Math.abs(userVal - scenario.answer.target) <= (scenario.answer.tol ?? 1);
     if (ok) {
-      solved = true;
-      revealSolution = true;
-      fb.className = 'text-sm mt-2 text-emerald-400';
-      fb.textContent = 'Correct.';
+      solved = true; revealSolution = true;
+      fb.className = 'text-sm mt-2 text-emerald-400'; fb.textContent = 'Correct.';
       document.getElementById('answerInput').disabled = true;
       document.getElementById('checkBtn').disabled = true;
-      updateAttemptsUI();
-      draw();
+      updateAttemptsUI(); draw();
       showSolutionModal('Well done — solution');
       return;
     }
-
-    if (attempts === 2) {
-      document.getElementById('hintsPanel').classList.remove('hidden');
-    }
-
+    if (attempts === 2) document.getElementById('hintsPanel').classList.remove('hidden');
     if (attempts >= MAX_ATTEMPTS) {
       revealSolution = true;
-      fb.className = 'text-sm mt-2 text-rose-400';
-      fb.textContent = 'Out of attempts. See the worked solution.';
+      fb.className = 'text-sm mt-2 text-rose-400'; fb.textContent = 'Out of attempts. See the worked solution.';
       document.getElementById('answerInput').disabled = true;
       document.getElementById('checkBtn').disabled = true;
       document.getElementById('hintsPanel').classList.remove('hidden');
-      draw();
-      showSolutionModal('Solution after 3 attempts');
+      draw(); showSolutionModal('Solution after 3 attempts');
     } else {
       const left = MAX_ATTEMPTS - attempts;
       fb.className = 'text-sm mt-2 text-rose-400';
-      fb.textContent = `Not quite. ${left} attempt${left === 1 ? '' : 's'} left.` +
-        (attempts >= 2 ? ' Hints are now available below.' : '');
+      fb.textContent = `Not quite. ${left} attempt${left === 1 ? '' : 's'} left.` + (attempts >= 2 ? ' Hints are below.' : '');
     }
   };
 
   function draw() {
     if (!scenario) return;
     const w = canvas.width, h = canvas.height;
-    ctx.fillStyle = '#080c10';
-    ctx.fillRect(0, 0, w, h);
-
+    ctx.fillStyle = '#080c10'; ctx.fillRect(0, 0, w, h);
     const pts = window.LabMath.points(scenario, params, 100);
     const plot = window.HyperGraph.drawAxes(ctx, {
-      w, h,
-      points: pts.filter(p => Number.isFinite(p.y)),
+      w, h, points: pts.filter(p => Number.isFinite(p.y)),
       xMin: scenario.xMin, xMax: scenario.xMax,
-      xStep: scenario.xMax > 12 ? 2 : 1,
-      xLabel: scenario.xLabel,
-      yLabel: scenario.yLabel,
-      legend: scenario.form
+      xStep: scenario.xMax > 20 ? 10 : scenario.xMax > 12 ? 2 : 1,
+      xLabel: scenario.xLabel, yLabel: scenario.yLabel, legend: scenario.form
     });
-
     window.HyperGraph.drawCurve(ctx, pts, plot.tx, plot.ty, '#3db8ff');
-
     if (revealSolution && scenario.answer && scenario.answer.atX != null) {
       const ax = scenario.answer.atX;
-      const ideal = idealParams();
-      const y = window.LabMath.valueAt(scenario, ideal, ax);
+      const y = window.LabMath.valueAt(scenario, idealParams(), ax);
       const px = plot.tx(ax);
-      ctx.strokeStyle = 'rgba(52, 211, 153, 0.55)';
-      ctx.setLineDash([4, 4]);
-      ctx.beginPath();
-      ctx.moveTo(px, plot.padT);
-      ctx.lineTo(px, plot.padT + plot.plotH);
-      ctx.stroke();
-      ctx.setLineDash([]);
+      ctx.strokeStyle = 'rgba(52, 211, 153, 0.55)'; ctx.setLineDash([4, 4]);
+      ctx.beginPath(); ctx.moveTo(px, plot.padT); ctx.lineTo(px, plot.padT + plot.plotH); ctx.stroke(); ctx.setLineDash([]);
       if (y != null) {
         const py = plot.ty(y);
-        ctx.fillStyle = '#34d399';
-        ctx.beginPath(); ctx.arc(px, py, 5, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = '#a7f3d0';
-        ctx.font = '11px JetBrains Mono';
-        ctx.textAlign = 'left';
+        ctx.fillStyle = '#34d399'; ctx.beginPath(); ctx.arc(px, py, 5, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#a7f3d0'; ctx.font = '11px JetBrains Mono'; ctx.textAlign = 'left';
         ctx.fillText(`x=${ax}  y=${y.toFixed(2)}`, px + 10, py - 8);
       }
     }
-
     if (animT != null && scenario.motion && window.HyperVisuals) {
       const V = window.HyperVisuals;
-      const t = animT;
-      if (scenario.motion === 'colonies') V.drawColonies(ctx, t, plot.tx, h);
-      else if (scenario.motion === 'scale') V.drawScale(ctx, t, plot.tx, h, w, plot.padL);
-      else if (scenario.motion === 'slices') V.drawSlices(ctx, t, plot.tx, h);
+      if (scenario.motion === 'colonies') V.drawColonies(ctx, animT, plot.tx, h);
+      else if (scenario.motion === 'scale') V.drawScale(ctx, animT, plot.tx, h, w, plot.padL);
+      else if (scenario.motion === 'slices') V.drawSlices(ctx, animT, plot.tx, h);
       else if (scenario.motion === 'ball') {
-        const y = window.LabMath.valueAt(scenario, params, t);
-        if (y != null) V.drawBall(ctx, true, plot.tx(t), plot.ty(y), w, h, plot.padL);
+        const y = window.LabMath.valueAt(scenario, params, animT);
+        if (y != null) V.drawBall(ctx, true, plot.tx(animT), plot.ty(y), w, h, plot.padL);
       }
     }
   }
@@ -428,19 +379,15 @@
     const x0 = scenario.xMin, x1 = scenario.xMax;
     let u = 0;
     const step = () => {
-      u += 0.004;
-      if (u > 1) u = 0;
+      u += 0.004; if (u > 1) u = 0;
       animT = x0 + u * (x1 - x0);
-      draw();
-      animId = requestAnimationFrame(step);
+      draw(); animId = requestAnimationFrame(step);
     };
     animId = requestAnimationFrame(step);
   }
-
   function stopAnim() {
     if (animId) cancelAnimationFrame(animId);
-    animId = null;
-    animT = null;
+    animId = null; animT = null;
   }
 })();
 </script>
