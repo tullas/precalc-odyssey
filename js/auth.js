@@ -40,7 +40,7 @@ async function apiCall(path, method = "GET", body = null, token = null) {
   }
 }
 
-// ---------- Login ----------
+// ---------- Login → Hyper-Scale Lab ----------
 document.getElementById("loginForm")?.addEventListener("submit", async (e) => {
   e.preventDefault();
   const email = document.getElementById("loginEmail").value.trim();
@@ -55,7 +55,7 @@ document.getElementById("loginForm")?.addEventListener("submit", async (e) => {
     localStorage.setItem("precalc_user", JSON.stringify(data.user || { email, role: "student" }));
     showMessage("loginMessage", "Login successful! Redirecting...", false);
     setTimeout(() => {
-      window.location.href = "/course.html";
+      window.location.href = "/hyper-scale/";
     }, 800);
   } else {
     showMessage("loginMessage", data.error || "Login failed", true);
@@ -111,10 +111,10 @@ document.getElementById("getTokenBtn")?.addEventListener("click", async () => {
 
   if (ok) {
     document.getElementById("resetSection").style.display = "block";
-    showMessage("forgotMessage", 
-      data.reset_token 
-        ? `Token: ${data.reset_token} (valid 1 hour)` 
-        : (data.message || "Token generated"), 
+    showMessage("forgotMessage",
+      data.reset_token
+        ? `Token: ${data.reset_token} (valid 1 hour)`
+        : (data.message || "Token generated"),
       false
     );
   } else {
