@@ -13,6 +13,8 @@
   <script src="scenarios-poly-rational.js"></script>
   <script src="scenarios-exp-log.js"></script>
   <script src="scenarios-trigonometry.js"></script>
+  <script src="scenarios-honors-sequences.js"></script>
+  <script src="scenarios-honors-conics.js"></script>
   <script src="lab.js"></script>
   <script src="lab-solution.js"></script>
   <script>
@@ -63,7 +65,7 @@
 
   <div id="unitPicker" class="hidden mb-6">
     <button id="backLevel" class="text-sm text-slate-400 hover:text-sky-300 mb-3">← Levels</button>
-    <h2 class="text-sm uppercase tracking-wide text-slate-500 mb-3">Standard — choose a section</h2>
+    <h2 class="text-sm uppercase tracking-wide text-slate-500 mb-3" id="unitPickerTitle">Choose a section</h2>
     <div class="grid sm:grid-cols-2 gap-3" id="unitCards"></div>
   </div>
 
@@ -166,6 +168,8 @@
     document.getElementById('levelPicker').classList.add('hidden');
     document.getElementById('unitPicker').classList.remove('hidden');
     document.getElementById('lab').classList.add('hidden');
+    const title = document.getElementById('unitPickerTitle');
+    title.textContent = (currentLevel === 'honors' ? 'Honors' : 'Standard') + ' — choose a section';
     const box = document.getElementById('unitCards');
     box.innerHTML = '';
     const counts = window.countByUnit ? window.countByUnit(currentLevel) : {};
@@ -330,7 +334,7 @@
       const px = plot.tx(ax);
       ctx.strokeStyle = 'rgba(52, 211, 153, 0.55)'; ctx.setLineDash([4, 4]);
       ctx.beginPath(); ctx.moveTo(px, plot.padT); ctx.lineTo(px, plot.padT + plot.plotH); ctx.stroke(); ctx.setLineDash([]);
-      if (y != null) {
+      if (y != null && Number.isFinite(y)) {
         const py = plot.ty(y);
         ctx.fillStyle = '#34d399'; ctx.beginPath(); ctx.arc(px, py, 5, 0, Math.PI * 2); ctx.fill();
         ctx.fillStyle = '#a7f3d0'; ctx.font = '11px JetBrains Mono'; ctx.textAlign = 'left';
