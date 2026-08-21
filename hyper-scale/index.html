@@ -24,6 +24,12 @@
     input[type=range] { width: 100%; accent-color: #3db8ff; }
     canvas { width: 100%; border-radius: 10px; background: #080c10; }
     .chip { font-size: 11px; padding: 2px 8px; border-radius: 999px; background: #1a2836; color: #8ec8ef; }
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.75);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 50; padding: 1rem;
+    }
+    .modal-backdrop.hidden { display: none; }
   </style>
 </head>
 <body class="p-4 md:p-6 max-w-6xl mx-auto">
@@ -39,7 +45,6 @@
     </div>
   </header>
 
-  <!-- Picker -->
   <div id="picker" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
     <button data-f="all" class="panel p-4 text-left hover:border-sky-500/50 transition">
       <div class="text-xs text-sky-400 mb-1">Random</div>
@@ -67,7 +72,6 @@
     </button>
   </div>
 
-  <!-- Lab -->
   <div id="lab" class="hidden space-y-4">
     <div class="panel p-4 md:p-5">
       <div class="flex flex-wrap items-center gap-2 mb-2">
@@ -81,7 +85,7 @@
     <div class="grid lg:grid-cols-5 gap-4">
       <div class="lg:col-span-3 panel p-3">
         <canvas id="graph" width="720" height="400"></canvas>
-        <p id="storyLine" class="text-xs text-slate-500 text-center mt-1 min-h-[1rem]"></p>
+        <p id="graphNote" class="text-xs text-slate-500 text-center mt-1">Solution marker appears after a correct answer or 3 attempts.</p>
       </div>
 
       <div class="lg:col-span-2 space-y-3">
@@ -92,7 +96,10 @@
         </div>
 
         <div class="panel p-4" id="answerPanel">
-          <div class="text-xs uppercase tracking-wide text-slate-500 mb-2">Check your reading</div>
+          <div class="flex justify-between items-center mb-2">
+            <div class="text-xs uppercase tracking-wide text-slate-500">Check your reading</div>
+            <div id="attemptsLabel" class="text-xs text-amber-400/90">3 attempts allowed</div>
+          </div>
           <label id="answerPrompt" class="text-sm text-slate-300 block mb-2"></label>
           <div class="flex gap-2">
             <input id="answerInput" type="number" step="any" class="flex-1 bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm mono" placeholder="Your value" />
@@ -101,7 +108,7 @@
           <p id="feedback" class="text-sm mt-2 min-h-[1.25rem]"></p>
         </div>
 
-        <div class="panel p-4">
+        <div class="panel p-4 hidden" id="hintsPanel">
           <div class="text-xs uppercase tracking-wide text-slate-500 mb-2">Hints</div>
           <ul id="hints" class="text-sm text-slate-400 space-y-1 list-disc list-inside"></ul>
         </div>
@@ -111,19 +118,28 @@
     </div>
   </div>
 
+  <!-- Solution modal -->
+  <div id="solutionModal" class="modal-backdrop hidden">
+    <div class="panel max-w-md w-full p-6 shadow-2xl border-sky-800/50">
+      <h3 id="modalTitle" class="text-lg font-semibold text-white mb-3">Solution</h3>
+      <div id="modalBody" class="text-sm text-slate-300 space-y-3 leading-relaxed"></div>
+      <button id="modalClose" class="mt-5 w-full py-2.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-sm font-medium">Continue</button>
+    </div>
+  </div>
+
 <script>
 (function () {
+  const MAX_ATTEMPTS = 3;
   const canvas = document.getElementById('graph');
   const ctx = canvas.getContext('2d');
+
   let scenario = null;
   let params = {};
-  let scrubX = null;
+  let attempts = 0;
+  let solved = false;
+  let revealSolution = false; // show marker on graph
   let animT = null;
   let animId = null;
-
-  try {
-    const u = JSON.parse(localStorage.getItem('precalc_user') || 'null');
-  } catch (e) {}
 
   document.getElementById('logoutBtn').onclick = () => {
     localStorage.removeItem('precalc_token');
@@ -133,6 +149,9 @@
 
   document.getElementById('pickBtn').onclick = () => start(null);
   document.getElementById('backBtn').onclick = showPicker;
+  document.getElementById('modalClose').onclick = () => {
+    document.getElementById('solutionModal').classList.add('hidden');
+  };
   document.querySelectorAll('#picker [data-f]').forEach(btn => {
     btn.onclick = () => start(btn.dataset.f === 'all' ? null : btn.dataset.f);
   });
@@ -140,7 +159,23 @@
   function showPicker() {
     document.getElementById('picker').classList.remove('hidden');
     document.getElementById('lab').classList.add('hidden');
+    document.getElementById('solutionModal').classList.add('hidden');
     stopAnim();
+  }
+
+  function updateAttemptsUI() {
+    const left = MAX_ATTEMPTS - attempts;
+    const el = document.getElementById('attemptsLabel');
+    if (solved) {
+      el.textContent = 'Solved';
+      el.className = 'text-xs text-emerald-400';
+    } else if (attempts >= MAX_ATTEMPTS) {
+      el.textContent = 'No attempts left';
+      el.className = 'text-xs text-rose-400';
+    } else {
+      el.textContent = left + ' attempt' + (left === 1 ? '' : 's') + ' left (max ' + MAX_ATTEMPTS + ')';
+      el.className = 'text-xs text-amber-400/90';
+    }
   }
 
   function start(familyFilter) {
@@ -149,17 +184,26 @@
 
     params = {};
     scenario.params.forEach(p => { params[p.key] = p.default; });
+    attempts = 0;
+    solved = false;
+    revealSolution = false;
 
     document.getElementById('picker').classList.add('hidden');
     document.getElementById('lab').classList.remove('hidden');
+    document.getElementById('solutionModal').classList.add('hidden');
     document.getElementById('title').textContent = scenario.title;
     document.getElementById('familyChip').textContent = scenario.family;
     document.getElementById('context').textContent = scenario.context;
     document.getElementById('question').textContent = scenario.question;
     document.getElementById('form').textContent = scenario.form;
-    document.getElementById('hints').innerHTML = (scenario.hints || []).map(h => `<li>${h}</li>`).join('');
     document.getElementById('feedback').textContent = '';
     document.getElementById('answerInput').value = '';
+    document.getElementById('answerInput').disabled = false;
+    document.getElementById('checkBtn').disabled = false;
+
+    // Hints hidden until 2 failed attempts
+    document.getElementById('hintsPanel').classList.add('hidden');
+    document.getElementById('hints').innerHTML = (scenario.hints || []).map(h => `<li>${h}</li>`).join('');
 
     if (scenario.answer && scenario.answer.type === 'numeric') {
       document.getElementById('answerPanel').classList.remove('hidden');
@@ -168,8 +212,8 @@
       document.getElementById('answerPanel').classList.add('hidden');
     }
 
+    updateAttemptsUI();
     buildControls();
-    scrubX = scenario.answer && scenario.answer.atX != null ? scenario.answer.atX : null;
     draw();
     if (scenario.motion) startAnim();
     else stopAnim();
@@ -196,33 +240,89 @@
     });
   }
 
+  function buildSolutionExplanation() {
+    const a = scenario.answer;
+    const atX = a.atX;
+    const target = a.target;
+    // Ideal params: use defaults which are set to produce the intended answer in our scenarios
+    const ideal = {};
+    scenario.params.forEach(p => { ideal[p.key] = p.default; });
+    const modelY = window.LabMath.valueAt(scenario, ideal, atX);
+
+    let steps = `<p><strong class="text-white">Target:</strong> about <span class="mono text-sky-300">${target}</span> at <span class="mono">x = ${atX}</span>.</p>`;
+    steps += `<p><strong class="text-white">Model:</strong> <span class="mono text-sky-300">${scenario.form}</span></p>`;
+    steps += `<p><strong class="text-white">Suggested parameters:</strong></p><ul class="list-disc list-inside text-slate-400">`;
+    scenario.params.forEach(p => {
+      steps += `<li>${p.label}: <span class="mono text-sky-300">${p.default}</span></li>`;
+    });
+    steps += `</ul>`;
+    if (modelY != null) {
+      steps += `<p>Plug in x = ${atX}: the model gives <span class="mono text-emerald-400">y ≈ ${modelY.toFixed(2)}</span>.</p>`;
+    }
+    if (scenario.hints && scenario.hints.length) {
+      steps += `<p class="text-slate-400"><strong class="text-white">Reasoning:</strong> ${scenario.hints[scenario.hints.length - 1]}</p>`;
+    }
+    return steps;
+  }
+
+  function showSolutionModal(title) {
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalBody').innerHTML = buildSolutionExplanation();
+    document.getElementById('solutionModal').classList.remove('hidden');
+  }
+
   document.getElementById('checkBtn').onclick = () => {
-    if (!scenario || !scenario.answer) return;
+    if (!scenario || !scenario.answer || solved || attempts >= MAX_ATTEMPTS) return;
+
     const raw = document.getElementById('answerInput').value;
     const userVal = parseFloat(raw);
     const fb = document.getElementById('feedback');
+
     if (Number.isNaN(userVal)) {
       fb.className = 'text-sm mt-2 text-amber-400';
       fb.textContent = 'Enter a number.';
       return;
     }
-    const atX = scenario.answer.atX;
-    const modelY = window.LabMath.valueAt(scenario, params, atX);
+
+    attempts += 1;
+    updateAttemptsUI();
+
     const target = scenario.answer.target;
     const tol = scenario.answer.tol ?? 1;
-    const okUser = Math.abs(userVal - target) <= tol;
-    const okModel = modelY != null && Math.abs(modelY - target) <= tol * 1.5;
+    const ok = Math.abs(userVal - target) <= tol;
 
-    if (okUser) {
+    if (ok) {
+      solved = true;
+      revealSolution = true;
       fb.className = 'text-sm mt-2 text-emerald-400';
-      fb.textContent = modelY != null
-        ? `Correct. Your model at x = ${atX} gives ${modelY.toFixed(2)}.`
-        : 'Correct.';
-    } else {
+      fb.textContent = 'Correct.';
+      document.getElementById('answerInput').disabled = true;
+      document.getElementById('checkBtn').disabled = true;
+      updateAttemptsUI();
+      draw();
+      showSolutionModal('Well done — solution');
+      return;
+    }
+
+    // Failed attempt
+    if (attempts === 2) {
+      document.getElementById('hintsPanel').classList.remove('hidden');
+    }
+
+    if (attempts >= MAX_ATTEMPTS) {
+      revealSolution = true;
       fb.className = 'text-sm mt-2 text-rose-400';
-      let msg = `Not quite. Target is about ${target}.`;
-      if (modelY != null) msg += ` Your current model gives ${modelY.toFixed(2)} at x = ${atX}. Adjust the sliders and read the graph.`;
-      fb.textContent = msg;
+      fb.textContent = 'Out of attempts. See the worked solution.';
+      document.getElementById('answerInput').disabled = true;
+      document.getElementById('checkBtn').disabled = true;
+      document.getElementById('hintsPanel').classList.remove('hidden');
+      draw();
+      showSolutionModal('Solution after 3 attempts');
+    } else {
+      const left = MAX_ATTEMPTS - attempts;
+      fb.className = 'text-sm mt-2 text-rose-400';
+      fb.textContent = `Not quite. ${left} attempt${left === 1 ? '' : 's'} left.` +
+        (attempts >= 2 ? ' Hints are now available below.' : '');
     }
   };
 
@@ -245,12 +345,14 @@
 
     window.HyperGraph.drawCurve(ctx, pts, plot.tx, plot.ty, '#3db8ff');
 
-    // Guide at answer x
-    const ax = scenario.answer && scenario.answer.atX;
-    if (ax != null && ax >= scenario.xMin && ax <= scenario.xMax) {
-      const y = window.LabMath.valueAt(scenario, params, ax);
+    // Solution marker ONLY after correct or 3 fails
+    if (revealSolution && scenario.answer && scenario.answer.atX != null) {
+      const ax = scenario.answer.atX;
+      const ideal = {};
+      scenario.params.forEach(p => { ideal[p.key] = p.default; });
+      const y = window.LabMath.valueAt(scenario, ideal, ax);
       const px = plot.tx(ax);
-      ctx.strokeStyle = 'rgba(52, 211, 153, 0.5)';
+      ctx.strokeStyle = 'rgba(52, 211, 153, 0.55)';
       ctx.setLineDash([4, 4]);
       ctx.beginPath();
       ctx.moveTo(px, plot.padT);
@@ -268,7 +370,6 @@
       }
     }
 
-    // Light motion (1:1 only)
     if (animT != null && scenario.motion && window.HyperVisuals) {
       const V = window.HyperVisuals;
       const t = animT;
@@ -301,8 +402,6 @@
     animId = null;
     animT = null;
   }
-
-  // Start on picker; optional deep link later
 })();
 </script>
 </body>
