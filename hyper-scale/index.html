@@ -14,6 +14,7 @@
   <script src="scenarios-exp-log.js"></script>
   <script src="scenarios-trigonometry.js"></script>
   <script src="lab.js"></script>
+  <script src="lab-solution.js"></script>
   <script>
     (function () {
       const token = localStorage.getItem('precalc_token');
@@ -111,7 +112,7 @@
   </div>
 
   <div id="solutionModal" class="modal-backdrop hidden">
-    <div class="panel max-w-md w-full p-6 shadow-2xl border-sky-800/50">
+    <div class="panel max-w-lg w-full p-6 shadow-2xl border-sky-800/50 max-h-[90vh] overflow-y-auto">
       <h3 id="modalTitle" class="text-lg font-semibold text-white mb-3">Solution</h3>
       <div id="modalBody" class="text-sm text-slate-300 space-y-3 leading-relaxed"></div>
       <button id="modalClose" class="mt-5 w-full py-2.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-sm font-medium">Next problem (same section)</button>
@@ -156,7 +157,7 @@
   (window.CURRICULUM.levels || []).forEach(L => {
     const btn = document.createElement('button');
     btn.className = 'panel p-4 text-left transition ' + (L.available ? 'hover:border-sky-500/50' : 'locked');
-    btn.innerHTML = `<div class="font-medium text-white">${L.name}</div><div class="text-xs text-slate-400 mt-1">${L.blurb}</div>`;
+    btn.innerHTML = '<div class="font-medium text-white">' + L.name + '</div><div class="text-xs text-slate-400 mt-1">' + L.blurb + '</div>';
     if (L.available) btn.onclick = () => { currentLevel = L.id; showUnits(); };
     levelBox.appendChild(btn);
   });
@@ -173,9 +174,9 @@
       const ready = n > 0;
       const btn = document.createElement('button');
       btn.className = 'panel p-4 text-left transition ' + (ready ? 'hover:border-sky-500/50' : 'locked');
-      btn.innerHTML = `<div class="font-medium text-white">${U.name}</div>
-        <div class="text-xs text-slate-400 mt-1">${U.blurb}</div>
-        <div class="text-xs mt-2 ${ready ? 'text-emerald-400' : 'text-slate-500'}">${n} / ${U.targetCount} scenarios</div>`;
+      btn.innerHTML = '<div class="font-medium text-white">' + U.name + '</div>' +
+        '<div class="text-xs text-slate-400 mt-1">' + U.blurb + '</div>' +
+        '<div class="text-xs mt-2 ' + (ready ? 'text-emerald-400' : 'text-slate-500') + '">' + n + ' / ' + U.targetCount + ' scenarios</div>';
       if (ready) btn.onclick = () => { currentUnit = U.id; openScenario(window.pickScenario(currentLevel, currentUnit)); };
       box.appendChild(btn);
     });
@@ -203,7 +204,7 @@
   function renderGlossary() {
     const g = scenario.symbolGlossary || [];
     document.getElementById('glossary').innerHTML = g.map(item =>
-      `<div><span class="mono text-sky-400">${item.sym}</span> — ${item.mean}</div>`).join('');
+      '<div><span class="mono text-sky-400">' + item.sym + '</span> — ' + item.mean + '</div>').join('');
   }
 
   function openScenario(s) {
@@ -230,7 +231,7 @@
     document.getElementById('answerInput').disabled = false;
     document.getElementById('checkBtn').disabled = false;
     document.getElementById('hintsPanel').classList.add('hidden');
-    document.getElementById('hints').innerHTML = (scenario.hints || []).map(h => `<li>${h}</li>`).join('');
+    document.getElementById('hints').innerHTML = (scenario.hints || []).map(h => '<li>' + h + '</li>').join('');
 
     if (scenario.answer && scenario.answer.type === 'numeric') {
       document.getElementById('answerPanel').classList.remove('hidden');
@@ -248,12 +249,11 @@
     box.innerHTML = '';
     scenario.params.forEach(p => {
       const wrap = document.createElement('div');
-      wrap.innerHTML = `
-        <div class="flex justify-between text-xs text-slate-400 mb-1">
-          <span>${p.label}</span>
-          <span class="mono text-sky-300" id="val_${p.key}">${params[p.key]}</span>
-        </div>
-        <input type="range" min="${p.min}" max="${p.max}" step="${p.step}" value="${params[p.key]}" />`;
+      wrap.innerHTML =
+        '<div class="flex justify-between text-xs text-slate-400 mb-1">' +
+        '<span>' + p.label + '</span>' +
+        '<span class="mono text-sky-300" id="val_' + p.key + '">' + params[p.key] + '</span></div>' +
+        '<input type="range" min="' + p.min + '" max="' + p.max + '" step="' + p.step + '" value="' + params[p.key] + '" />';
       box.appendChild(wrap);
       wrap.querySelector('input').oninput = (e) => {
         params[p.key] = parseFloat(e.target.value);
@@ -267,25 +267,16 @@
     return scenario.idealParams || Object.fromEntries(scenario.params.map(p => [p.key, p.default]));
   }
 
-  function buildSolutionExplanation() {
-    const a = scenario.answer;
-    const ideal = idealParams();
-    const modelY = window.LabMath.valueAt(scenario, ideal, a.atX);
-    let steps = `<p><strong class="text-white">Target:</strong> about <span class="mono text-sky-300">${a.target}</span> at <span class="mono">x = ${a.atX}</span>.</p>`;
-    steps += `<p><strong class="text-white">Model:</strong> <span class="mono text-sky-300">${scenario.form}</span></p>`;
-    if (scenario.symbolGlossary) {
-      steps += scenario.symbolGlossary.map(g => `<div class="text-xs"><span class="mono text-sky-400">${g.sym}</span> — ${g.mean}</div>`).join('');
-    }
-    steps += `<p class="mt-2"><strong class="text-white">Parameters:</strong></p><ul class="list-disc list-inside text-slate-400">`;
-    scenario.params.forEach(p => { steps += `<li>${p.label}: <span class="mono text-sky-300">${ideal[p.key]}</span></li>`; });
-    steps += `</ul>`;
-    if (modelY != null) steps += `<p>At x = ${a.atX}: <span class="mono text-emerald-400">y ≈ ${modelY.toFixed(2)}</span>.</p>`;
-    return steps;
-  }
-
   function showSolutionModal(title) {
+    const ideal = idealParams();
+    const modelY = scenario.answer && scenario.answer.atX != null
+      ? window.LabMath.valueAt(scenario, ideal, scenario.answer.atX)
+      : null;
+    const html = window.buildLabSolutionHTML
+      ? window.buildLabSolutionHTML(scenario, ideal, modelY)
+      : '<p>See the target and graph marker.</p>';
     document.getElementById('modalTitle').textContent = title;
-    document.getElementById('modalBody').innerHTML = buildSolutionExplanation();
+    document.getElementById('modalBody').innerHTML = html;
     document.getElementById('solutionModal').classList.remove('hidden');
   }
 
@@ -316,7 +307,8 @@
     } else {
       const left = MAX_ATTEMPTS - attempts;
       fb.className = 'text-sm mt-2 text-rose-400';
-      fb.textContent = `Not quite. ${left} attempt${left === 1 ? '' : 's'} left.` + (attempts >= 2 ? ' Hints are below.' : '');
+      fb.textContent = 'Not quite. ' + left + ' attempt' + (left === 1 ? '' : 's') + ' left.' +
+        (attempts >= 2 ? ' Hints are below.' : '');
     }
   };
 
@@ -342,7 +334,7 @@
         const py = plot.ty(y);
         ctx.fillStyle = '#34d399'; ctx.beginPath(); ctx.arc(px, py, 5, 0, Math.PI * 2); ctx.fill();
         ctx.fillStyle = '#a7f3d0'; ctx.font = '11px JetBrains Mono'; ctx.textAlign = 'left';
-        ctx.fillText(`x=${ax}  y=${y.toFixed(2)}`, px + 10, py - 8);
+        ctx.fillText('x=' + ax + '  y=' + y.toFixed(2), px + 10, py - 8);
       }
     }
     if (animT != null && scenario.motion && window.HyperVisuals) {
