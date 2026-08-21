@@ -1,30 +1,36 @@
-# Hyper-Scale Mission Quality Checklist
+# Hyper-Scale Quality Agent
 
-Every new encounter MUST pass this checklist before being added.
+Automated + manual checklist. Fail any item → do not ship the scenario.
 
-## 1. Story ↔ Math Alignment
-- [ ] The real-world situation genuinely requires the target function family
+## A. Hand guarantee (code-enforced)
+- [ ] `CombatManager.start(target, requiredFamily)` is always called with `scenario.family`
+- [ ] `ensureParentInHand(family)` runs after the opening draw
+- [ ] Opening hand always contains ≥1 parent with `parentType === scenario.family`
+- [ ] That card is marked with green glow **and** a visible "USE THIS" badge in the UI
 
-## 2. Intended Card Path (CRITICAL)
-- [ ] Player can win using the recommended Parent + 1–2 Modifiers
-- [ ] **Opening hand ALWAYS contains at least one card of the required parent family**
-- [ ] Recommended cards are clearly marked (green glow)
+## B. Scenario text
+- [ ] Brief states the real situation in plain language
+- [ ] Brief names or clearly implies the function family
+- [ ] Hints contrast correct vs wrong family at least once
+- [ ] `recommend` names the exact parent card
 
-## 3. Educational Failure Feedback
-- [ ] If the player uses the wrong function family, the result screen explains the mismatch
+## C. Visual relevance
+- [ ] `scenario.visual` is set to a real type: colonies | dots | bars | ball | slices | cars | scale
+- [ ] Execute animation is not only a generic particle on a line
+- [ ] For log scenarios, use `scale` (Richter-style steps)
 
-## 4. Target Score Calibration
-- [ ] Intended strategy reaches the target most of the time
-- [ ] Clearly wrong strategies usually fail
+## D. Scoring
+- [ ] Intended path (required parent + 1 stretch) can reach target
+- [ ] Obviously wrong family usually fails
 
-## 5. Visual Reinforcement
-- [ ] Visuals during Execute match the story when applicable
-
-## 6. Single Learning Goal
-- [ ] One primary concept per mission
+## E. UX
+- [ ] Required card cannot be missed (badge + glow)
+- [ ] Result feedback names used family vs required family
 
 ---
 
-## Enforcement in code
-
-`CombatManager.start(target, requiredFamily)` guarantees that after the opening draw, the hand contains at least one parent card whose `parentType === requiredFamily`. If the random draw missed it, one is injected from the deck.
+## Quick test for any scenario
+1. Start scenario → required parent visible with USE THIS
+2. Play only that parent + one stretch → can win
+3. Play wrong parent → feedback explains mismatch
+4. Run model → animation matches story
