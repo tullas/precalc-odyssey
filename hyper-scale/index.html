@@ -39,15 +39,15 @@
   <header class="flex flex-wrap items-center justify-between gap-3 mb-6">
     <div>
       <h1 class="text-xl md:text-2xl font-semibold tracking-tight">
-        <a href="/" class="home-link">Hyper-Scale Lab</a>
+        <a href="/hyper-scale/" class="home-link" id="titleHome">Hyper-Scale Lab</a>
       </h1>
       <p class="text-sm text-slate-400">
-        <a href="/" class="text-sky-400 hover:text-sky-300 underline underline-offset-2">← Home / landing</a>
+        <a href="/hyper-scale/" class="text-sky-400 hover:text-sky-300 underline underline-offset-2" id="homeLink">← Home</a>
         · Self-study lab
       </p>
     </div>
     <div class="flex items-center gap-2">
-      <a href="/" class="text-sm px-3 py-1.5 rounded-lg border border-slate-600 text-slate-300 hover:border-sky-500 hover:text-sky-300">Home</a>
+      <a href="/hyper-scale/" class="text-sm px-3 py-1.5 rounded-lg border border-slate-600 text-slate-300 hover:border-sky-500 hover:text-sky-300" id="homeBtn">Home</a>
       <button id="pickBtn" class="text-sm px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white">New scenario</button>
       <button id="logoutBtn" class="text-sm px-3 py-1.5 rounded-lg border border-slate-600 text-slate-300">Logout</button>
     </div>
@@ -147,6 +147,17 @@
   let revealSolution = false;
   let animT = null;
   let animId = null;
+
+  function goHome(e) {
+    if (e) e.preventDefault();
+    // Already on lab and logged in → show scenario picker (no login)
+    showPicker();
+    history.replaceState(null, '', '/hyper-scale/');
+  }
+
+  document.getElementById('titleHome').onclick = goHome;
+  document.getElementById('homeLink').onclick = goHome;
+  document.getElementById('homeBtn').onclick = goHome;
 
   document.getElementById('logoutBtn').onclick = () => {
     localStorage.removeItem('precalc_token');

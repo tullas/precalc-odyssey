@@ -5,6 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login | Precalc Odyssey</title>
   <link rel="stylesheet" href="css/auth.css" />
+  <script>
+    // Already logged in → go straight to the lab (do not show login form)
+    (function () {
+      try {
+        var token = localStorage.getItem('precalc_token');
+        var user = localStorage.getItem('precalc_user');
+        if (token && user) {
+          window.location.replace('/hyper-scale/');
+        }
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
   <div class="auth-container">
@@ -14,14 +26,12 @@
         <p>Enter the Math Realms</p>
       </div>
 
-      <!-- Tabs -->
       <div class="tabs">
         <button class="tab active" data-tab="login">Login</button>
         <button class="tab" data-tab="register">Register</button>
         <button class="tab" data-tab="forgot">Reset Password</button>
       </div>
 
-      <!-- Login Form -->
       <form id="loginForm" class="form active">
         <div class="form-group">
           <label>Email</label>
@@ -35,7 +45,6 @@
         <p class="message" id="loginMessage"></p>
       </form>
 
-      <!-- Register Form -->
       <form id="registerForm" class="form">
         <div class="form-group">
           <label>Email</label>
@@ -53,7 +62,6 @@
         <p class="message" id="regMessage"></p>
       </form>
 
-      <!-- Forgot / Reset Password -->
       <form id="forgotForm" class="form">
         <div class="form-group">
           <label>Email</label>
