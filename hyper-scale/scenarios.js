@@ -1,120 +1,146 @@
 /**
- * Hyper-Scale — 25 Real-Life Function Scenarios
- * Randomly selected when a player starts a mission.
- * Each scenario teaches how one function family behaves in daily life.
+ * Hyper-Scale — Practical Real-Life Scenarios
+ * Clearer wording, stronger teaching focus.
  */
 
 window.SCENARIOS = [
-  // ===== EXPONENTIAL (growth / decay) =====
-  {
-    id: 'virus',
-    family: 'exponential',
-    title: 'Outbreak Protocol',
-    brief: 'A digital virus is doubling every hour. Build an exponential function that matches the infection growth and generate enough damage to contain it.',
-    recommend: 'Use Exponential Spike + Stretch / Amplify',
-    target: 1800,
-    hints: [
-      'Play Exponential Spike (doubles each turn)',
-      'Add ×2 or ×3 stretch for more power',
-      'Avoid Rational or Log — they do not double'
-    ],
-    storyDuring: t => t < 3 ? 'Infection spreading slowly…' : t < 7 ? 'Virus doubling rapidly!' : 'Critical window!'
-  },
+  // ===== EXPONENTIAL =====
   {
     id: 'savings',
     family: 'exponential',
     title: 'Compound Interest',
-    brief: 'You invest money that grows by a fixed percentage each year. Model the balance with an exponential function to reach your savings goal.',
-    recommend: 'Use Exponential Spike + Stretch',
+    brief: 'You put money in a savings account that earns a fixed percentage each year. The balance grows by multiplying — not by adding the same amount. Build an exponential model to see how the money grows over 10 years.',
+    recommend: 'Exponential Spike + Stretch (higher rate)',
     target: 1600,
     hints: [
-      'Compound growth is exponential',
-      'Exponential Spike is the right parent',
-      'Stretch increases the growth rate'
+      'Percentage growth multiplies → Exponential',
+      'Linear would only add a fixed amount each year',
+      'Stretch represents a higher interest rate'
     ],
-    storyDuring: t => t < 4 ? 'Money growing steadily…' : 'Interest compounding!'
-  },
-  {
-    id: 'bacteria',
-    family: 'exponential',
-    title: 'Kitchen Bacteria',
-    brief: 'Bacteria on a forgotten dish double every turn. Build the growth curve so you know when the colony becomes dangerous.',
-    recommend: 'Exponential Spike + Amplify',
-    target: 1700,
-    hints: ['Doubling population → Exponential', 'Add stretch for faster growth', 'Linear will underestimate the danger'],
-    storyDuring: t => t < 5 ? 'Colony still small…' : 'Exploding growth!'
+    storyDuring: t => t < 4 ? 'Balance growing slowly at first…' : 'Compounding speeds up',
+    visual: 'bars' // growing height bars
   },
   {
     id: 'views',
     family: 'exponential',
     title: 'Viral Video',
-    brief: 'Your video shares are roughly doubling each wave of viewers. Model the view count with an exponential to predict when it hits trending.',
-    recommend: 'Exponential Spike + ×2 Stretch',
+    brief: 'Each person who likes your video shares it with about two friends. Views roughly double with every wave of sharing. Model this doubling to predict when the video will hit a high view count.',
+    recommend: 'Exponential Spike + Stretch',
     target: 1750,
-    hints: ['Viral sharing ≈ exponential', 'Use Exponential Spike', 'Stretch = more aggressive sharing'],
-    storyDuring: t => t < 4 ? 'Early shares…' : 'Going viral!'
+    hints: [
+      'Each wave doubles viewers → Exponential',
+      'Linear would mean a fixed number of new views each turn',
+      'Use Exponential Spike'
+    ],
+    storyDuring: t => t < 4 ? 'Early shares…' : 'Going viral!',
+    visual: 'dots' // multiplying dots
   },
   {
-    id: 'cooling',
+    id: 'bacteria',
     family: 'exponential',
-    title: 'Coffee Cooling',
-    brief: 'Hot coffee cools toward room temperature. The temperature drop follows an exponential decay. Model it to know when it is drinkable.',
-    recommend: 'Exponential (decay style) + careful stretch',
-    target: 900,
-    hints: ['Cooling is exponential decay', 'Exponential parent still applies', 'You may need smaller stretch'],
-    storyDuring: t => t < 5 ? 'Still hot…' : 'Approaching room temp'
+    title: 'Kitchen Bacteria',
+    brief: 'Bacteria on a dish roughly double every few hours in the right conditions. After several doublings the colony is huge. Build the exponential growth curve so you can see why “just a few hours” matters.',
+    recommend: 'Exponential Spike + Amplify',
+    target: 1700,
+    hints: [
+      'Doubling each interval → Exponential',
+      'A straight line would badly underestimate later growth',
+      'Stretch / Amplify = faster doubling'
+    ],
+    storyDuring: t => t < 4 ? 'Colony still small…' : 'Colony exploding!',
+    visual: 'colonies'
+  },
+  {
+    id: 'medicine',
+    family: 'exponential',
+    title: 'Medicine Level',
+    brief: 'Many medicines leave the blood at a rate proportional to how much is still there (a constant fraction each hour). That is exponential decay. Model the falling level over time.',
+    recommend: 'Exponential Spike + Compress or Stretch',
+    target: 820,
+    hints: [
+      'Constant fraction remaining → Exponential decay',
+      'Not a straight drop (linear)',
+      'Exponential parent still models this'
+    ],
+    storyDuring: t => 'Concentration falling…',
+    visual: 'fade'
+  },
+  {
+    id: 'streaming',
+    family: 'exponential',
+    title: 'App Subscribers',
+    brief: 'A new app gains a steady percentage of new users each month (word of mouth). That is exponential growth, not “+1000 users every month.” Model the subscriber curve.',
+    recommend: 'Exponential Spike + Stretch',
+    target: 1650,
+    hints: [
+      'Percentage growth → Exponential',
+      'Linear would be a fixed number of new users each month',
+      'Use Exponential Spike'
+    ],
+    storyDuring: t => 'Subscriber base growing…',
+    visual: 'bars'
   },
 
   // ===== QUADRATIC =====
   {
     id: 'hoop',
     family: 'quadratic',
-    title: 'Hoop Shot',
-    brief: 'Championship final. The basketball follows a curved (parabolic) path. Build a quadratic so the arc goes through the hoop.',
+    title: 'Basketball Shot',
+    brief: 'A basketball follows a curved path (a parabola) under gravity. Build a quadratic function so the height of the ball matches an arc that can go through the hoop.',
     recommend: 'Quadratic Surge + Shift + Stretch',
     target: 950,
-    hints: ['Projectile motion → Quadratic', 'Shift moves the peak', 'Stretch controls height'],
-    storyDuring: t => t < 4 ? 'Ball leaving your hands…' : t < 7 ? 'Climbing toward the rim…' : 'At the hoop!'
+    hints: [
+      'Projectile under gravity → Quadratic',
+      'Shift moves where the peak of the arc is',
+      'Stretch changes how high the ball goes'
+    ],
+    storyDuring: t => t < 4 ? 'Ball in the air…' : t < 7 ? 'Near the rim…' : 'At the hoop',
+    visual: 'ball'
   },
   {
-    id: 'fountain',
+    id: 'hose',
     family: 'quadratic',
-    title: 'Water Fountain',
-    brief: 'Water from a park fountain follows a parabolic arc. Model the path so the stream lands in the basin, not on the path.',
-    recommend: 'Quadratic Surge + Shift',
-    target: 900,
-    hints: ['Arcing water → Quadratic', 'Use shift to aim the landing', 'Stretch changes how high it goes'],
-    storyDuring: t => t < 5 ? 'Stream rising…' : 'Falling toward basin'
-  },
-  {
-    id: 'bridge',
-    family: 'quadratic',
-    title: 'Cable Bridge',
-    brief: 'The main cable of a suspension bridge hangs in a parabola. Model the cable shape to check clearance for trucks.',
-    recommend: 'Quadratic Surge + Stretch',
-    target: 1000,
-    hints: ['Hanging cable ≈ parabola', 'Quadratic is the parent', 'Stretch sets how deep the curve is'],
-    storyDuring: t => 'Tracing the cable curve…'
+    title: 'Garden Hose',
+    brief: 'Water from a hose aimed upward follows a parabola and falls back down. Model the stream so it lands on the far flower bed instead of the path.',
+    recommend: 'Quadratic Surge + Shift + Stretch',
+    target: 910,
+    hints: [
+      'Arcing water → Quadratic',
+      'Shift aims the landing point',
+      'Stretch sets maximum height'
+    ],
+    storyDuring: t => t < 5 ? 'Stream rising…' : 'Falling toward the flowers',
+    visual: 'ball'
   },
   {
     id: 'phone',
     family: 'quadratic',
     title: 'Dropped Phone',
-    brief: 'You drop your phone. Its height vs time is roughly quadratic (free fall). Model the fall to estimate when it hits the ground.',
+    brief: 'When you drop a phone, its height above the ground falls faster and faster (accelerated by gravity). Height vs time is roughly quadratic. Model the fall.',
     recommend: 'Quadratic Surge',
     target: 850,
-    hints: ['Free fall height → Quadratic in time', 'Quadratic Surge is ideal', 'Shift can represent release point'],
-    storyDuring: t => t < 5 ? 'Phone in free fall…' : 'About to hit!'
+    hints: [
+      'Free fall height vs time → Quadratic',
+      'Not linear (that would be constant speed)',
+      'Quadratic Surge is the right parent'
+    ],
+    storyDuring: t => t < 5 ? 'Phone falling…' : 'About to hit the ground',
+    visual: 'ball'
   },
   {
     id: 'profit',
     family: 'quadratic',
-    title: 'Lemonade Stand',
-    brief: 'Profit vs price often rises then falls (a downward parabola). Find a quadratic model that peaks at a good selling price.',
+    title: 'Lemonade Pricing',
+    brief: 'If you set the price too low you sell a lot but earn little per cup; too high and few people buy. Profit often rises then falls — a downward-opening parabola. Find a quadratic that peaks at a sensible price.',
     recommend: 'Quadratic + Stretch + Shift',
     target: 920,
-    hints: ['Profit curves are often quadratic', 'Shift moves the best price', 'Stretch changes how sharp the peak is'],
-    storyDuring: t => 'Scanning price vs profit…'
+    hints: [
+      'Profit vs price often peaks then falls → Quadratic',
+      'Shift moves the best price',
+      'Stretch changes how sharp the peak is'
+    ],
+    storyDuring: t => 'Scanning price vs profit…',
+    visual: 'bars'
   },
 
   // ===== LINEAR =====
@@ -122,186 +148,146 @@ window.SCENARIOS = [
     id: 'taxi',
     family: 'linear',
     title: 'Taxi Fare',
-    brief: 'A taxi charges a fixed start fee plus a constant rate per kilometre. Model the total cost with a linear function.',
+    brief: 'A taxi charges a starting fee plus a fixed amount per kilometre. Total cost rises at a constant rate. Model the fare with a linear function.',
     recommend: 'Linear Core + Stretch (rate) + Shift (base fee)',
     target: 700,
-    hints: ['Constant rate → Linear', 'Linear Core is the parent', 'Shift can act like the flag-fall fee'],
-    storyDuring: t => 'Meter running…'
-  },
-  {
-    id: 'data',
-    family: 'linear',
-    title: 'Phone Data Plan',
-    brief: 'You use roughly the same amount of data every day. Model remaining data with a linear decrease.',
-    recommend: 'Linear Core + negative stretch feel via compress',
-    target: 650,
-    hints: ['Steady daily use → Linear', 'Linear Core', 'Compress / stretch adjusts the slope'],
-    storyDuring: t => 'Data draining steadily…'
+    hints: [
+      'Constant rate per km → Linear',
+      'Shift can represent the flag-fall fee',
+      'Stretch is the per-km rate'
+    ],
+    storyDuring: t => 'Meter running…',
+    visual: 'line'
   },
   {
     id: 'walk',
     family: 'linear',
-    title: 'Walking to School',
-    brief: 'You walk at a nearly constant speed. Distance from home is linear in time. Model it to know when you arrive.',
+    title: 'Walk to School',
+    brief: 'You walk at a nearly constant speed. Distance from home increases steadily with time. Model this with a linear function to see when you arrive.',
     recommend: 'Linear Core + Stretch',
     target: 680,
-    hints: ['Constant speed → Linear', 'Stretch = walking speed', 'Shift = head-start or delay'],
-    storyDuring: t => 'Steps adding up…'
+    hints: [
+      'Constant speed → Linear',
+      'Stretch = walking speed',
+      'Not exponential (you are not accelerating)'
+    ],
+    storyDuring: t => 'Steps adding up at a steady pace…',
+    visual: 'line'
   },
   {
-    id: 'savings_linear',
+    id: 'allowance',
     family: 'linear',
     title: 'Weekly Allowance',
-    brief: 'You save a fixed amount every week (no interest). The total is linear in the number of weeks.',
+    brief: 'You save a fixed amount every week and earn no interest. The total saved is just “amount × weeks” — a straight line. Model it.',
     recommend: 'Linear Core + Stretch',
     target: 720,
-    hints: ['Fixed amount each week → Linear', 'Not exponential (no compounding)', 'Linear Core + stretch'],
-    storyDuring: t => 'Savings growing by the same amount…'
+    hints: [
+      'Same amount each week → Linear',
+      'If it earned interest it would be exponential',
+      'Linear Core is correct here'
+    ],
+    storyDuring: t => 'Savings growing by the same amount each week…',
+    visual: 'bars'
   },
 
   // ===== LOGARITHMIC =====
   {
     id: 'richter',
     family: 'logarithmic',
-    title: 'Earthquake Scale',
-    brief: 'Earthquake magnitude is logarithmic. A jump of 1 on the Richter scale means 10× more energy. Model the perceived intensity.',
+    title: 'Earthquake Magnitude',
+    brief: 'On the Richter scale, each step up of 1 means about 10 times more energy. That is a logarithmic scale: large energy changes become smaller steps on the scale. Model the relationship with a log function.',
     recommend: 'Log Dampen + Stretch',
     target: 600,
-    hints: ['Richter scale → Logarithmic', 'Log Dampen is the parent', 'Stretch adjusts sensitivity'],
-    storyDuring: t => 'Measuring seismic intensity…'
+    hints: [
+      'Richter scale is logarithmic',
+      'Log turns multiplication into addition on the scale',
+      'Use Log Dampen'
+    ],
+    storyDuring: t => 'Measuring seismic intensity…',
+    visual: 'scale'
   },
   {
     id: 'volume',
     family: 'logarithmic',
-    title: 'Speaker Volume',
-    brief: 'Loudness in decibels is logarithmic in power. Model how turning the dial feels to the ear.',
+    title: 'Speaker Loudness',
+    brief: 'Loudness in decibels is logarithmic in sound power. Doubling the power does not double the perceived loudness. Model this with a log function.',
     recommend: 'Log Dampen + Stretch',
     target: 580,
-    hints: ['Decibels are logarithmic', 'Log parent', 'Human hearing compresses large changes'],
-    storyDuring: t => 'Volume dial turning…'
-  },
-  {
-    id: 'pH',
-    family: 'logarithmic',
-    title: 'Pool pH',
-    brief: 'pH is a logarithmic measure of acidity. Model how small chemical changes affect the reading.',
-    recommend: 'Log Dampen',
-    target: 550,
-    hints: ['pH → Logarithmic', 'Log Dampen', 'Small input changes, big perceived effect at extremes'],
-    storyDuring: t => 'Testing water chemistry…'
+    hints: [
+      'Decibels are a log scale',
+      'Human hearing compresses large power changes',
+      'Log parent'
+    ],
+    storyDuring: t => 'Volume dial turning…',
+    visual: 'scale'
   },
   {
     id: 'search',
     family: 'logarithmic',
-    title: 'Binary Search',
-    brief: 'Looking up a word in a sorted dictionary by halving the range each time is logarithmic in the number of entries.',
+    title: 'Dictionary Lookup',
+    brief: 'In a sorted dictionary you can find a word by repeatedly jumping to the middle of the remaining section. The number of steps grows very slowly (logarithmically) even for a huge book. Model that with a log function.',
     recommend: 'Log Dampen + Stretch',
     target: 620,
-    hints: ['Halving search space → Logarithmic', 'Log parent', 'Grows slowly even for huge lists'],
-    storyDuring: t => 'Halving the search range…'
+    hints: [
+      'Halving the search range each time → Logarithmic',
+      'Steps stay small even for millions of entries',
+      'Log Dampen is the parent'
+    ],
+    storyDuring: t => 'Halving the remaining pages…',
+    visual: 'scale'
   },
 
   // ===== RATIONAL =====
   {
-    id: 'speed',
+    id: 'pizza',
     family: 'rational',
-    title: 'Traffic Density',
-    brief: 'At high car density, average speed drops roughly like 1/density. Model the slowdown with a rational function.',
-    recommend: 'Rational Singularity + Stretch + Shift',
-    target: 800,
-    hints: ['Speed vs density often ~ 1/x', 'Rational Singularity', 'Shift moves the “jam” point'],
-    storyDuring: t => t < 5 ? 'Traffic building…' : 'Near gridlock'
-  },
-  {
-    id: 'sharing',
-    family: 'rational',
-    title: 'Pizza Sharing',
-    brief: 'You split one pizza among more and more friends. Size per person is 1/n — a rational relationship.',
+    title: 'Sharing a Pizza',
+    brief: 'One pizza shared equally among more friends means each person gets less. Amount per person = total ÷ number of people (a 1/n relationship). Model this with a rational function.',
     recommend: 'Rational Singularity + Stretch',
     target: 750,
-    hints: ['Amount per person = total / n → Rational', 'Rational Singularity', 'More people → less each'],
-    storyDuring: t => 'More friends arriving…'
+    hints: [
+      'Amount per person = 1 / n → Rational',
+      'More people → less each',
+      'Rational Singularity is the parent'
+    ],
+    storyDuring: t => 'More friends arriving…',
+    visual: 'slices'
   },
   {
-    id: 'work',
+    id: 'traffic',
     family: 'rational',
-    title: 'Work Rate',
-    brief: 'If a job takes a fixed number of person-hours, time to finish is roughly 1/(number of workers).',
+    title: 'Traffic Speed',
+    brief: 'When a road gets crowded, average speed drops. A simple model is “speed ≈ constant / density.” That is a rational (1/x) relationship. Build it.',
+    recommend: 'Rational Singularity + Stretch + Shift',
+    target: 800,
+    hints: [
+      'Speed falls as density rises ≈ 1/x',
+      'Rational parent',
+      'Shift can move where the jam becomes severe'
+    ],
+    storyDuring: t => t < 5 ? 'Traffic building…' : 'Near gridlock',
+    visual: 'cars'
+  },
+  {
+    id: 'workers',
+    family: 'rational',
+    title: 'Team Work Rate',
+    brief: 'A job takes a fixed amount of work. More workers finish it faster: time ≈ work ÷ number of workers. Model time vs workers with a rational function.',
     recommend: 'Rational Singularity + Shift',
     target: 780,
-    hints: ['Time = work / rate → Rational', 'Rational parent', 'More workers → less time'],
-    storyDuring: t => 'Team size changing…'
-  },
-  {
-    id: 'lens',
-    family: 'rational',
-    title: 'Camera Lens',
-    brief: 'In simple optics, some image relationships behave like reciprocal (rational) functions of distance.',
-    recommend: 'Rational Singularity + Stretch',
-    target: 700,
-    hints: ['Optical formulas often involve 1/x', 'Rational Singularity', 'Stretch scales the effect'],
-    storyDuring: t => 'Focusing the lens…'
-  },
-
-  // ===== MIXED / COMPARISON =====
-  {
-    id: 'streaming',
-    family: 'exponential',
-    title: 'Streaming Subscribers',
-    brief: 'A new streaming app is growing by a steady percentage each month. That is exponential, not linear.',
-    recommend: 'Exponential Spike + Stretch',
-    target: 1650,
-    hints: ['Percentage growth → Exponential', 'Not Linear (that would be +fixed users)', 'Exponential Spike'],
-    storyDuring: t => 'Subscriber base growing…'
-  },
-  {
-    id: 'battery',
-    family: 'exponential',
-    title: 'Phone Battery Drain',
-    brief: 'Under steady use, battery charge often falls in a way closer to exponential decay than a perfect straight line.',
-    recommend: 'Exponential + Compress / Stretch',
-    target: 880,
-    hints: ['Drain can look exponential', 'Exponential parent', 'Adjust stretch to match speed of drain'],
-    storyDuring: t => 'Battery percentage falling…'
-  },
-  {
-    id: 'medicine',
-    family: 'exponential',
-    title: 'Medicine in Blood',
-    brief: 'Many medicines leave the bloodstream at a rate proportional to the current amount — classic exponential decay.',
-    recommend: 'Exponential Spike (as decay model) + Stretch',
-    target: 820,
-    hints: ['Half-life style decay → Exponential', 'Exponential parent', 'Stretch related to how fast it clears'],
-    storyDuring: t => 'Concentration dropping…'
-  },
-  {
-    id: 'stairs',
-    family: 'linear',
-    title: 'Climbing Stairs',
-    brief: 'You climb stairs at a steady pace. Height gained is linear in the number of steps.',
-    recommend: 'Linear Core + Stretch',
-    target: 640,
-    hints: ['Steady pace → Linear', 'Linear Core', 'Stretch = step height effect'],
-    storyDuring: t => 'Step after step…'
-  },
-  {
-    id: 'rainbow',
-    family: 'quadratic',
-    title: 'Garden Hose',
-    brief: 'Water from a hose aimed upward follows a parabola. Model the stream so it lands on the far flowers.',
-    recommend: 'Quadratic Surge + Shift + Stretch',
-    target: 910,
-    hints: ['Hose stream → Quadratic', 'Shift aims left/right', 'Stretch changes max height'],
-    storyDuring: t => t < 5 ? 'Stream rising…' : 'Arcing down to the flowers'
+    hints: [
+      'Time = work / workers → Rational',
+      'More workers → less time',
+      'Rational Singularity'
+    ],
+    storyDuring: t => 'Team size changing…',
+    visual: 'bars'
   }
 ];
 
-/** Pick a random scenario, optionally filtered by family */
 window.pickScenario = function (familyFilter) {
   let pool = window.SCENARIOS;
-  if (familyFilter) {
-    pool = pool.filter(s => s.family === familyFilter);
-  }
+  if (familyFilter) pool = pool.filter(s => s.family === familyFilter);
   if (!pool.length) pool = window.SCENARIOS;
   return pool[Math.floor(Math.random() * pool.length)];
 };
