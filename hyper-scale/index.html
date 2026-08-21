@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hyper-Scale</title>
+  <title>Hyper-Scale Lab</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="graph.js"></script>
   <script src="visuals.js"></script>
   <script src="scenarios.js"></script>
-  <script src="graph.js"></script>
+  <script src="lab.js"></script>
   <script>
     (function () {
       const token = localStorage.getItem('precalc_token');
@@ -16,430 +17,293 @@
     })();
   </script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Rajdhani:wght@500;600&display=swap');
-    body { font-family: 'Rajdhani', sans-serif; background: radial-gradient(ellipse at 30% 20%, #0d0d2b 0%, #050510 70%); color: #e0e0ff; min-height: 100vh; }
-    .font-orbitron { font-family: 'Orbitron', sans-serif; }
-    .neon-text { text-shadow: 0 0 10px #00f0ff, 0 0 20px #00f0ff; }
-    .neon-box { border: 1px solid rgba(0,240,255,0.4); box-shadow: 0 0 14px rgba(0,240,255,0.12); }
-    .card { transition: transform 0.15s ease, box-shadow 0.15s ease; cursor: pointer; user-select: none; position: relative; }
-    .card:hover { transform: translateY(-6px) scale(1.03); }
-    .card.recommended { box-shadow: 0 0 22px rgba(0,255,150,0.55); border: 2px solid rgba(0,255,150,0.85); background: rgba(0, 40, 30, 0.6); }
-    .use-badge { position: absolute; top: -8px; right: -6px; background: #00c853; color: #000; font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 4px; font-family: Orbitron, sans-serif; }
-    canvas { background: #03030a; border-radius: 12px; }
-    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: flex; align-items: center; justify-content: center; z-index: 60; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
-    .overlay.show { opacity: 1; pointer-events: all; }
-    .mission-card { transition: all 0.2s; cursor: pointer; }
-    .mission-card:hover { transform: translateY(-4px); box-shadow: 0 0 25px rgba(0,240,255,0.35); }
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+    body { font-family: 'DM Sans', system-ui, sans-serif; background: #0b0f14; color: #e8eef5; min-height: 100vh; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .panel { background: #121821; border: 1px solid #1e2a38; border-radius: 12px; }
+    input[type=range] { width: 100%; accent-color: #3db8ff; }
+    canvas { width: 100%; border-radius: 10px; background: #080c10; }
+    .chip { font-size: 11px; padding: 2px 8px; border-radius: 999px; background: #1a2836; color: #8ec8ef; }
   </style>
 </head>
-<body class="p-3 md:p-5 flex flex-col items-center">
+<body class="p-4 md:p-6 max-w-6xl mx-auto">
 
-  <header class="w-full max-w-6xl flex flex-wrap justify-between items-center gap-3 mb-4">
+  <header class="flex flex-wrap items-center justify-between gap-3 mb-6">
     <div>
-      <h1 class="font-orbitron text-2xl md:text-3xl neon-text tracking-widest">HYPER-SCALE</h1>
-      <div id="userInfo" class="text-xs text-cyan-400/60 mt-0.5"></div>
+      <h1 class="text-xl md:text-2xl font-semibold tracking-tight text-white">Hyper-Scale Lab</h1>
+      <p class="text-sm text-slate-400">Self-study · model real situations with one function family</p>
     </div>
-    <div class="flex items-center gap-3">
-      <button id="missionsBtn" class="text-xs px-3 py-1.5 rounded border border-cyan-500/40 text-cyan-300">Missions</button>
-      <button id="helpBtn" class="text-xs px-3 py-1.5 rounded border border-cyan-500/40 text-cyan-300">How to Play</button>
-      <button id="logoutBtn" class="text-xs px-3 py-1.5 rounded border border-red-500/40 text-red-400">Logout</button>
+    <div class="flex items-center gap-2">
+      <button id="pickBtn" class="text-sm px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white">New scenario</button>
+      <button id="logoutBtn" class="text-sm px-3 py-1.5 rounded-lg border border-slate-600 text-slate-300">Logout</button>
     </div>
   </header>
 
-  <div id="missionSelect" class="w-full max-w-4xl">
-    <h2 class="font-orbitron text-xl text-cyan-300 mb-2">Real-Life Function Encounters</h2>
-    <p class="text-sm text-cyan-200/70 mb-6">Correct parent is always marked <span class="text-emerald-400 font-bold">USE THIS</span>. Graph shows numbered axes and measurements.</p>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <div class="mission-card neon-box rounded-xl p-5 bg-black/50" data-filter="all"><div class="text-[10px] text-cyan-400 uppercase mb-1">Random</div><h3 class="font-orbitron text-lg text-white mb-1">Any Scenario</h3></div>
-      <div class="mission-card neon-box rounded-xl p-5 bg-black/50" data-filter="exponential"><div class="text-[10px] text-pink-400 uppercase mb-1">Exponential</div><h3 class="font-orbitron text-lg text-white mb-1">Growth & Decay</h3></div>
-      <div class="mission-card neon-box rounded-xl p-5 bg-black/50" data-filter="quadratic"><div class="text-[10px] text-fuchsia-400 uppercase mb-1">Quadratic</div><h3 class="font-orbitron text-lg text-white mb-1">Curves</h3></div>
-      <div class="mission-card neon-box rounded-xl p-5 bg-black/50" data-filter="linear"><div class="text-[10px] text-sky-400 uppercase mb-1">Linear</div><h3 class="font-orbitron text-lg text-white mb-1">Steady Change</h3></div>
-      <div class="mission-card neon-box rounded-xl p-5 bg-black/50" data-filter="logarithmic"><div class="text-[10px] text-emerald-400 uppercase mb-1">Logarithmic</div><h3 class="font-orbitron text-lg text-white mb-1">Scales</h3></div>
-      <div class="mission-card neon-box rounded-xl p-5 bg-black/50" data-filter="rational"><div class="text-[10px] text-amber-400 uppercase mb-1">Rational</div><h3 class="font-orbitron text-lg text-white mb-1">Rates & Sharing</h3></div>
-    </div>
+  <!-- Picker -->
+  <div id="picker" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
+    <button data-f="all" class="panel p-4 text-left hover:border-sky-500/50 transition">
+      <div class="text-xs text-sky-400 mb-1">Random</div>
+      <div class="font-medium">Any scenario</div>
+    </button>
+    <button data-f="exponential" class="panel p-4 text-left hover:border-sky-500/50 transition">
+      <div class="text-xs text-pink-400 mb-1">Exponential</div>
+      <div class="font-medium">Growth & decay</div>
+    </button>
+    <button data-f="quadratic" class="panel p-4 text-left hover:border-sky-500/50 transition">
+      <div class="text-xs text-fuchsia-400 mb-1">Quadratic</div>
+      <div class="font-medium">Curves & projectiles</div>
+    </button>
+    <button data-f="linear" class="panel p-4 text-left hover:border-sky-500/50 transition">
+      <div class="text-xs text-sky-400 mb-1">Linear</div>
+      <div class="font-medium">Steady change</div>
+    </button>
+    <button data-f="logarithmic" class="panel p-4 text-left hover:border-sky-500/50 transition">
+      <div class="text-xs text-emerald-400 mb-1">Logarithmic</div>
+      <div class="font-medium">Scales</div>
+    </button>
+    <button data-f="rational" class="panel p-4 text-left hover:border-sky-500/50 transition">
+      <div class="text-xs text-amber-400 mb-1">Rational</div>
+      <div class="font-medium">Rates & sharing</div>
+    </button>
   </div>
 
-  <div id="gameScreen" class="w-full max-w-6xl hidden">
-    <div class="neon-box rounded-xl p-4 mb-4 bg-black/40">
-      <div class="flex flex-col md:flex-row md:justify-between gap-3">
-        <div>
-          <div class="font-orbitron text-sm text-cyan-300 tracking-wider mb-1" id="missionTitle">MISSION</div>
-          <p class="text-sm text-cyan-100/90 max-w-3xl" id="missionBrief"></p>
-          <p class="text-xs text-emerald-300 mt-2" id="missionRecommend"></p>
-        </div>
-        <div class="text-right shrink-0">
-          <div class="text-[10px] text-cyan-400/60 uppercase">Target</div>
-          <div id="targetScore" class="font-orbitron text-3xl text-cyan-300">600</div>
-          <div class="text-[10px] text-cyan-400/60 mt-1 uppercase">Current</div>
-          <div id="liveScoreHeader" class="font-orbitron text-2xl text-white">0</div>
-        </div>
+  <!-- Lab -->
+  <div id="lab" class="hidden space-y-4">
+    <div class="panel p-4 md:p-5">
+      <div class="flex flex-wrap items-center gap-2 mb-2">
+        <h2 id="title" class="text-lg font-semibold text-white"></h2>
+        <span id="familyChip" class="chip"></span>
       </div>
+      <p id="context" class="text-sm text-slate-300 leading-relaxed mb-3"></p>
+      <p id="question" class="text-sm text-sky-100/90 leading-relaxed border-l-2 border-sky-500 pl-3"></p>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-      <div class="lg:col-span-2 relative">
-        <canvas id="graphCanvas" width="820" height="420" class="w-full"></canvas>
-        <div class="absolute top-3 right-3 neon-box bg-black/70 px-3 py-1.5 rounded-lg">
-          <div class="text-[10px] text-cyan-400/70 uppercase">Score</div>
-          <div id="liveScore" class="font-orbitron text-2xl text-white">0</div>
-        </div>
-        <div id="storyVisual" class="absolute bottom-2 left-3 right-3 text-center text-xs text-cyan-200/80"></div>
+    <div class="grid lg:grid-cols-5 gap-4">
+      <div class="lg:col-span-3 panel p-3">
+        <canvas id="graph" width="720" height="400"></canvas>
+        <p id="storyLine" class="text-xs text-slate-500 text-center mt-1 min-h-[1rem]"></p>
       </div>
-      <div class="flex flex-col gap-3">
-        <div class="neon-box rounded-xl p-3 bg-black/40">
-          <h2 class="font-orbitron text-[10px] text-cyan-400 mb-2 tracking-widest">ACTIVE FUNCTION</h2>
-          <div id="activeDisplay" class="min-h-[56px] flex items-center justify-center text-cyan-200/40 text-sm italic">No function selected</div>
-          <div id="transformList" class="mt-2 space-y-1 text-xs text-pink-300/90"></div>
-        </div>
-        <button id="executeBtn" disabled class="w-full py-3.5 font-orbitron font-bold rounded-xl bg-gradient-to-r from-cyan-600 to-fuchsia-700 disabled:opacity-40">RUN MODEL</button>
-        <div class="flex justify-between text-[11px] text-cyan-400/50 px-1">
-          <span>Draw: <span id="drawCount">0</span></span>
-          <span>Discard: <span id="discardCount">0</span></span>
-        </div>
-        <div id="statusText" class="text-center text-sm text-cyan-300/80 min-h-[20px]"></div>
-        <div class="neon-box rounded-lg p-3 bg-black/30 text-xs text-cyan-200/70">
-          <div class="font-orbitron text-[10px] text-cyan-400 mb-1">HINTS</div>
-          <ol class="list-decimal list-inside space-y-1" id="missionHints"></ol>
-        </div>
-        <button id="backToMissions" class="text-xs text-cyan-400/70 underline">← Back to Missions</button>
-      </div>
-    </div>
 
-    <div class="mt-5">
-      <div class="flex justify-between mb-2">
-        <h2 class="font-orbitron text-[10px] text-cyan-400 tracking-widest">YOUR HAND</h2>
-        <div class="text-[10px] text-emerald-400/80">Green + USE THIS = required parent</div>
-      </div>
-      <div id="handContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5"></div>
-    </div>
-  </div>
+      <div class="lg:col-span-2 space-y-3">
+        <div class="panel p-4">
+          <div class="text-xs uppercase tracking-wide text-slate-500 mb-1">Model</div>
+          <div id="form" class="mono text-sky-300 text-sm mb-4"></div>
+          <div id="controls" class="space-y-4"></div>
+        </div>
 
-  <div id="helpOverlay" class="overlay">
-    <div class="neon-box bg-black/95 rounded-2xl p-6 max-w-lg w-full mx-4">
-      <h2 class="font-orbitron text-2xl text-cyan-300 mb-4">How It Works</h2>
-      <div class="space-y-3 text-sm text-cyan-100/90">
-        <p>Pick the function family that matches the real situation.</p>
-        <p>Required parent is marked <strong class="text-emerald-400">USE THIS</strong>.</p>
-        <p>The graph has numbered axes so you can read values like a real chart.</p>
-      </div>
-      <button id="closeHelpBtn" class="mt-5 w-full py-2.5 font-orbitron rounded-lg bg-cyan-700">Got it</button>
-    </div>
-  </div>
+        <div class="panel p-4" id="answerPanel">
+          <div class="text-xs uppercase tracking-wide text-slate-500 mb-2">Check your reading</div>
+          <label id="answerPrompt" class="text-sm text-slate-300 block mb-2"></label>
+          <div class="flex gap-2">
+            <input id="answerInput" type="number" step="any" class="flex-1 bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm mono" placeholder="Your value" />
+            <button id="checkBtn" class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-sm font-medium">Check</button>
+          </div>
+          <p id="feedback" class="text-sm mt-2 min-h-[1.25rem]"></p>
+        </div>
 
-  <div id="resultOverlay" class="overlay">
-    <div class="text-center p-8 rounded-2xl neon-box bg-black/95 max-w-md mx-4">
-      <h2 id="resultTitle" class="font-orbitron text-4xl mb-2"></h2>
-      <p id="resultScore" class="text-lg text-cyan-300 mb-2"></p>
-      <p id="resultHint" class="text-sm text-cyan-200/70 mb-6"></p>
-      <div class="flex gap-3 justify-center">
-        <button id="restartBtn" class="px-6 py-2.5 font-orbitron font-bold rounded-lg bg-cyan-700">Retry</button>
-        <button id="nextMissionBtn" class="px-6 py-2.5 font-orbitron font-bold rounded-lg bg-fuchsia-700">New Scenario</button>
+        <div class="panel p-4">
+          <div class="text-xs uppercase tracking-wide text-slate-500 mb-2">Hints</div>
+          <ul id="hints" class="text-sm text-slate-400 space-y-1 list-disc list-inside"></ul>
+        </div>
+
+        <button id="backBtn" class="text-sm text-slate-400 hover:text-sky-300">← All scenarios</button>
       </div>
     </div>
   </div>
 
 <script>
-class MathEngine {
-  constructor(){ this.MAX=1e6; this.MIN=-1e6; this.EPS=1e-9;
-    this.parents={ linear:x=>x, quadratic:x=>x*x, exponential:x=>Math.pow(2,x), logarithmic:x=>x<=0?NaN:Math.log2(x), rational:x=>Math.abs(x)<this.EPS?Infinity:1/x }; }
-  clamp(v){ if(Number.isNaN(v)||!Number.isFinite(v)) return 0; return Math.max(this.MIN,Math.min(this.MAX,v)); }
-  evaluate(card,x){ const type=card.type||card.parentType, a=card.a??1, h=card.h??0; const fn=this.parents[type]; if(!fn) return 0; let raw=fn(x-h); if(Number.isNaN(raw)) return 0; if(!Number.isFinite(raw)) return this.clamp(raw>0?this.MAX:this.MIN); return this.clamp(a*raw); }
-  generatePlotPoints(card,from=0,to=10,samples=50){ const pts=[]; const step=1/samples; for(let t=from;t<=to+this.EPS;t+=step) pts.push({x:t,y:this.evaluate(card,t)}); return pts; }
-  describe(card){ const map={linear:'x',quadratic:'x²',exponential:'2ˣ',logarithmic:'log₂(x)',rational:'1/x'}; let expr=map[card.type||card.parentType]||'?'; const a=card.a??1,h=card.h??0; if(h!==0) expr=expr.replace(/x/g,`(x${h>0?' − ':' + '}${Math.abs(h)})`); if(a!==1) expr=`${a}·${expr}`; return expr; }
-}
-class Card { constructor(o){ Object.assign(this,{id:o.id,name:o.name,type:o.type,parentType:o.parentType||null,a:o.a??1,h:o.h??0,description:o.description||'',color:o.color||'#00f0ff'}); } clone(){ return new Card({...this,id:this.id+'_'+Math.random().toString(36).slice(2,6)}); } }
-class Deck {
-  constructor(cards=[]){ this.drawPile=[...cards]; this.discardPile=[]; this.hand=[]; this.shuffle(); }
-  shuffle(){ for(let i=this.drawPile.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [this.drawPile[i],this.drawPile[j]]=[this.drawPile[j],this.drawPile[i]]; } }
-  draw(n=1){ const out=[]; for(let i=0;i<n;i++){ if(!this.drawPile.length){ if(!this.discardPile.length) break; this.drawPile=[...this.discardPile]; this.discardPile=[]; this.shuffle(); } const c=this.drawPile.pop(); if(c){ this.hand.push(c); out.push(c);} } return out; }
-  discard(card){ const i=this.hand.findIndex(c=>c.id===card.id); if(i!==-1){ this.hand.splice(i,1); this.discardPile.push(card);} }
-  ensureParentInHand(family) {
-    if (this.hand.some(c => c.type==='parent' && c.parentType===family)) return;
-    const idx = this.drawPile.findIndex(c => c.type==='parent' && c.parentType===family);
-    if (idx !== -1) {
-      const [card] = this.drawPile.splice(idx, 1);
-      if (this.hand.length >= 5) {
-        const ri = this.hand.findIndex(c => !(c.type==='parent' && c.parentType===family));
-        if (ri !== -1) { this.drawPile.push(this.hand[ri]); this.hand[ri] = card; }
-      } else this.hand.push(card);
-      return;
-    }
-    const templates = {
-      linear:{id:'lin_g',name:'Linear Core',type:'parent',parentType:'linear',description:'f(x)=x',color:'#00f0ff'},
-      quadratic:{id:'quad_g',name:'Quadratic Surge',type:'parent',parentType:'quadratic',description:'f(x)=x²',color:'#ff00aa'},
-      exponential:{id:'exp_g',name:'Exponential Spike',type:'parent',parentType:'exponential',description:'f(x)=2ˣ',color:'#bf00ff'},
-      logarithmic:{id:'log_g',name:'Log Dampen',type:'parent',parentType:'logarithmic',description:'f(x)=log₂(x)',color:'#00ff9f'},
-      rational:{id:'rat_g',name:'Rational Singularity',type:'parent',parentType:'rational',description:'f(x)=1/x',color:'#ffaa00'}
-    };
-    const t = templates[family]; if (!t) return;
-    const card = new Card(t);
-    if (this.hand.length >= 5) {
-      const ri = this.hand.findIndex(c => c.type !== 'parent' || c.parentType !== family);
-      if (ri !== -1) { this.drawPile.push(this.hand[ri]); this.hand[ri] = card; }
-    } else this.hand.push(card);
-  }
-}
-const CardLibrary = {
-  createStarterDeck(){
-    const list=[]; const add=o=>list.push(new Card(o));
-    add({id:'lin',name:'Linear Core',type:'parent',parentType:'linear',description:'f(x)=x — steady',color:'#00f0ff'});
-    add({id:'quad',name:'Quadratic Surge',type:'parent',parentType:'quadratic',description:'f(x)=x² — arc',color:'#ff00aa'});
-    add({id:'exp',name:'Exponential Spike',type:'parent',parentType:'exponential',description:'f(x)=2ˣ — doubles',color:'#bf00ff'});
-    add({id:'log',name:'Log Dampen',type:'parent',parentType:'logarithmic',description:'f(x)=log₂(x) — log scale',color:'#00ff9f'});
-    add({id:'rat',name:'Rational Singularity',type:'parent',parentType:'rational',description:'f(x)=1/x',color:'#ffaa00'});
-    add({id:'s2',name:'×2 Stretch',type:'modifier',a:2,h:0,description:'Doubles amplitude',color:'#ff6b6b'});
-    add({id:'s3',name:'×3 Amplify',type:'modifier',a:3,h:0,description:'Triples amplitude',color:'#ff4757'});
-    add({id:'c05',name:'×0.5 Compress',type:'modifier',a:0.5,h:0,description:'Halves curve',color:'#4ecdc4'});
-    add({id:'sh2',name:'Shift +2',type:'modifier',a:1,h:2,description:'Move right',color:'#ffe66d'});
-    add({id:'shm2',name:'Shift −2',type:'modifier',a:1,h:-2,description:'Move left',color:'#a29bfe'});
-    add({id:'combo',name:'Amplify & Offset',type:'modifier',a:2.5,h:1,description:'×2.5 + shift 1',color:'#fd79a8'});
-    list.push(list[0].clone(),list[1].clone(),list[2].clone(),list[2].clone(),list[3].clone(),list[3].clone(),list[4].clone(),list[5].clone(),list[6].clone());
-    return list;
-  }
-};
-class CombatManager {
-  constructor(math){ this.math=math; this.deck=null; this.active=null; this.appliedMods=[]; this.score=0; this.target=1200; }
-  start(target=1200, requiredFamily=null){
-    this.deck=new Deck(CardLibrary.createStarterDeck()); this.active=null; this.appliedMods=[]; this.score=0; this.target=target;
-    this.deck.draw(5);
-    if (requiredFamily) this.deck.ensureParentInHand(requiredFamily);
-    return this.deck.hand;
-  }
-  slotParent(card){ if(card.type!=='parent') return false; this.active={type:card.parentType,a:1,h:0}; this.appliedMods=[]; this.deck.discard(card); return true; }
-  applyModifier(card){ if(!this.active||card.type!=='modifier') return false; this.active.a*=card.a; this.active.h+=card.h; this.appliedMods.push(card); this.deck.discard(card); return true; }
-  getHand(){ return this.deck?this.deck.hand:[]; }
-  piles(){ return this.deck?{draw:this.deck.drawPile.length,discard:this.deck.discardPile.length}:{draw:0,discard:0}; }
-}
-class Juice {
-  constructor(canvas){ this.canvas=canvas; this.shake={mag:0,dur:0,ox:0,oy:0}; }
-  shakeScreen(mag=5,dur=200){ this.shake.mag=Math.max(this.shake.mag,mag); this.shake.dur=Math.max(this.shake.dur,dur); }
-  update(dt=16.6){ if(this.shake.dur>0){ this.shake.dur-=dt; const p=Math.max(0,this.shake.dur/200); this.shake.ox=(Math.random()-0.5)*2*this.shake.mag*p; this.shake.oy=(Math.random()-0.5)*2*this.shake.mag*p; if(this.shake.dur<=0) this.shake.ox=this.shake.oy=this.shake.mag=0; } }
-  begin(ctx){ ctx.save(); ctx.translate(this.shake.ox, this.shake.oy); }
-  end(ctx){ ctx.restore(); }
-  reset(){ this.shake={mag:0,dur:0,ox:0,oy:0}; }
-}
+(function () {
+  const canvas = document.getElementById('graph');
+  const ctx = canvas.getContext('2d');
+  let scenario = null;
+  let params = {};
+  let scrubX = null;
+  let animT = null;
+  let animId = null;
 
-function buildFeedback(mission, usedType, victory) {
-  const names = { linear:'Linear', quadratic:'Quadratic', exponential:'Exponential', logarithmic:'Logarithmic', rational:'Rational' };
-  const usedName = names[usedType] || usedType;
-  const need = mission.family;
-  if (victory) return usedType === need ? `Correct: ${usedName} matches this situation.` : `Score reached, but best model is ${need} (you used ${usedName}).`;
-  if (usedType === need) return `Right family (${usedName}) — add Stretch/Amplify for more power.`;
-  return `Needs ${need}. You used ${usedName}. Click the card marked USE THIS.`;
-}
+  try {
+    const u = JSON.parse(localStorage.getItem('precalc_user') || 'null');
+  } catch (e) {}
 
-function axisLabelsFor(mission) {
-  if (!mission) return { x: 'Turn (time)', y: 'Value' };
-  const map = {
-    exponential: { x: 'Time (turns)', y: 'Amount / size' },
-    quadratic: { x: 'Time (turns)', y: 'Height / value' },
-    linear: { x: 'Time (turns)', y: 'Total' },
-    logarithmic: { x: 'Input level', y: 'Scale reading' },
-    rational: { x: 'Count / density', y: 'Share / speed' }
+  document.getElementById('logoutBtn').onclick = () => {
+    localStorage.removeItem('precalc_token');
+    localStorage.removeItem('precalc_user');
+    location.href = '/login.html';
   };
-  return map[mission.family] || { x: 'Turn (time)', y: 'Value' };
-}
 
-class GameUI {
-  constructor(){
-    this.canvas=document.getElementById('graphCanvas'); this.ctx=this.canvas.getContext('2d');
-    this.w=this.canvas.width; this.h=this.canvas.height;
-    this.math=new MathEngine(); this.combat=new CombatManager(this.math); this.juice=new Juice(this.canvas);
-    this.points=[]; this.particleT=0; this.particleActive=false; this.executing=false;
-    this.currentMission=null; this.lastFilter='all'; this.plot=null;
+  document.getElementById('pickBtn').onclick = () => start(null);
+  document.getElementById('backBtn').onclick = showPicker;
+  document.querySelectorAll('#picker [data-f]').forEach(btn => {
+    btn.onclick = () => start(btn.dataset.f === 'all' ? null : btn.dataset.f);
+  });
 
-    try{ const user=JSON.parse(localStorage.getItem('precalc_user')||'null'); if(user) document.getElementById('userInfo').textContent=`Pilot: ${user.email}`;}catch(e){}
-
-    document.getElementById('logoutBtn').onclick=()=>{ localStorage.removeItem('precalc_token'); localStorage.removeItem('precalc_user'); window.location.href='/login.html'; };
-    document.getElementById('helpBtn').onclick=()=>document.getElementById('helpOverlay').classList.add('show');
-    document.getElementById('closeHelpBtn').onclick=()=>document.getElementById('helpOverlay').classList.remove('show');
-    document.getElementById('missionsBtn').onclick=()=>this.showMissions();
-    document.getElementById('backToMissions').onclick=()=>this.showMissions();
-    document.getElementById('nextMissionBtn').onclick=()=>this.startRandom(this.lastFilter);
-    document.querySelectorAll('.mission-card').forEach(el=>el.onclick=()=>this.startRandom(el.dataset.filter||'all'));
-    this._bind(); this._loop();
+  function showPicker() {
+    document.getElementById('picker').classList.remove('hidden');
+    document.getElementById('lab').classList.add('hidden');
+    stopAnim();
   }
 
-  showMissions(){ document.getElementById('missionSelect').classList.remove('hidden'); document.getElementById('gameScreen').classList.add('hidden'); document.getElementById('resultOverlay').classList.remove('show'); }
+  function start(familyFilter) {
+    scenario = window.pickScenario(familyFilter);
+    if (!scenario) return;
 
-  startRandom(filter){
-    this.lastFilter = filter || 'all';
-    const family = filter === 'all' ? null : filter;
-    const scenario = window.pickScenario ? window.pickScenario(family) : null;
-    if (!scenario) { alert('Scenarios failed to load'); return; }
-    this.startMission(scenario);
+    params = {};
+    scenario.params.forEach(p => { params[p.key] = p.default; });
+
+    document.getElementById('picker').classList.add('hidden');
+    document.getElementById('lab').classList.remove('hidden');
+    document.getElementById('title').textContent = scenario.title;
+    document.getElementById('familyChip').textContent = scenario.family;
+    document.getElementById('context').textContent = scenario.context;
+    document.getElementById('question').textContent = scenario.question;
+    document.getElementById('form').textContent = scenario.form;
+    document.getElementById('hints').innerHTML = (scenario.hints || []).map(h => `<li>${h}</li>`).join('');
+    document.getElementById('feedback').textContent = '';
+    document.getElementById('answerInput').value = '';
+
+    if (scenario.answer && scenario.answer.type === 'numeric') {
+      document.getElementById('answerPanel').classList.remove('hidden');
+      document.getElementById('answerPrompt').textContent = scenario.answer.prompt || 'Your answer';
+    } else {
+      document.getElementById('answerPanel').classList.add('hidden');
+    }
+
+    buildControls();
+    scrubX = scenario.answer && scenario.answer.atX != null ? scenario.answer.atX : null;
+    draw();
+    if (scenario.motion) startAnim();
+    else stopAnim();
   }
 
-  startMission(scenario){
-    this.currentMission = scenario;
-    document.getElementById('missionSelect').classList.add('hidden');
-    document.getElementById('gameScreen').classList.remove('hidden');
-    document.getElementById('missionTitle').textContent = scenario.title;
-    document.getElementById('missionBrief').textContent = scenario.brief;
-    document.getElementById('missionRecommend').textContent = '→ ' + scenario.recommend;
-    document.getElementById('targetScore').textContent = scenario.target;
-    document.getElementById('missionHints').innerHTML = (scenario.hints||[]).map(h=>`<li>${h}</li>`).join('');
-    this.combat.start(scenario.target, scenario.family);
-    this.points=[]; this.particleActive=false; this.executing=false;
-    document.getElementById('liveScore').textContent='0'; document.getElementById('liveScoreHeader').textContent='0';
-    document.getElementById('resultOverlay').classList.remove('show');
-    document.getElementById('storyVisual').textContent='';
-    this.juice.reset(); this._renderHand(); this._updateActive(); this._updatePiles();
-    this._status('Click the card marked USE THIS');
-    document.getElementById('executeBtn').disabled=true;
-  }
-
-  _bind(){
-    document.getElementById('executeBtn').onclick=()=>this.execute();
-    document.getElementById('restartBtn').onclick=()=>{ if(this.currentMission) this.startMission(this.currentMission); };
-  }
-
-  _isRequiredParent(card){
-    return this.currentMission && card.type==='parent' && card.parentType === this.currentMission.family;
-  }
-
-  _renderHand(){
-    const box=document.getElementById('handContainer'); box.innerHTML='';
-    this.combat.getHand().forEach(card=>{
-      const el=document.createElement('div');
-      const req = this._isRequiredParent(card);
-      el.className=`card neon-box rounded-xl p-2.5 bg-black/50 text-center ${card.type} ${req?'recommended':''}`;
-      el.innerHTML = (req ? '<span class="use-badge">USE THIS</span>' : '') +
-        `<div class="text-[9px] uppercase tracking-wider mb-0.5" style="color:${card.color}">${card.type}</div>` +
-        `<div class="font-orbitron text-xs leading-tight">${card.name}</div>` +
-        `<div class="text-[9px] text-cyan-200/40 mt-1">${card.description||''}</div>`;
-      el.onclick=()=>this.onCard(card); box.appendChild(el);
+  function buildControls() {
+    const box = document.getElementById('controls');
+    box.innerHTML = '';
+    scenario.params.forEach(p => {
+      const wrap = document.createElement('div');
+      wrap.innerHTML = `
+        <div class="flex justify-between text-xs text-slate-400 mb-1">
+          <span>${p.label}</span>
+          <span class="mono text-sky-300" id="val_${p.key}">${params[p.key]}</span>
+        </div>
+        <input type="range" min="${p.min}" max="${p.max}" step="${p.step}" value="${params[p.key]}" data-key="${p.key}" />
+      `;
+      box.appendChild(wrap);
+      wrap.querySelector('input').oninput = (e) => {
+        params[p.key] = parseFloat(e.target.value);
+        document.getElementById('val_' + p.key).textContent = params[p.key];
+        draw();
+      };
     });
   }
 
-  onCard(card){
-    if(this.executing) return;
-    if(card.type==='parent'){
-      this.combat.slotParent(card); this.juice.shakeScreen(2,120);
-      this._status(`Selected: ${card.name}`);
-      document.getElementById('executeBtn').disabled=false;
+  document.getElementById('checkBtn').onclick = () => {
+    if (!scenario || !scenario.answer) return;
+    const raw = document.getElementById('answerInput').value;
+    const userVal = parseFloat(raw);
+    const fb = document.getElementById('feedback');
+    if (Number.isNaN(userVal)) {
+      fb.className = 'text-sm mt-2 text-amber-400';
+      fb.textContent = 'Enter a number.';
+      return;
+    }
+    const atX = scenario.answer.atX;
+    const modelY = window.LabMath.valueAt(scenario, params, atX);
+    const target = scenario.answer.target;
+    const tol = scenario.answer.tol ?? 1;
+    const okUser = Math.abs(userVal - target) <= tol;
+    const okModel = modelY != null && Math.abs(modelY - target) <= tol * 1.5;
+
+    if (okUser) {
+      fb.className = 'text-sm mt-2 text-emerald-400';
+      fb.textContent = modelY != null
+        ? `Correct. Your model at x = ${atX} gives ${modelY.toFixed(2)}.`
+        : 'Correct.';
     } else {
-      if(!this.combat.active){ this._status('First choose a Parent Function'); return; }
-      this.combat.applyModifier(card); this.juice.shakeScreen(2,100);
-      this._status(`Applied: ${card.name}`);
+      fb.className = 'text-sm mt-2 text-rose-400';
+      let msg = `Not quite. Target is about ${target}.`;
+      if (modelY != null) msg += ` Your current model gives ${modelY.toFixed(2)} at x = ${atX}. Adjust the sliders and read the graph.`;
+      fb.textContent = msg;
     }
-    this._recalc(); this._updateActive(); this._renderHand(); this._updatePiles();
-  }
+  };
 
-  _recalc(){ this.points=this.combat.active?this.math.generatePlotPoints(this.combat.active,0,10,60):[]; }
-  _updateActive(){
-    const el=document.getElementById('activeDisplay'), list=document.getElementById('transformList');
-    if(!this.combat.active){ el.innerHTML='<span class="italic text-cyan-200/40">No function selected</span>'; list.innerHTML=''; return; }
-    el.innerHTML=`<div class="font-orbitron text-lg text-cyan-300">${this.math.describe(this.combat.active)}</div>`;
-    list.innerHTML=this.combat.appliedMods.map(m=>`<div>↳ ${m.name}</div>`).join('');
-  }
-  _updatePiles(){ const p=this.combat.piles(); document.getElementById('drawCount').textContent=p.draw; document.getElementById('discardCount').textContent=p.discard; }
-  _status(msg){ document.getElementById('statusText').textContent=msg; }
+  function draw() {
+    if (!scenario) return;
+    const w = canvas.width, h = canvas.height;
+    ctx.fillStyle = '#080c10';
+    ctx.fillRect(0, 0, w, h);
 
-  async execute(){
-    if(!this.combat.active||this.executing) return;
-    this.executing=true; this.particleActive=true; this.particleT=0; this.combat.score=0;
-    document.getElementById('liveScore').textContent='0'; document.getElementById('liveScoreHeader').textContent='0';
-    document.getElementById('executeBtn').disabled=true;
-    this._status('Running model…');
+    const pts = window.LabMath.points(scenario, params, 100);
+    const plot = window.HyperGraph.drawAxes(ctx, {
+      w, h,
+      points: pts.filter(p => Number.isFinite(p.y)),
+      xMin: scenario.xMin, xMax: scenario.xMax,
+      xStep: scenario.xMax > 12 ? 2 : 1,
+      xLabel: scenario.xLabel,
+      yLabel: scenario.yLabel,
+      legend: scenario.form
+    });
 
-    const steps=90;
-    for(let i=0;i<=steps;i++){
-      const t=(i/steps)*10; this.particleT=t;
-      const dmg=this.math.evaluate(this.combat.active,t);
-      this.combat.score=Math.round(Math.abs(dmg)*(t/10)*12);
-      document.getElementById('liveScore').textContent=this.combat.score;
-      document.getElementById('liveScoreHeader').textContent=this.combat.score;
-      if(this.currentMission?.storyDuring) document.getElementById('storyVisual').textContent=this.currentMission.storyDuring(t);
-      await new Promise(r=>setTimeout(r,30));
-    }
+    window.HyperGraph.drawCurve(ctx, pts, plot.tx, plot.ty, '#3db8ff');
 
-    this.particleActive=false; this.executing=false;
-    document.getElementById('storyVisual').textContent='';
-    const victory=this.combat.score>=this.combat.target;
-    this.juice.shakeScreen(victory?6:4, 220);
-    this._showResult(victory, this.combat.score);
-  }
-
-  _showResult(victory, score){
-    const usedType = this.combat.active?.type || 'unknown';
-    document.getElementById('resultTitle').textContent = victory ? 'SUCCESS' : 'TRY AGAIN';
-    document.getElementById('resultTitle').style.color = victory ? '#00f0ff' : '#ff6688';
-    document.getElementById('resultScore').textContent = `Score: ${score} / ${this.combat.target}`;
-    document.getElementById('resultHint').textContent = buildFeedback(this.currentMission, usedType, victory);
-    document.getElementById('resultOverlay').classList.add('show');
-  }
-
-  _loop(){ const frame=()=>{ this.juice.update(16.6); this._draw(); requestAnimationFrame(frame); }; requestAnimationFrame(frame); }
-
-  _draw(){
-    const ctx=this.ctx, w=this.w, h=this.h;
-    ctx.fillStyle='#03030a'; ctx.fillRect(0,0,w,h);
-    this.juice.begin(ctx);
-
-    const labels = axisLabelsFor(this.currentMission);
-    const expr = this.combat.active ? this.math.describe(this.combat.active) : '';
-
-    // Accurate measurement axes
-    let tx, ty;
-    if (window.HyperGraph) {
-      this.plot = window.HyperGraph.drawAxes(ctx, {
-        w, h,
-        points: this.points,
-        xMin: 0, xMax: 10, xStep: 1,
-        xLabel: labels.x,
-        yLabel: labels.y,
-        legend: expr ? ('f = ' + expr) : (this.currentMission?.title || 'Model')
-      });
-      tx = this.plot.tx;
-      ty = this.plot.ty;
-    } else {
-      const pad = 48;
-      tx = t => pad + (t/10)*(w-pad*2);
-      ty = y => h/2 - y;
-    }
-
-    // Scenario visuals (behind or over curve as appropriate)
-    const vis = this.currentMission?.visual;
-    const V = window.HyperVisuals;
-    const pad = this.plot ? this.plot.padL : 48;
-    if (this.particleActive && V) {
-      if (vis === 'colonies') V.drawColonies(ctx, this.particleT, tx, h);
-      else if (vis === 'dots') V.drawDots(ctx, this.particleT, tx, h);
-      else if (vis === 'slices') V.drawSlices(ctx, this.particleT, tx, h);
-      else if (vis === 'cars') V.drawCars(ctx, this.particleT, tx, h);
-      else if (vis === 'scale') V.drawScale(ctx, this.particleT, tx, h, w, pad);
-    }
-
-    // Curve on top of grid
-    if (window.HyperGraph && this.points.length > 1) {
-      window.HyperGraph.drawCurve(ctx, this.points, tx, ty, 'rgba(0,240,255,0.95)');
-    }
-
-    // Marker / ball
-    let bx=null, by=null;
-    if (this.particleActive && this.combat.active) {
-      const y = this.math.evaluate(this.combat.active, this.particleT);
-      bx = tx(this.particleT); by = ty(y);
-      if (vis === 'ball' && V) V.drawBall(ctx, true, bx, by, w, h, pad);
-      else if (!['colonies','dots','slices','cars','scale'].includes(vis)) {
-        ctx.fillStyle = '#fff';
-        ctx.beginPath(); ctx.arc(bx, by, 5, 0, Math.PI*2); ctx.fill();
-        ctx.strokeStyle = '#00f0ff'; ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.arc(bx, by, 8, 0, Math.PI*2); ctx.stroke();
-        // readout
-        ctx.fillStyle = 'rgba(0,240,255,0.9)';
-        ctx.font = '11px Orbitron';
+    // Guide at answer x
+    const ax = scenario.answer && scenario.answer.atX;
+    if (ax != null && ax >= scenario.xMin && ax <= scenario.xMax) {
+      const y = window.LabMath.valueAt(scenario, params, ax);
+      const px = plot.tx(ax);
+      ctx.strokeStyle = 'rgba(52, 211, 153, 0.5)';
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(px, plot.padT);
+      ctx.lineTo(px, plot.padT + plot.plotH);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      if (y != null) {
+        const py = plot.ty(y);
+        ctx.fillStyle = '#34d399';
+        ctx.beginPath(); ctx.arc(px, py, 5, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#a7f3d0';
+        ctx.font = '11px JetBrains Mono';
         ctx.textAlign = 'left';
-        ctx.fillText('t=' + this.particleT.toFixed(1) + '  y=' + y.toFixed(2), bx + 12, by - 10);
+        ctx.fillText(`x=${ax}  y=${y.toFixed(2)}`, px + 10, py - 8);
       }
     }
 
-    this.juice.end(ctx);
+    // Light motion (1:1 only)
+    if (animT != null && scenario.motion && window.HyperVisuals) {
+      const V = window.HyperVisuals;
+      const t = animT;
+      if (scenario.motion === 'colonies') V.drawColonies(ctx, t, plot.tx, h);
+      else if (scenario.motion === 'scale') V.drawScale(ctx, t, plot.tx, h, w, plot.padL);
+      else if (scenario.motion === 'slices') V.drawSlices(ctx, t, plot.tx, h);
+      else if (scenario.motion === 'ball') {
+        const y = window.LabMath.valueAt(scenario, params, t);
+        if (y != null) V.drawBall(ctx, true, plot.tx(t), plot.ty(y), w, h, plot.padL);
+      }
+    }
   }
-}
 
-window.addEventListener('DOMContentLoaded',()=>{ window.game=new GameUI(); });
+  function startAnim() {
+    stopAnim();
+    const x0 = scenario.xMin, x1 = scenario.xMax;
+    let u = 0;
+    const step = () => {
+      u += 0.004;
+      if (u > 1) u = 0;
+      animT = x0 + u * (x1 - x0);
+      draw();
+      animId = requestAnimationFrame(step);
+    };
+    animId = requestAnimationFrame(step);
+  }
+
+  function stopAnim() {
+    if (animId) cancelAnimationFrame(animId);
+    animId = null;
+    animT = null;
+  }
+
+  // Start on picker; optional deep link later
+})();
 </script>
 </body>
 </html>
