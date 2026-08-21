@@ -1,8 +1,5 @@
 /**
- * Scenario engine — templates loaded from unit packs:
- *   scenarios-functions.js
- *   scenarios-poly-rational.js
- *   scenarios-exp-log.js
+ * Scenario engine — templates from unit packs
  */
 
 function roundNice(v, decimals) {
@@ -49,7 +46,8 @@ window.instantiateScenario = function (template, fixedParams) {
     idealParams: { ...params },
     question: built.question,
     answer: built.answer,
-    hints: built.hints
+    hints: built.hints,
+    workedSolution: built.workedSolution || null
   };
 };
 
