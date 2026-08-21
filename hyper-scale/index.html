@@ -99,7 +99,8 @@
       <div class="lg:col-span-2 space-y-3">
         <div class="panel p-4">
           <div class="text-xs uppercase tracking-wide text-slate-500 mb-1">Model</div>
-          <div id="form" class="mono text-sky-300 text-sm mb-4"></div>
+          <div id="form" class="mono text-sky-300 text-sm mb-2"></div>
+          <div id="glossary" class="text-xs text-slate-400 space-y-1 mb-4 leading-snug"></div>
           <div id="controls" class="space-y-4"></div>
         </div>
 
@@ -150,7 +151,6 @@
 
   function goHome(e) {
     if (e) e.preventDefault();
-    // Already on lab and logged in → show scenario picker (no login)
     showPicker();
     history.replaceState(null, '', '/hyper-scale/');
   }
@@ -206,6 +206,15 @@
     }
   }
 
+  function renderGlossary() {
+    const g = scenario.symbolGlossary || [];
+    const el = document.getElementById('glossary');
+    if (!g.length) { el.innerHTML = ''; return; }
+    el.innerHTML = g.map(item =>
+      `<div><span class="mono text-sky-400">${item.sym}</span> — ${item.mean}</div>`
+    ).join('');
+  }
+
   function openScenario(s) {
     scenario = s;
     if (!scenario) return;
@@ -224,6 +233,7 @@
     document.getElementById('context').textContent = scenario.context;
     document.getElementById('question').textContent = scenario.question;
     document.getElementById('form').textContent = scenario.form;
+    renderGlossary();
     document.getElementById('feedback').textContent = '';
     document.getElementById('answerInput').value = '';
     document.getElementById('answerInput').disabled = false;
@@ -280,6 +290,13 @@
 
     let steps = `<p><strong class="text-white">Target:</strong> about <span class="mono text-sky-300">${target}</span> at <span class="mono">x = ${atX}</span>.</p>`;
     steps += `<p><strong class="text-white">Model:</strong> <span class="mono text-sky-300">${scenario.form}</span></p>`;
+    if (scenario.symbolGlossary && scenario.symbolGlossary.length) {
+      steps += `<ul class="list-none text-slate-400 text-xs space-y-1">`;
+      scenario.symbolGlossary.forEach(g => {
+        steps += `<li><span class="mono text-sky-400">${g.sym}</span> — ${g.mean}</li>`;
+      });
+      steps += `</ul>`;
+    }
     steps += `<p><strong class="text-white">Parameters that work:</strong></p><ul class="list-disc list-inside text-slate-400">`;
     scenario.params.forEach(p => {
       steps += `<li>${p.label}: <span class="mono text-sky-300">${ideal[p.key]}</span></li>`;
@@ -287,9 +304,6 @@
     steps += `</ul>`;
     if (modelY != null) {
       steps += `<p>At x = ${atX}: <span class="mono text-emerald-400">y ≈ ${modelY.toFixed(2)}</span>.</p>`;
-    }
-    if (scenario.hints && scenario.hints.length) {
-      steps += `<p class="text-slate-400"><strong class="text-white">Reasoning:</strong> ${scenario.hints[scenario.hints.length - 1]}</p>`;
     }
     return steps;
   }
