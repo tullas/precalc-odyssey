@@ -2,11 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=login.html">
   <title>Precalc Odyssey</title>
-  <script>window.location.href = "login.html";</script>
+  <script>
+    (function () {
+      var token = localStorage.getItem('precalc_token');
+      var user = localStorage.getItem('precalc_user');
+      if (token && user) {
+        window.location.replace('/hyper-scale/');
+      } else {
+        window.location.replace('/login.html');
+      }
+    })();
+  </script>
 </head>
 <body>
-  <p>Redirecting to login...</p>
+  <p>Redirecting…</p>
 </body>
 </html>
