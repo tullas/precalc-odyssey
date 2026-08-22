@@ -71,10 +71,12 @@
       <h1 class="text-xl md:text-2xl font-semibold tracking-tight">
         <a href="#" class="home-link" id="titleHome">Hyper-Scale Lab</a>
       </h1>
-      <p class="text-sm text-slate-400 mt-0.5">Precalculus · self-study · graphs &amp; guides</p>
+      <p class="text-sm text-slate-400 mt-0.5">Practice · Test · Report · graphs & guides</p>
     </div>
     <div class="flex flex-wrap items-center gap-2">
       <button type="button" class="nav-btn" id="homeBtn">Levels</button>
+      <a class="nav-btn" href="/hyper-scale/test.html">Test</a>
+      <a class="nav-btn" href="/hyper-scale/report.html">Report</a>
       <button type="button" class="nav-btn" id="guidesNavBtn">Guides</button>
       <a class="nav-btn" href="/guides/" target="_blank" rel="noopener">All guides ↗</a>
       <button type="button" class="nav-btn primary" id="pickBtn">New scenario</button>
@@ -84,6 +86,20 @@
 
   <!-- LEVELS -->
   <div id="levelPicker" class="mb-6">
+    <div class="grid sm:grid-cols-3 gap-3 mb-5">
+      <a href="/hyper-scale/" class="panel panel-hover p-4 block no-underline text-inherit">
+        <div class="text-sky-300 text-sm font-medium mb-1">Practice</div>
+        <p class="text-xs text-slate-400 m-0">Learn with attempts, hints, and worked solutions.</p>
+      </a>
+      <a href="/hyper-scale/test.html" class="panel panel-hover p-4 block no-underline text-inherit">
+        <div class="text-amber-300 text-sm font-medium mb-1">Test</div>
+        <p class="text-xs text-slate-400 m-0">10 randomized questions. Score and review at the end.</p>
+      </a>
+      <a href="/hyper-scale/report.html" class="panel panel-hover p-4 block no-underline text-inherit">
+        <div class="text-emerald-300 text-sm font-medium mb-1">Report</div>
+        <p class="text-xs text-slate-400 m-0">Track scores and units suggested for improvement.</p>
+      </a>
+    </div>
     <h2 class="text-sm uppercase tracking-wide text-slate-500 mb-3">Choose level</h2>
     <div class="grid sm:grid-cols-3 gap-3" id="levelCards"></div>
     <div class="panel p-4 mt-5">
@@ -205,7 +221,6 @@
     location.href = '/login.html';
   };
 
-  // Quick guides on level screen
   const qg = document.getElementById('quickGuides');
   (window.CURRICULUM.guides || []).slice(0, 6).forEach(g => {
     const a = document.createElement('a');
@@ -215,7 +230,6 @@
     qg.appendChild(a);
   });
 
-  // Full guides grid
   const gg = document.getElementById('guidesGrid');
   (window.CURRICULUM.guides || []).forEach(g => {
     const a = document.createElement('a');
@@ -227,7 +241,6 @@
     gg.appendChild(a);
   });
 
-  // Levels
   const levelBox = document.getElementById('levelCards');
   (window.CURRICULUM.levels || []).forEach(L => {
     const btn = document.createElement('button');
@@ -302,7 +315,6 @@
     scenario = s;
     if (!scenario) return;
     currentUnit = scenario.unit || currentUnit;
-    // resolve guide from curriculum if needed
     if (!currentGuide) {
       const units = (window.CURRICULUM.units[scenario.level] || []);
       const u = units.find(x => x.id === scenario.unit);
