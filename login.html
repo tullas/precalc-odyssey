@@ -3,27 +3,48 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login | Precalc Odyssey</title>
+  <title>Log in | Hyper-Scale Lab – Free Precalculus</title>
+  <meta name="description" content="Log in or create a free account to practice precalculus with graphs and study guides." />
   <link rel="stylesheet" href="css/auth.css" />
   <script>
-    // Already logged in → go straight to the lab (do not show login form)
     (function () {
       try {
-        var token = localStorage.getItem('precalc_token');
-        var user = localStorage.getItem('precalc_user');
-        if (token && user) {
+        if (localStorage.getItem('precalc_token') && localStorage.getItem('precalc_user'))
           window.location.replace('/hyper-scale/');
-        }
       } catch (e) {}
     })();
   </script>
+  <style>
+    .site-top {
+      max-width: 420px; margin: 0 auto 1rem; padding: 1rem 1rem 0;
+      display: flex; justify-content: space-between; align-items: center;
+      font-family: system-ui, sans-serif; font-size: 0.875rem;
+    }
+    .site-top a { color: #7dd3fc; text-decoration: none; }
+    .site-top a:hover { text-decoration: underline; }
+    .site-top .brand { color: #e8eef5; font-weight: 600; }
+    .guide-note {
+      max-width: 420px; margin: 1rem auto 0; padding: 0 1rem;
+      font-family: system-ui, sans-serif; font-size: 0.8rem; color: #94a3b8; text-align: center;
+    }
+    .guide-note a { color: #38bdf8; }
+  </style>
 </head>
 <body>
+  <div class="site-top">
+    <a class="brand" href="/">Hyper-Scale Lab</a>
+    <span>
+      <a href="/guides/">Guides</a>
+      &nbsp;·&nbsp;
+      <a href="/">Home</a>
+    </span>
+  </div>
+
   <div class="auth-container">
     <div class="auth-card">
       <div class="logo">
-        <h1>Precalc Odyssey</h1>
-        <p>Enter the Math Realms</p>
+        <h1>Hyper-Scale Lab</h1>
+        <p>Precalculus practice with graphs</p>
       </div>
 
       <div class="tabs">
@@ -68,7 +89,6 @@
           <input type="email" id="forgotEmail" placeholder="you@example.com" required />
         </div>
         <button type="button" class="btn secondary" id="getTokenBtn">Get Reset Token</button>
-
         <div id="resetSection" style="display:none; margin-top: 1.5rem;">
           <div class="form-group">
             <label>Reset Token</label>
@@ -84,6 +104,12 @@
       </form>
     </div>
   </div>
+
+  <p class="guide-note">
+    No account needed to read explanations.
+    <a href="/guides/">Browse free study guides</a>
+    (polar, parametric, functions, trig, and more).
+  </p>
 
   <script src="js/auth.js"></script>
 </body>

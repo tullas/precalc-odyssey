@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Precalculus Practice Lab | Graphs, Functions, Trig – Hyper-Scale</title>
-  <meta name="description" content="Interactive precalculus lab: practice functions, polynomials, exponential/log, trigonometry, sequences, conics, vectors, polar, parametric, matrices, and rates with live graphs." />
-  <meta name="robots" content="index, follow" />
+  <title>Hyper-Scale Lab | Precalculus Practice</title>
+  <meta name="description" content="Interactive precalculus lab with graphs, guides, and worked solutions." />
   <link rel="canonical" href="https://precalc-odyssey.pages.dev/hyper-scale/" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="graph.js"></script>
@@ -28,9 +27,8 @@
   <script src="lab-solution.js"></script>
   <script>
     (function () {
-      const token = localStorage.getItem('precalc_token');
-      const user = localStorage.getItem('precalc_user');
-      if (!token || !user) window.location.href = '/login.html';
+      if (!localStorage.getItem('precalc_token') || !localStorage.getItem('precalc_user'))
+        window.location.href = '/login.html';
     })();
   </script>
   <style>
@@ -38,14 +36,32 @@
     body { font-family: 'DM Sans', system-ui, sans-serif; background: #0b0f14; color: #e8eef5; min-height: 100vh; }
     .mono { font-family: 'JetBrains Mono', monospace; }
     .panel { background: #121821; border: 1px solid #1e2a38; border-radius: 12px; }
+    .panel-hover { transition: border-color 0.15s, transform 0.15s; }
+    .panel-hover:hover { border-color: rgba(56, 189, 248, 0.45); }
     input[type=range] { width: 100%; accent-color: #3db8ff; }
     canvas { width: 100%; border-radius: 10px; background: #080c10; }
     .chip { font-size: 11px; padding: 2px 8px; border-radius: 999px; background: #1a2836; color: #8ec8ef; }
     .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.75); display: flex; align-items: center; justify-content: center; z-index: 50; padding: 1rem; }
     .modal-backdrop.hidden { display: none; }
-    a.home-link { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
+    a.home-link { color: #fff; text-decoration: none; }
     a.home-link:hover { color: #7dd3fc; }
     .locked { opacity: 0.45; pointer-events: none; }
+    .guide-pill {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      font-size: 0.75rem; padding: 0.35rem 0.65rem; border-radius: 999px;
+      background: rgba(56, 189, 248, 0.12); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.25);
+      text-decoration: none; transition: background 0.15s;
+    }
+    .guide-pill:hover { background: rgba(56, 189, 248, 0.22); color: #bae6fd; }
+    .nav-btn {
+      font-size: 0.875rem; padding: 0.4rem 0.75rem; border-radius: 0.5rem;
+      border: 1px solid #334155; color: #cbd5e1; background: transparent; cursor: pointer;
+      text-decoration: none; display: inline-block;
+    }
+    .nav-btn:hover { border-color: #38bdf8; color: #e0f2fe; }
+    .nav-btn.active { border-color: #0ea5e9; background: rgba(14, 165, 233, 0.15); color: #7dd3fc; }
+    .nav-btn.primary { background: #0284c7; border-color: #0284c7; color: #fff; }
+    .nav-btn.primary:hover { background: #0ea5e9; }
   </style>
 </head>
 <body class="p-4 md:p-6 max-w-6xl mx-auto">
@@ -53,37 +69,55 @@
   <header class="flex flex-wrap items-center justify-between gap-3 mb-6">
     <div>
       <h1 class="text-xl md:text-2xl font-semibold tracking-tight">
-        <a href="/hyper-scale/" class="home-link" id="titleHome">Hyper-Scale Lab</a>
+        <a href="#" class="home-link" id="titleHome">Hyper-Scale Lab</a>
       </h1>
-      <p class="text-sm text-slate-400">
-        <a href="/hyper-scale/" class="text-sky-400 hover:text-sky-300 underline underline-offset-2" id="homeLink">← Home</a>
-        · Precalculus · self-study
-      </p>
+      <p class="text-sm text-slate-400 mt-0.5">Precalculus · self-study · graphs &amp; guides</p>
     </div>
-    <div class="flex items-center gap-2">
-      <a href="/hyper-scale/" class="text-sm px-3 py-1.5 rounded-lg border border-slate-600 text-slate-300" id="homeBtn">Home</a>
-      <button id="pickBtn" class="text-sm px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white">New scenario</button>
-      <button id="logoutBtn" class="text-sm px-3 py-1.5 rounded-lg border border-slate-600 text-slate-300">Logout</button>
+    <div class="flex flex-wrap items-center gap-2">
+      <button type="button" class="nav-btn" id="homeBtn">Levels</button>
+      <button type="button" class="nav-btn" id="guidesNavBtn">Guides</button>
+      <a class="nav-btn" href="/guides/" target="_blank" rel="noopener">All guides ↗</a>
+      <button type="button" class="nav-btn primary" id="pickBtn">New scenario</button>
+      <button type="button" class="nav-btn" id="logoutBtn">Logout</button>
     </div>
   </header>
 
+  <!-- LEVELS -->
   <div id="levelPicker" class="mb-6">
     <h2 class="text-sm uppercase tracking-wide text-slate-500 mb-3">Choose level</h2>
     <div class="grid sm:grid-cols-3 gap-3" id="levelCards"></div>
+    <div class="panel p-4 mt-5">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+        <h3 class="text-sm font-medium text-white m-0">Quick study guides</h3>
+        <a href="/guides/" class="text-xs text-sky-400 hover:text-sky-300">Browse all →</a>
+      </div>
+      <div class="flex flex-wrap gap-2" id="quickGuides"></div>
+    </div>
   </div>
 
+  <!-- GUIDES PANEL (in-lab) -->
+  <div id="guidesPanel" class="hidden mb-6">
+    <button type="button" id="backFromGuides" class="text-sm text-slate-400 hover:text-sky-300 mb-3">← Levels</button>
+    <h2 class="text-lg font-semibold text-white mb-1">Study guides</h2>
+    <p class="text-sm text-slate-400 mb-4">Plain-language explanations with diagrams. Open any guide, then return here to practice.</p>
+    <div class="grid sm:grid-cols-2 gap-3" id="guidesGrid"></div>
+  </div>
+
+  <!-- UNITS -->
   <div id="unitPicker" class="hidden mb-6">
-    <button id="backLevel" class="text-sm text-slate-400 hover:text-sky-300 mb-3">← Levels</button>
+    <button type="button" id="backLevel" class="text-sm text-slate-400 hover:text-sky-300 mb-3">← Levels</button>
     <h2 class="text-sm uppercase tracking-wide text-slate-500 mb-3" id="unitPickerTitle">Choose a section</h2>
     <div class="grid sm:grid-cols-2 gap-3" id="unitCards"></div>
   </div>
 
+  <!-- LAB -->
   <div id="lab" class="hidden space-y-4">
     <div class="panel p-4 md:p-5">
       <div class="flex flex-wrap items-center gap-2 mb-2">
-        <h2 id="title" class="text-lg font-semibold text-white"></h2>
+        <h2 id="title" class="text-lg font-semibold text-white m-0"></h2>
         <span id="familyChip" class="chip"></span>
         <span id="unitChip" class="chip"></span>
+        <a id="unitGuideLink" class="guide-pill hidden" href="#" target="_blank" rel="noopener">📖 Read guide</a>
       </div>
       <p id="context" class="text-sm text-slate-300 leading-relaxed mb-3"></p>
       <p id="question" class="text-sm text-sky-100/90 leading-relaxed border-l-2 border-sky-500 pl-3"></p>
@@ -117,7 +151,7 @@
           <div class="text-xs uppercase tracking-wide text-slate-500 mb-2">Hints</div>
           <ul id="hints" class="text-sm text-slate-400 space-y-1 list-disc list-inside"></ul>
         </div>
-        <button id="backBtn" class="text-sm text-slate-400 hover:text-sky-300">← Sections</button>
+        <button type="button" id="backBtn" class="text-sm text-slate-400 hover:text-sky-300">← Sections</button>
       </div>
     </div>
   </div>
@@ -136,71 +170,114 @@
   const canvas = document.getElementById('graph');
   const ctx = canvas.getContext('2d');
 
-  let scenario = null;
-  let params = {};
-  let attempts = 0;
-  let solved = false;
-  let revealSolution = false;
-  let animT = null;
-  let animId = null;
-  let currentLevel = 'standard';
-  let currentUnit = null;
+  let scenario = null, params = {}, attempts = 0, solved = false, revealSolution = false;
+  let animT = null, animId = null, currentLevel = 'standard', currentUnit = null, currentGuide = null;
 
-  function goHome(e) {
-    if (e) e.preventDefault();
-    document.getElementById('lab').classList.add('hidden');
-    document.getElementById('unitPicker').classList.add('hidden');
-    document.getElementById('levelPicker').classList.remove('hidden');
+  function hideAll() {
+    ['levelPicker', 'unitPicker', 'lab', 'guidesPanel'].forEach(id =>
+      document.getElementById(id).classList.add('hidden'));
     document.getElementById('solutionModal').classList.add('hidden');
     stopAnim();
   }
-  document.getElementById('titleHome').onclick = goHome;
-  document.getElementById('homeLink').onclick = goHome;
-  document.getElementById('homeBtn').onclick = goHome;
+  function goHome(e) {
+    if (e) e.preventDefault();
+    hideAll();
+    document.getElementById('levelPicker').classList.remove('hidden');
+    setNav('home');
+  }
+  function showGuidesPanel() {
+    hideAll();
+    document.getElementById('guidesPanel').classList.remove('hidden');
+    setNav('guides');
+  }
+  function setNav(which) {
+    document.getElementById('homeBtn').classList.toggle('active', which === 'home');
+    document.getElementById('guidesNavBtn').classList.toggle('active', which === 'guides');
+  }
 
+  document.getElementById('titleHome').onclick = goHome;
+  document.getElementById('homeBtn').onclick = goHome;
+  document.getElementById('guidesNavBtn').onclick = showGuidesPanel;
+  document.getElementById('backFromGuides').onclick = goHome;
   document.getElementById('logoutBtn').onclick = () => {
     localStorage.removeItem('precalc_token');
     localStorage.removeItem('precalc_user');
     location.href = '/login.html';
   };
 
+  // Quick guides on level screen
+  const qg = document.getElementById('quickGuides');
+  (window.CURRICULUM.guides || []).slice(0, 6).forEach(g => {
+    const a = document.createElement('a');
+    a.href = g.href; a.target = '_blank'; a.rel = 'noopener';
+    a.className = 'guide-pill';
+    a.textContent = g.title;
+    qg.appendChild(a);
+  });
+
+  // Full guides grid
+  const gg = document.getElementById('guidesGrid');
+  (window.CURRICULUM.guides || []).forEach(g => {
+    const a = document.createElement('a');
+    a.href = g.href; a.target = '_blank'; a.rel = 'noopener';
+    a.className = 'panel panel-hover p-4 block no-underline';
+    a.innerHTML = '<div class="font-medium text-white">' + g.title + '</div>' +
+      '<div class="text-xs text-slate-400 mt-1">' + g.blurb + '</div>' +
+      '<div class="text-xs text-sky-400 mt-2">Open guide ↗</div>';
+    gg.appendChild(a);
+  });
+
+  // Levels
   const levelBox = document.getElementById('levelCards');
   (window.CURRICULUM.levels || []).forEach(L => {
     const btn = document.createElement('button');
-    btn.className = 'panel p-4 text-left transition ' + (L.available ? 'hover:border-sky-500/50' : 'locked');
+    btn.type = 'button';
+    btn.className = 'panel panel-hover p-4 text-left w-full ' + (L.available ? '' : 'locked');
     btn.innerHTML = '<div class="font-medium text-white">' + L.name + '</div><div class="text-xs text-slate-400 mt-1">' + L.blurb + '</div>';
     if (L.available) btn.onclick = () => { currentLevel = L.id; showUnits(); };
     levelBox.appendChild(btn);
   });
 
   function showUnits() {
-    document.getElementById('levelPicker').classList.add('hidden');
+    hideAll();
     document.getElementById('unitPicker').classList.remove('hidden');
-    document.getElementById('lab').classList.add('hidden');
+    setNav('home');
     const names = { standard: 'Standard', honors: 'Honors', ap: 'AP' };
-    document.getElementById('unitPickerTitle').textContent =
-      (names[currentLevel] || currentLevel) + ' — choose a section';
+    document.getElementById('unitPickerTitle').textContent = (names[currentLevel] || '') + ' — choose a section';
     const box = document.getElementById('unitCards');
     box.innerHTML = '';
     const counts = window.countByUnit ? window.countByUnit(currentLevel) : {};
     (window.CURRICULUM.units[currentLevel] || []).forEach(U => {
       const n = counts[U.id] || 0;
       const ready = n > 0;
-      const btn = document.createElement('button');
-      btn.className = 'panel p-4 text-left transition ' + (ready ? 'hover:border-sky-500/50' : 'locked');
-      btn.innerHTML = '<div class="font-medium text-white">' + U.name + '</div>' +
+      const wrap = document.createElement('div');
+      wrap.className = 'panel p-4 text-left ' + (ready ? 'panel-hover' : 'locked');
+      let html = '<div class="font-medium text-white">' + U.name + '</div>' +
         '<div class="text-xs text-slate-400 mt-1">' + U.blurb + '</div>' +
         '<div class="text-xs mt-2 ' + (ready ? 'text-emerald-400' : 'text-slate-500') + '">' + n + ' / ' + U.targetCount + ' scenarios</div>';
-      if (ready) btn.onclick = () => { currentUnit = U.id; openScenario(window.pickScenario(currentLevel, currentUnit)); };
-      box.appendChild(btn);
+      if (U.guide) {
+        html += '<div class="mt-3"><a class="guide-pill" href="' + U.guide + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">📖 Study guide first</a></div>';
+      }
+      wrap.innerHTML = html;
+      if (ready) {
+        wrap.style.cursor = 'pointer';
+        wrap.onclick = (e) => {
+          if (e.target.closest('a')) return;
+          currentUnit = U.id;
+          currentGuide = U.guide || null;
+          openScenario(window.pickScenario(currentLevel, currentUnit));
+        };
+      }
+      box.appendChild(wrap);
     });
   }
 
   document.getElementById('backLevel').onclick = goHome;
-  document.getElementById('backBtn').onclick = () => { document.getElementById('lab').classList.add('hidden'); showUnits(); stopAnim(); };
+  document.getElementById('backBtn').onclick = () => { hideAll(); showUnits(); };
   document.getElementById('pickBtn').onclick = () => {
     if (currentUnit) openScenario(window.pickScenario(currentLevel, currentUnit));
-    else if (currentLevel) showUnits();
+    else if (!document.getElementById('levelPicker').classList.contains('hidden')) return;
+    else showUnits();
   };
   document.getElementById('modalClose').onclick = () => {
     document.getElementById('solutionModal').classList.add('hidden');
@@ -225,14 +302,20 @@
     scenario = s;
     if (!scenario) return;
     currentUnit = scenario.unit || currentUnit;
+    // resolve guide from curriculum if needed
+    if (!currentGuide) {
+      const units = (window.CURRICULUM.units[scenario.level] || []);
+      const u = units.find(x => x.id === scenario.unit);
+      currentGuide = u && u.guide ? u.guide : null;
+    }
     params = {};
     scenario.params.forEach(p => { params[p.key] = p.default; });
     attempts = 0; solved = false; revealSolution = false;
 
-    document.getElementById('levelPicker').classList.add('hidden');
-    document.getElementById('unitPicker').classList.add('hidden');
+    hideAll();
     document.getElementById('lab').classList.remove('hidden');
-    document.getElementById('solutionModal').classList.add('hidden');
+    setNav('home');
+
     document.getElementById('title').textContent = scenario.title;
     document.getElementById('familyChip').textContent = scenario.family;
     document.getElementById('unitChip').textContent = scenario.unit || '';
@@ -240,6 +323,13 @@
     document.getElementById('question').textContent = scenario.question;
     document.getElementById('form').textContent = scenario.form;
     renderGlossary();
+
+    const gl = document.getElementById('unitGuideLink');
+    if (currentGuide) {
+      gl.href = currentGuide;
+      gl.classList.remove('hidden');
+    } else gl.classList.add('hidden');
+
     document.getElementById('feedback').textContent = '';
     document.getElementById('answerInput').value = '';
     document.getElementById('answerInput').disabled = false;
@@ -284,13 +374,10 @@
   function showSolutionModal(title) {
     const ideal = idealParams();
     const modelY = scenario.answer && scenario.answer.atX != null
-      ? window.LabMath.valueAt(scenario, ideal, scenario.answer.atX)
-      : null;
-    const html = window.buildLabSolutionHTML
-      ? window.buildLabSolutionHTML(scenario, ideal, modelY)
-      : '<p>See the target and graph marker.</p>';
+      ? window.LabMath.valueAt(scenario, ideal, scenario.answer.atX) : null;
     document.getElementById('modalTitle').textContent = title;
-    document.getElementById('modalBody').innerHTML = html;
+    document.getElementById('modalBody').innerHTML = window.buildLabSolutionHTML
+      ? window.buildLabSolutionHTML(scenario, ideal, modelY) : '<p>See the graph marker.</p>';
     document.getElementById('solutionModal').classList.remove('hidden');
   }
 
@@ -313,7 +400,8 @@
     if (attempts === 2) document.getElementById('hintsPanel').classList.remove('hidden');
     if (attempts >= MAX_ATTEMPTS) {
       revealSolution = true;
-      fb.className = 'text-sm mt-2 text-rose-400'; fb.textContent = 'Out of attempts. See the worked solution.';
+      fb.className = 'text-sm mt-2 text-rose-400';
+      fb.textContent = 'Out of attempts. See the worked solution.';
       document.getElementById('answerInput').disabled = true;
       document.getElementById('checkBtn').disabled = true;
       document.getElementById('hintsPanel').classList.remove('hidden');
@@ -349,16 +437,6 @@
         ctx.fillStyle = '#34d399'; ctx.beginPath(); ctx.arc(px, py, 5, 0, Math.PI * 2); ctx.fill();
         ctx.fillStyle = '#a7f3d0'; ctx.font = '11px JetBrains Mono'; ctx.textAlign = 'left';
         ctx.fillText('x=' + ax + '  y=' + y.toFixed(2), px + 10, py - 8);
-      }
-    }
-    if (animT != null && scenario.motion && window.HyperVisuals) {
-      const V = window.HyperVisuals;
-      if (scenario.motion === 'colonies') V.drawColonies(ctx, animT, plot.tx, h);
-      else if (scenario.motion === 'scale') V.drawScale(ctx, animT, plot.tx, h, w, plot.padL);
-      else if (scenario.motion === 'slices') V.drawSlices(ctx, animT, plot.tx, h);
-      else if (scenario.motion === 'ball') {
-        const y = window.LabMath.valueAt(scenario, params, animT);
-        if (y != null) V.drawBall(ctx, true, plot.tx(animT), plot.ty(y), w, h, plot.padL);
       }
     }
   }
