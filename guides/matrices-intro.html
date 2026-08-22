@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Matrices Explained | Tables That Transform Points</title>
+  <meta name="description" content="What a matrix is in plain language: a table of numbers that transforms points. 2×2 examples, determinants as area factors, with clear diagrams." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://precalc-odyssey.pages.dev/guides/matrices-intro.html" />
+  <link rel="stylesheet" href="/guides/css/guide.css" />
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Matrices Explained","description":"Matrices as transformations with diagrams.","author":{"@type":"Organization","name":"Hyper-Scale Lab"},"mainEntityOfPage":"https://precalc-odyssey.pages.dev/guides/matrices-intro.html"}
+  </script>
+</head>
+<body>
+  <header>
+    <p class="crumbs"><a href="/guides/">← Guides</a> · <a href="/">Home</a></p>
+    <h1>Matrices: tables that transform</h1>
+    <p class="muted">Think spreadsheet cells with a geometric job — not only abstract algebra.</p>
+  </header>
+  <main>
+    <p>A <strong>matrix</strong> is a rectangular table of numbers. In precalculus and early linear algebra, the useful 2×2 case is a small machine: you feed it a point (or vector), and it outputs a new point. That is how scaling, rotating, and shearing shapes work in graphics and physics demos.</p>
+
+    <h2>Reading the table</h2>
+    <p>A 2×2 matrix has four entries:</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="2 by 2 matrix layout">
+        <rect x="90" y="30" width="140" height="100" rx="8" fill="#121821" stroke="#38bdf8" stroke-width="2"/>
+        <text x="115" y="70" fill="#7dd3fc" font-size="18" font-family="monospace">a</text>
+        <text x="185" y="70" fill="#7dd3fc" font-size="18" font-family="monospace">b</text>
+        <text x="115" y="110" fill="#7dd3fc" font-size="18" font-family="monospace">c</text>
+        <text x="185" y="110" fill="#7dd3fc" font-size="18" font-family="monospace">d</text>
+        <text x="40" y="72" fill="#94a3b8" font-size="12">row 1 →</text>
+        <text x="40" y="112" fill="#94a3b8" font-size="12">row 2 →</text>
+        <text x="120" y="22" fill="#94a3b8" font-size="11">col1</text>
+        <text x="185" y="22" fill="#94a3b8" font-size="11">col2</text>
+      </svg>
+      <figcaption>Rows run left–right; columns run top–bottom. Entry a is row 1, column 1.</figcaption>
+    </figure>
+
+    <h2>What “apply a matrix” means</h2>
+    <p>For a vector ⟨x, y⟩, the 2×2 matrix produces:</p>
+    <p class="mono">⟨ a·x + b·y ,&nbsp; c·x + d·y ⟩</p>
+    <p>Example: the scaling matrix <span class="mono">[[2, 0], [0, 2]]</span> sends ⟨3, 1⟩ to ⟨6, 2⟩ — everything doubles. That is a uniform zoom.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 380 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Scaling a square by 2">
+        <line x1="30" y1="190" x2="180" y2="190" stroke="#475569"/>
+        <line x1="30" y1="190" x2="30" y2="40" stroke="#475569"/>
+        <rect x="30" y="130" width="60" height="60" fill="#0c4a6e" stroke="#38bdf8" stroke-width="2"/>
+        <text x="40" y="125" fill="#94a3b8" font-size="12">before</text>
+        <line x1="200" y1="190" x2="360" y2="190" stroke="#475569"/>
+        <line x1="200" y1="190" x2="200" y2="40" stroke="#475569"/>
+        <rect x="200" y="70" width="120" height="120" fill="#14532d" stroke="#34d399" stroke-width="2"/>
+        <text x="230" y="62" fill="#94a3b8" font-size="12">after ×2 scale</text>
+        <path d="M 110 160 L 190 160" stroke="#fbbf24" stroke-width="2" marker-end="url(#a)"/>
+      </svg>
+      <figcaption>A uniform scale matrix enlarges shapes away from the origin.</figcaption>
+    </figure>
+
+    <h2>Determinant: how areas change</h2>
+    <p>For <span class="mono">[[a, b], [c, d]]</span> the determinant is:</p>
+    <p class="mono">det = a·d − b·c</p>
+    <p>Its absolute value tells you the <strong>area scale factor</strong> of the transformation. If |det| = 2, areas of shapes generally double. If det = 0, the matrix squashes everything onto a lower-dimensional set (often a line) — information is lost; the matrix is called <strong>singular</strong>.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 360 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Determinant as area scale">
+        <rect x="40" y="80" width="70" height="70" fill="#0c4a6e" stroke="#38bdf8" stroke-width="2"/>
+        <text x="50" y="70" fill="#94a3b8" font-size="12">area 1</text>
+        <text x="130" y="115" fill="#fbbf24" font-size="20">→</text>
+        <rect x="180" y="50" width="120" height="120" fill="#14532d" stroke="#34d399" stroke-width="2"/>
+        <text x="200" y="40" fill="#94a3b8" font-size="12">area |det|</text>
+        <text x="60" y="185" fill="#64748b" font-size="12">|det| &gt; 1 stretches area · |det| = 1 preserves · det = 0 collapses</text>
+      </svg>
+      <figcaption>Determinant magnitude ≈ how much area is stretched or compressed.</figcaption>
+    </figure>
+
+    <div class="box tip">
+      <p style="margin:0"><strong>Identity matrix</strong> <span class="mono">[[1,0],[0,1]]</span> leaves every point alone. Its determinant is 1: areas stay the same, and nothing is flipped.</p>
+    </div>
+
+    <div class="box warn">
+      <p style="margin:0"><strong>Common trap:</strong> Order of multiplication matters for matrices. “Do scale then rotate” is not always the same as “do rotate then scale.” Treat matrices like operations in sequence, not like ordinary numbers that commute.</p>
+    </div>
+
+    <div class="box">
+      <p style="margin:0 0 0.75rem 0"><strong>Practice in the lab</strong></p>
+      <p class="muted" style="margin:0 0 0.75rem 0">AP → Matrices: reading entries, determinants, and simple scaling.</p>
+      <a class="cta" href="/login.html">Open Hyper-Scale Lab</a>
+    </div>
+
+    <h2>Related guides</h2>
+    <ul>
+      <li><a href="/guides/functions-and-transformations.html">Functions and transformations</a></li>
+      <li><a href="/guides/parametric-equations.html">Parametric equations</a></li>
+      <li><a href="/guides/rates-and-limits.html">Rates and limits</a></li>
+    </ul>
+  </main>
+  <footer>
+    <p>Hyper-Scale Lab · <a href="/guides/">All guides</a> · <a href="/login.html">Practice</a></p>
+  </footer>
+</body>
+</html>
