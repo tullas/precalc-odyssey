@@ -4,78 +4,80 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Functions and Transformations Explained | Precalculus Guide</title>
-  <meta name="description" content="Learn parent functions and transformations in precalculus: horizontal and vertical shifts, stretches, reflections, domain and range—with plain examples." />
-  <meta name="robots" content="index, follow" />
+  <meta name="description" content="Parent functions and transformations: shifts, stretches, reflections, domain and range—with diagrams for precalculus." />
   <link rel="canonical" href="https://precalc-odyssey.pages.dev/guides/functions-and-transformations.html" />
-  <meta property="og:title" content="Functions and Transformations Explained" />
-  <meta property="og:description" content="Parent functions, shifts, stretches, and reflections for precalculus students." />
-  <meta property="og:url" content="https://precalc-odyssey.pages.dev/guides/functions-and-transformations.html" />
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Functions and Transformations Explained","description":"Parent functions and graph transformations for precalculus.","author":{"@type":"Organization","name":"Hyper-Scale Lab"},"mainEntityOfPage":"https://precalc-odyssey.pages.dev/guides/functions-and-transformations.html"}
-  </script>
-  <style>
-    :root { --bg:#0b0f14; --card:#121821; --line:#1e2a38; --text:#e8eef5; --muted:#94a3b8; --sky:#38bdf8; }
-    body { margin:0; font-family:system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.65; }
-    a { color:var(--sky); } main, header, footer { max-width:720px; margin:0 auto; padding:1.25rem; }
-    h1 { font-size:1.75rem; line-height:1.25; } h2 { font-size:1.2rem; margin-top:2rem; color:#fff; }
-    .muted { color:var(--muted); } code, .mono { font-family:ui-monospace,monospace; color:#7dd3fc; }
-    .box { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:1rem 1.15rem; margin:1.25rem 0; }
-    table { width:100%; border-collapse:collapse; font-size:0.95rem; margin:1rem 0; }
-    th, td { border:1px solid var(--line); padding:0.5rem 0.65rem; text-align:left; }
-    th { background:var(--card); } footer { border-top:1px solid var(--line); color:var(--muted); font-size:0.85rem; margin-top:2rem; }
-  </style>
+  <link rel="stylesheet" href="/guides/css/guide.css" />
 </head>
 <body>
-  <header>
-    <p><a href="/guides/">← All guides</a> · <a href="/">Home</a></p>
+  <div class="site-header"><div class="site-header-inner">
+    <a class="brand" href="/">Hyper-Scale Lab</a>
+    <nav><a href="/guides/">Guides</a><a href="/login.html">Log in</a><a class="cta-nav" href="/login.html">Practice</a></nav>
+  </div></div>
+  <header class="page-head">
+    <p class="crumbs"><a href="/guides/">← Guides</a></p>
     <h1>Functions and transformations</h1>
-    <p class="muted">The spine of precalculus: how a formula becomes a graph, and how small changes move that graph.</p>
+    <p class="muted">How a formula becomes a graph—and how small changes move that graph.</p>
   </header>
   <main>
-    <p>A <strong>function</strong> assigns exactly one output to each allowed input. In precalculus you study families of functions—linear, quadratic, absolute value, square root, reciprocal, exponential, and more—and you learn to <strong>transform</strong> their graphs without plotting dozens of points from scratch.</p>
+    <p>A <strong>function</strong> assigns one output to each allowed input. Precalculus studies families of functions and how to <strong>transform</strong> their graphs without plotting dozens of points from scratch.</p>
 
-    <h2>Parent functions</h2>
-    <p>A parent function is the simplest member of a family. Examples:</p>
-    <table>
-      <tr><th>Family</th><th>Parent</th><th>Shape idea</th></tr>
-      <tr><td>Linear</td><td class="mono">y = x</td><td>Straight diagonal line</td></tr>
-      <tr><td>Quadratic</td><td class="mono">y = x²</td><td>Parabola opening up</td></tr>
-      <tr><td>Absolute value</td><td class="mono">y = |x|</td><td>V shape</td></tr>
-      <tr><td>Square root</td><td class="mono">y = √x</td><td>Slow rise from the origin</td></tr>
-      <tr><td>Reciprocal</td><td class="mono">y = 1/x</td><td>Two branches; vertical asymptote at x = 0</td></tr>
-    </table>
+    <h2>Parent shapes</h2>
+    <figure class="diagram">
+      <svg viewBox="0 0 360 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Parent function sketches">
+        <line x1="20" y1="70" x2="90" y2="70" stroke="#334155"/><line x1="55" y1="110" x2="55" y2="30" stroke="#334155"/>
+        <line x1="25" y1="95" x2="85" y2="45" stroke="#38bdf8" stroke-width="2"/>
+        <text x="30" y="130" fill="#94a3b8" font-size="10">y=x</text>
+        <line x1="110" y1="100" x2="180" y2="100" stroke="#334155"/><line x1="145" y1="120" x2="145" y2="30" stroke="#334155"/>
+        <path d="M 115 100 Q 145 20 175 100" fill="none" stroke="#34d399" stroke-width="2"/>
+        <text x="120" y="130" fill="#94a3b8" font-size="10">y=x²</text>
+        <line x1="200" y1="100" x2="270" y2="100" stroke="#334155"/><line x1="235" y1="120" x2="235" y2="30" stroke="#334155"/>
+        <path d="M 205 40 L 235 100 L 265 40" fill="none" stroke="#fbbf24" stroke-width="2"/>
+        <text x="210" y="130" fill="#94a3b8" font-size="10">y=|x|</text>
+        <line x1="290" y1="100" x2="350" y2="100" stroke="#334155"/><line x1="300" y1="120" x2="300" y2="30" stroke="#334155"/>
+        <path d="M 302 100 Q 330 100 348 50" fill="none" stroke="#a78bfa" stroke-width="2"/>
+        <text x="300" y="130" fill="#94a3b8" font-size="10">y=√x</text>
+      </svg>
+      <figcaption>Common parent shapes: line, parabola, V, square-root curve.</figcaption>
+    </figure>
 
-    <h2>The basic transformations</h2>
-    <p>Start with a parent <span class="mono">y = f(x)</span>. These rules are used constantly:</p>
-    <table>
-      <tr><th>Change</th><th>New formula</th><th>What happens to the graph</th></tr>
-      <tr><td>Vertical shift</td><td class="mono">y = f(x) + k</td><td>Up if k &gt; 0, down if k &lt; 0</td></tr>
-      <tr><td>Horizontal shift</td><td class="mono">y = f(x − h)</td><td>Right if h &gt; 0, left if h &lt; 0</td></tr>
-      <tr><td>Vertical stretch</td><td class="mono">y = a·f(x)</td><td>|a| &gt; 1 stretches; 0 &lt; |a| &lt; 1 compresses</td></tr>
-      <tr><td>Reflection</td><td class="mono">y = −f(x)</td><td>Flips over the x-axis</td></tr>
-      <tr><td>Reflection</td><td class="mono">y = f(−x)</td><td>Flips over the y-axis</td></tr>
-    </table>
-    <p>A common student trap: <span class="mono">f(x − 2)</span> moves the graph <em>right</em>, not left. Think “the inside needs a larger x to feed the same input to f.”</p>
+    <h2>Shifts and stretches</h2>
+    <p>Start with <span class="mono">y = f(x)</span>:</p>
+    <ul>
+      <li><span class="mono">f(x) + k</span> — vertical shift (up if k &gt; 0)</li>
+      <li><span class="mono">f(x − h)</span> — horizontal shift (<strong>right</strong> if h &gt; 0)</li>
+      <li><span class="mono">a·f(x)</span> — vertical stretch if |a| &gt; 1</li>
+      <li><span class="mono">−f(x)</span> — reflect over the x-axis</li>
+    </ul>
 
-    <h2>Domain and range</h2>
-    <p><strong>Domain</strong> = allowed inputs. <strong>Range</strong> = possible outputs. Transformations can change both. For example, <span class="mono">y = √(x − 3)</span> has domain x ≥ 3 because you cannot take the square root of a negative number in the real numbers. Shifting the parent <span class="mono">√x</span> three units right moves the starting point with it.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Horizontal shift of parabola">
+        <line x1="30" y1="150" x2="290" y2="150" stroke="#475569"/>
+        <line x1="80" y1="160" x2="80" y2="20" stroke="#475569"/>
+        <path d="M 40 150 Q 80 40 120 150" fill="none" stroke="#64748b" stroke-width="2" stroke-dasharray="4 3"/>
+        <path d="M 120 150 Q 160 40 200 150" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
+        <text x="50" y="30" fill="#64748b" font-size="11">y = x²</text>
+        <text x="150" y="30" fill="#38bdf8" font-size="11">y = (x−2)² → shifted right</text>
+      </svg>
+      <figcaption>f(x − 2) moves the graph right—not left. A common exam trap.</figcaption>
+    </figure>
 
-    <h2>Why this matters</h2>
-    <p>Word problems rarely hand you a bare <span class="mono">x²</span>. They hand you “starts at 50, grows, then levels off” or “the lowest point is at hour 3.” Transformations are how you turn that language into a formula and check it against a graph.</p>
-
-    <div class="box">
-      <p style="margin:0"><strong>Practice:</strong> In Hyper-Scale Lab, open <strong>Standard → Functions</strong> for scenario-based problems with labeled graphs. <a href="/login.html">Start free practice</a>.</p>
+    <div class="box warn">
+      <p style="margin:0"><strong>Trap:</strong> <span class="mono">f(x − 2)</span> shifts <em>right</em>. The input must be 2 larger to feed f the same value.</p>
     </div>
 
-    <h2>Related guides</h2>
+    <h2>Domain and range</h2>
+    <p><strong>Domain</strong> = allowed inputs. <strong>Range</strong> = possible outputs. Example: <span class="mono">√(x − 3)</span> needs x ≥ 3. Shifting the parent moves that starting point with it.</p>
+
+    <div class="box">
+      <p style="margin:0 0 0.75rem"><strong>Practice</strong> — Standard → Functions</p>
+      <a class="cta" href="/login.html">Open Hyper-Scale Lab</a>
+    </div>
+    <h2>Related</h2>
     <ul>
-      <li><a href="/guides/what-is-precalculus.html">What is precalculus?</a></li>
-      <li><a href="/guides/exponential-and-logarithmic-functions.html">Exponential and logarithmic functions</a></li>
-      <li><a href="/guides/trigonometry-basics.html">Trigonometry basics</a></li>
+      <li><a href="/guides/polynomial-and-rational-functions.html">Polynomial and rational functions</a></li>
+      <li><a href="/guides/exponential-and-logarithmic-functions.html">Exp and log</a></li>
     </ul>
   </main>
-  <footer>
-    <p>Hyper-Scale Lab · <a href="/guides/">All guides</a> · <a href="/login.html">Practice</a></p>
-  </footer>
+  <footer class="site-foot"><p><a href="/guides/">Guides</a> · <a href="/login.html">Practice</a></p></footer>
 </body>
 </html>

@@ -3,72 +3,68 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Trigonometry Basics for Precalculus | Unit Circle &amp; Graphs</title>
-  <meta name="description" content="Precalculus trigonometry explained: unit circle, sine and cosine as coordinates, radians vs degrees, amplitude and period—clear language for self-study." />
-  <meta name="robots" content="index, follow" />
+  <title>Trigonometry Basics | Unit Circle, Sine &amp; Cosine</title>
+  <meta name="description" content="Trigonometry basics for precalculus: unit circle, sine and cosine, radians, and wave graphs—with diagrams." />
   <link rel="canonical" href="https://precalc-odyssey.pages.dev/guides/trigonometry-basics.html" />
-  <meta property="og:title" content="Trigonometry Basics for Precalculus" />
-  <meta property="og:description" content="Unit circle, sine, cosine, radians, and wave graphs without the exam-paper fog." />
-  <meta property="og:url" content="https://precalc-odyssey.pages.dev/guides/trigonometry-basics.html" />
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Trigonometry Basics for Precalculus","description":"Unit circle and trig graphs for precalculus students.","author":{"@type":"Organization","name":"Hyper-Scale Lab"},"mainEntityOfPage":"https://precalc-odyssey.pages.dev/guides/trigonometry-basics.html"}
-  </script>
-  <style>
-    :root { --bg:#0b0f14; --card:#121821; --line:#1e2a38; --text:#e8eef5; --muted:#94a3b8; --sky:#38bdf8; }
-    body { margin:0; font-family:system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.65; }
-    a { color:var(--sky); } main, header, footer { max-width:720px; margin:0 auto; padding:1.25rem; }
-    h1 { font-size:1.75rem; line-height:1.25; } h2 { font-size:1.2rem; margin-top:2rem; color:#fff; }
-    .muted { color:var(--muted); } .mono { font-family:ui-monospace,monospace; color:#7dd3fc; }
-    .box { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:1rem 1.15rem; margin:1.25rem 0; }
-    footer { border-top:1px solid var(--line); color:var(--muted); font-size:0.85rem; margin-top:2rem; }
-  </style>
+  <link rel="stylesheet" href="/guides/css/guide.css" />
 </head>
 <body>
-  <header>
-    <p><a href="/guides/">← All guides</a> · <a href="/">Home</a></p>
+  <div class="site-header"><div class="site-header-inner">
+    <a class="brand" href="/">Hyper-Scale Lab</a>
+    <nav><a href="/guides/">Guides</a><a href="/login.html">Log in</a><a class="cta-nav" href="/login.html">Practice</a></nav>
+  </div></div>
+  <header class="page-head">
+    <p class="crumbs"><a href="/guides/">← Guides</a></p>
     <h1>Trigonometry basics</h1>
-    <p class="muted">Sine and cosine as height and width on a circle—then as waves over time.</p>
+    <p class="muted">Angles on the unit circle, sine and cosine as coordinates, and the wave graph.</p>
   </header>
   <main>
-    <p>In geometry, trigonometry often means right triangles: opposite, adjacent, hypotenuse. In precalculus, the same ratios open up into the <strong>unit circle</strong> and into <strong>periodic graphs</strong> that model tides, sound, and rotation.</p>
+    <p>Trigonometry begins with angles and right triangles, then expands to the <strong>unit circle</strong>: every angle places a point (cos θ, sin θ) on a circle of radius 1. That single idea powers graphs, polar coordinates, and many physics models.</p>
 
-    <h2>The unit circle idea</h2>
-    <p>Draw a circle of radius 1 centered at the origin. Measure an angle from the positive x-axis. The point where the ray hits the circle has coordinates:</p>
-    <ul>
-      <li><span class="mono">(cos θ, sin θ)</span></li>
-      <li>So <strong>cosine</strong> is the left-right position</li>
-      <li><strong>Sine</strong> is the up-down position</li>
-    </ul>
-    <p>That is why sin(90°) = 1 (top of the circle) and cos(0°) = 1 (rightmost point). You do not have to memorize those as random facts once the picture is clear.</p>
+    <h2>Unit circle</h2>
+    <figure class="diagram">
+      <svg viewBox="0 0 280 260" xmlns="http://www.w3.org/2000/svg" role="img">
+        <circle cx="140" cy="130" r="90" fill="none" stroke="#1e2a38" stroke-width="2"/>
+        <line x1="40" y1="130" x2="240" y2="130" stroke="#475569"/>
+        <line x1="140" y1="220" x2="140" y2="40" stroke="#475569"/>
+        <line x1="140" y1="130" x2="204" y2="70" stroke="#38bdf8" stroke-width="2"/>
+        <circle cx="204" cy="70" r="6" fill="#34d399"/>
+        <line x1="204" y1="70" x2="204" y2="130" stroke="#34d399" stroke-dasharray="4 3"/>
+        <line x1="140" y1="130" x2="204" y2="130" stroke="#a78bfa" stroke-dasharray="4 3"/>
+        <path d="M 180 130 A 40 40 0 0 0 168 100" fill="none" stroke="#fbbf24" stroke-width="2"/>
+        <text x="185" y="115" fill="#fbbf24" font-size="12">θ</text>
+        <text x="210" y="65" fill="#94a3b8" font-size="11">(cos θ, sin θ)</text>
+        <text x="150" y="148" fill="#a78bfa" font-size="11">cos</text>
+        <text x="210" y="105" fill="#34d399" font-size="11">sin</text>
+      </svg>
+      <figcaption>On the unit circle, x = cos θ and y = sin θ.</figcaption>
+    </figure>
 
-    <h2>Degrees and radians</h2>
-    <p>A full turn is 360° or <span class="mono">2π</span> radians. Radians measure angle by arc length on the unit circle: an angle of 1 radian cuts an arc of length 1. Calculus prefers radians; precalculus trains you to convert:</p>
-    <p class="mono">180° = π radians, so 1° = π/180 and 1 radian = 180/π degrees.</p>
+    <h2>Radians in one sentence</h2>
+    <p>A radian measures angle by arc length on the unit circle: a full turn is 2π radians (360°). Precalculus and calculus prefer radians for calculus-ready formulas.</p>
 
-    <h2>Sine and cosine as waves</h2>
-    <p>Plot angle on the horizontal axis and sine on the vertical axis. As the angle runs forward, the height goes up and down—producing the familiar wave. Important features:</p>
-    <ul>
-      <li><strong>Amplitude</strong> — height of the wave from the middle to a peak (for <span class="mono">y = A sin x</span>, amplitude is |A|)</li>
-      <li><strong>Period</strong> — how long one full cycle takes (for <span class="mono">sin x</span>, period is 2π)</li>
-      <li><strong>Midline</strong> — horizontal center line after a vertical shift</li>
-    </ul>
+    <h2>The wave</h2>
+    <p>Plotting sin θ as θ runs produces the classic wave. Amplitude, period, and midline adjustments appear in models of sound, seasons, and circular motion.</p>
 
-    <h2>Tangent and ratios</h2>
-    <p><span class="mono">tan θ = sin θ / cos θ</span> when cosine is not zero. On a ramp, tangent is rise over run—the slope. At 45° (π/4 radians), rise equals run, so tangent equals 1.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 320 120" xmlns="http://www.w3.org/2000/svg" role="img">
+        <line x1="20" y1="60" x2="300" y2="60" stroke="#475569"/>
+        <path d="M 20 60 Q 50 20 80 60 T 140 60 T 200 60 T 260 60 T 300 60" fill="none" stroke="#38bdf8" stroke-width="2"/>
+        <text x="120" y="100" fill="#64748b" font-size="11">y = sin θ</text>
+      </svg>
+      <figcaption>Sine wave: output of sin as the angle advances.</figcaption>
+    </figure>
 
     <div class="box">
-      <p style="margin:0"><strong>Practice:</strong> <strong>Standard → Trigonometry</strong> uses plain-language scenarios (ladders, waves, tides) with graphs. Honors adds identities and applications. <a href="/login.html">Start free practice</a>.</p>
+      <p style="margin:0 0 0.75rem"><strong>Practice</strong> — Standard → Trigonometry; later Honors → Advanced Trig</p>
+      <a class="cta" href="/login.html">Open Hyper-Scale Lab</a>
     </div>
-
-    <h2>Related guides</h2>
+    <h2>Related</h2>
     <ul>
-      <li><a href="/guides/functions-and-transformations.html">Functions and transformations</a></li>
-      <li><a href="/guides/exponential-and-logarithmic-functions.html">Exponential and logarithmic functions</a></li>
-      <li><a href="/guides/what-is-precalculus.html">What is precalculus?</a></li>
+      <li><a href="/guides/advanced-trigonometry.html">Advanced trigonometry</a></li>
+      <li><a href="/guides/polar-coordinates.html">Polar coordinates</a></li>
     </ul>
   </main>
-  <footer>
-    <p>Hyper-Scale Lab · <a href="/guides/">All guides</a> · <a href="/login.html">Practice</a></p>
-  </footer>
+  <footer class="site-foot"><p><a href="/guides/">Guides</a> · <a href="/login.html">Practice</a></p></footer>
 </body>
 </html>
