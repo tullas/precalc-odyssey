@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test Session | Hyper-Scale Lab</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #060a0e; color: #e2e8f0; font-family: system-ui, sans-serif; }
+    .panel { background: #0c1219; border: 1px solid #1e2a38; border-radius: 12px; }
+    .nav-btn {
+      font-size: 0.875rem; padding: 0.4rem 0.75rem; border-radius: 0.5rem;
+      border: 1px solid #334155; color: #cbd5e1; background: transparent; cursor: pointer; text-decoration: none;
+    }
+    .nav-btn:hover { border-color: #38bdf8; color: #e0f2fe; }
+    .nav-btn.primary { background: #0284c7; border-color: #0284c7; color: #fff; }
+    .ok { color: #34d399; }
+    .bad { color: #fb7185; }
+    input[type=text], input[type=number] {
+      background: #080c10; border: 1px solid #334155; border-radius: 8px;
+      padding: 0.5rem 0.75rem; color: #e2e8f0; width: 100%; max-width: 220px;
+    }
+  </style>
+</head>
+<body class="p-4 md:p-6 max-w-3xl mx-auto">
+  <header class="flex flex-wrap items-center justify-between gap-3 mb-6">
+    <div>
+      <h1 class="text-xl font-semibold"><a href="/hyper-scale/" class="hover:text-sky-300">Hyper-Scale Lab</a> · Test</h1>
+      <p class="text-sm text-slate-400">Timed-style check · no hints until the end · scores saved to your report</p>
+    </div>
+    <div class="flex gap-2 flex-wrap">
+      <a class="nav-btn" href="/hyper-scale/">Practice</a>
+      <a class="nav-btn" href="/hyper-scale/report.html">Report</a>
+      <a class="nav-btn" href="/guides/">Guides</a>
+    </div>
+  </header>
+
+  <!-- SETUP -->
+  <div id="setup" class="panel p-5 mb-4">
+    <h2 class="text-lg font-medium mb-2">Start a test session</h2>
+    <p class="text-sm text-slate-400 mb-4">10 questions from one unit. Order and numbers are randomized each attempt. One answer per question — results and review appear at the end.</p>
+    <div class="grid sm:grid-cols-2 gap-3 mb-4">
+      <div>
+        <label class="text-xs text-slate-500 block mb-1">Level</label>
+        <select id="levelSel" class="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm"></select>
+      </div>
+      <div>
+        <label class="text-xs text-slate-500 block mb-1">Unit</label>
+        <select id="unitSel" class="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm"></select>
+      </div>
+    </div>
+    <button type="button" id="startBtn" class="nav-btn primary">Start test (10 questions)</button>
+    <p id="setupErr" class="text-sm text-rose-400 mt-2 hidden"></p>
+  </div>
+
+  <!-- ACTIVE TEST -->
+  <div id="active" class="hidden">
+    <div class="flex justify-between text-sm text-slate-400 mb-3">
+      <span id="progress">Question 1 / 10</span>
+      <span id="meta"></span>
+    </div>
+    <div class="panel p-5 mb-4">
+      <p id="qTitle" class="text-sky-300 text-sm mb-1"></p>
+      <p id="qText" class="text-base leading-relaxed mb-4"></p>
+      <label class="text-xs text-slate-500 block mb-1">Your answer (number)</label>
+      <input type="text" id="ansInput" inputmode="decimal" autocomplete="off" />
+      <div class="mt-4 flex gap-2">
+        <button type="button" id="nextBtn" class="nav-btn primary">Next</button>
+        <button type="button" id="skipBtn" class="nav-btn">Skip</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results" class="hidden">
+    <div class="panel p-5 mb-4">
+      <h2 class="text-lg font-medium mb-2">Session score</h2>
+      <p id="scoreLine" class="text-2xl font-semibold text-sky-300 mb-2"></p>
+      <div id="improveBox" class="text-sm text-amber-200/90 mb-3"></div>
+      <p id="saveStatus" class="text-xs text-slate-500"></p>
+      <div class="flex flex-wrap gap-2 mt-4">
+        <a class="nav-btn primary" href="/hyper-scale/report.html">Open report</a>
+        <button type="button" id="againBtn" class="nav-btn">Retake (new params)</button>
+        <a class="nav-btn" href="/hyper-scale/">Back to practice</a>
+      </div>
+    </div>
+    <div id="reviewList"></div>
+  </div>
+
+  <script src="curriculum.js"></script>
+  <script src="scenarios.js"></script>
+  <script src="scenarios-functions.js"></script>
+  <script src="scenarios-poly-rational.js"></script>
+  <script src="scenarios-exp-log.js"></script>
+  <script src="scenarios-trigonometry.js"></script>
+  <script src="scenarios-honors-sequences.js"></script>
+  <script src="scenarios-honors-conics.js"></script>
+  <script src="scenarios-honors-vectors.js"></script>
+  <script src="scenarios-honors-adv-trig.js"></script>
+  <script src="scenarios-ap-polar.js"></script>
+  <script src="scenarios-ap-parametric.js"></script>
+  <script src="scenarios-ap-matrices.js"></script>
+  <script src="scenarios-ap-rates-limits.js"></script>
+  <script src="test-engine.js"></script>
+  <script src="test-api.js"></script>
+  <script>
+  (function () {
+    // Auth gate (same keys as lab)
+    try {
+      const u = localStorage.getItem('hs_user') || localStorage.getItem('precalc_user');
+      if (!u) {
+        location.href = '/login.html?next=' + encodeURIComponent('/hyper-scale/test.html');
+        return;
+      }
+    } catch (e) {
+      location.href = '/login.html';
+      return;
+    }
+
+    const levelSel = document.getElementById('levelSel');
+    const unitSel = document.getElementById('unitSel');
+    const C = window.CURRICULUM;
+
+    function fillLevels() {
+      levelSel.innerHTML = '';
+      (C.levels || []).forEach(l => {
+        if (!l.available) return;
+        const o = document.createElement('option');
+        o.value = l.id; o.textContent = l.name;
+        levelSel.appendChild(o);
+      });
+      fillUnits();
+    }
+    function fillUnits() {
+      unitSel.innerHTML = '';
+      const lev = levelSel.value;
+      (C.units[lev] || []).forEach(u => {
+        const o = document.createElement('option');
+        o.value = u.id; o.textContent = u.name;
+        unitSel.appendChild(o);
+      });
+    }
+    levelSel.onchange = fillUnits;
+    fillLevels();
+
+    let test = null;
+    let idx = 0;
+    let answers = [];
+
+    function show(id) {
+      ['setup', 'active', 'results'].forEach(x => {
+        document.getElementById(x).classList.toggle('hidden', x !== id);
+      });
+    }
+
+    document.getElementById('startBtn').onclick = function () {
+      const level = levelSel.value;
+      const unit = unitSel.value;
+      const built = window.TestEngine.buildTest(level, unit, 10);
+      const err = document.getElementById('setupErr');
+      if (!built.ok) {
+        err.textContent = built.error;
+        err.classList.remove('hidden');
+        return;
+      }
+      err.classList.add('hidden');
+      test = built;
+      idx = 0;
+      answers = new Array(built.questions.length).fill('');
+      show('active');
+      renderQ();
+    };
+
+    function renderQ() {
+      const sc = test.questions[idx];
+      document.getElementById('progress').textContent =
+        'Question ' + (idx + 1) + ' / ' + test.questions.length;
+      document.getElementById('meta').textContent =
+        window.TestEngine.unitLabel(sc.unit) + ' · ' + (sc.level || '');
+      document.getElementById('qTitle').textContent = sc.title || sc.family || '';
+      document.getElementById('qText').textContent = sc.question || '';
+      const inp = document.getElementById('ansInput');
+      inp.value = answers[idx] || '';
+      inp.focus();
+      document.getElementById('nextBtn').textContent =
+        idx === test.questions.length - 1 ? 'Finish test' : 'Next';
+    }
+
+    function commitAndAdvance(skip) {
+      const inp = document.getElementById('ansInput');
+      answers[idx] = skip ? '' : inp.value;
+      if (idx < test.questions.length - 1) {
+        idx++;
+        renderQ();
+      } else {
+        finish();
+      }
+    }
+
+    document.getElementById('nextBtn').onclick = function () { commitAndAdvance(false); };
+    document.getElementById('skipBtn').onclick = function () { commitAndAdvance(true); };
+    document.getElementById('ansInput').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') commitAndAdvance(false);
+    });
+
+    async function finish() {
+      const graded = window.TestEngine.gradeSession(test.questions, answers);
+      show('results');
+      document.getElementById('scoreLine').textContent =
+        graded.score + ' / ' + graded.total + '  (' + graded.percent + '%)';
+
+      const ib = document.getElementById('improveBox');
+      if (graded.improve.length) {
+        ib.innerHTML = '<strong>Suggested focus:</strong><ul class="list-disc ml-5 mt-1">' +
+          graded.improve.map(x => '<li>' + x.message + '</li>').join('') + '</ul>';
+      } else {
+        ib.innerHTML = '<span class="ok">Strong session — no weak unit flagged.</span>';
+      }
+
+      const review = document.getElementById('reviewList');
+      review.innerHTML = graded.details.map((d, i) => {
+        const cls = d.correct ? 'ok' : 'bad';
+        const mark = d.correct ? 'Correct' : 'Incorrect';
+        return '<div class="panel p-4 mb-3">' +
+          '<div class="flex justify-between text-sm mb-2"><span>Q' + (i + 1) + '</span><span class="' + cls + '">' + mark + '</span></div>' +
+          '<p class="text-sm text-slate-300 mb-2">' + escapeHtml(d.question) + '</p>' +
+          '<p class="text-xs text-slate-500">Your answer: <span class="text-slate-200">' + escapeHtml(d.userAnswer || '(blank)') + '</span>' +
+          ' · Expected: <span class="text-emerald-300">' + escapeHtml(d.expectedAnswer) + '</span></p>' +
+          (d.correct ? '' : (d.workedSolution ? '<p class="text-xs text-slate-400 mt-2">' + escapeHtml(String(d.workedSolution).slice(0, 400)) + '</p>' : '')) +
+          '</div>';
+      }).join('');
+
+      const user = window.TestAPI.getUser() || {};
+      const payload = {
+        sessionId: window.TestEngine.sessionId(),
+        userId: user.id || user.user_id || null,
+        email: user.email || null,
+        level: test.level,
+        unit: test.unit,
+        score: graded.score,
+        total: graded.total,
+        percent: graded.percent,
+        improve: graded.improve,
+        details: graded.details.map(d => ({
+          qIndex: d.qIndex,
+          scenarioId: d.scenarioId,
+          question: d.question,
+          userAnswer: d.userAnswer,
+          expectedAnswer: d.expectedAnswer,
+          correct: d.correct ? 1 : 0,
+          unit: d.unit
+        }))
+      };
+
+      const save = await window.TestAPI.submitSession(payload);
+      const st = document.getElementById('saveStatus');
+      if (save.ok && !save.local) st.textContent = 'Saved to your cloud report.';
+      else st.textContent = 'Saved on this device' + (save.error ? ' (cloud: ' + save.error + '). Deploy /test/submit on the Worker to sync.' : '.');
+    }
+
+    document.getElementById('againBtn').onclick = function () {
+      show('setup');
+    };
+
+    function escapeHtml(s) {
+      return String(s || '').replace(/[&<>"']/g, c => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      })[c]);
+    }
+  })();
+  </script>
+</body>
+</html>

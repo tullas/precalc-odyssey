@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Performance Report | Hyper-Scale Lab</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #060a0e; color: #e2e8f0; font-family: system-ui, sans-serif; }
+    .panel { background: #0c1219; border: 1px solid #1e2a38; border-radius: 12px; }
+    .nav-btn {
+      font-size: 0.875rem; padding: 0.4rem 0.75rem; border-radius: 0.5rem;
+      border: 1px solid #334155; color: #cbd5e1; background: transparent; cursor: pointer; text-decoration: none;
+    }
+    .nav-btn:hover { border-color: #38bdf8; color: #e0f2fe; }
+    .nav-btn.primary { background: #0284c7; border-color: #0284c7; color: #fff; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th, td { text-align: left; padding: 0.55rem 0.4rem; border-bottom: 1px solid #1e2a38; }
+    th { color: #94a3b8; font-weight: 600; }
+  </style>
+</head>
+<body class="p-4 md:p-6 max-w-4xl mx-auto">
+  <header class="flex flex-wrap items-center justify-between gap-3 mb-6">
+    <div>
+      <h1 class="text-xl font-semibold"><a href="/hyper-scale/" class="hover:text-sky-300">Hyper-Scale Lab</a> · Report</h1>
+      <p class="text-sm text-slate-400">Test history, scores, and suggested improvement areas</p>
+    </div>
+    <div class="flex gap-2 flex-wrap">
+      <a class="nav-btn" href="/hyper-scale/">Practice</a>
+      <a class="nav-btn primary" href="/hyper-scale/test.html">New test</a>
+    </div>
+  </header>
+
+  <div class="panel p-5 mb-4">
+    <div class="flex flex-wrap gap-4 text-sm" id="summary">
+      <div>Sessions: <strong id="sCount">—</strong></div>
+      <div>Average: <strong id="sAvg">—</strong></div>
+      <div>Best: <strong id="sBest">—</strong></div>
+      <div class="text-slate-500" id="sourceLabel"></div>
+    </div>
+  </div>
+
+  <div class="panel p-5 overflow-x-auto">
+    <h2 class="text-sm uppercase tracking-wide text-slate-500 mb-3">All test sessions</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Level</th>
+          <th>Unit</th>
+          <th>Score</th>
+          <th>%</th>
+          <th>Improve</th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+        <tr><td colspan="6" class="text-slate-500">Loading…</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="text-xs text-slate-500 mt-4">Cloud sync needs Worker routes <code>/test/submit</code> and <code>/test/report</code> plus D1 tables. Until then, history is kept in this browser.</p>
+
+  <script src="test-api.js"></script>
+  <script src="test-engine.js"></script>
+  <script>
+  (function () {
+    try {
+      const u = localStorage.getItem('hs_user') || localStorage.getItem('precalc_user');
+      if (!u) {
+        location.href = '/login.html?next=' + encodeURIComponent('/hyper-scale/report.html');
+        return;
+      }
+    } catch (e) {
+      location.href = '/login.html';
+      return;
+    }
+
+    async function load() {
+      const user = window.TestAPI.getUser() || {};
+      const res = await window.TestAPI.fetchReport(user.id || user.user_id);
+      const sessions = res.sessions || [];
+      document.getElementById('sourceLabel').textContent =
+        res.source === 'api' ? 'Source: Cloudflare D1' : 'Source: this device';
+
+      document.getElementById('sCount').textContent = sessions.length;
+      if (sessions.length) {
+        const pcts = sessions.map(s => Number(s.percent) || 0);
+        const avg = pcts.reduce((a, b) => a + b, 0) / pcts.length;
+        document.getElementById('sAvg').textContent = avg.toFixed(1) + '%';
+        document.getElementById('sBest').textContent = Math.max.apply(null, pcts).toFixed(1) + '%';
+      } else {
+        document.getElementById('sAvg').textContent = '—';
+        document.getElementById('sBest').textContent = '—';
+      }
+
+      const tb = document.getElementById('tbody');
+      if (!sessions.length) {
+        tb.innerHTML = '<tr><td colspan="6" class="text-slate-500">No tests yet. Take a test session to build your report.</td></tr>';
+        return;
+      }
+      tb.innerHTML = sessions.map(s => {
+        const date = (s.created_at || '').replace('T', ' ').slice(0, 19);
+        const improve = s.improve_units || (Array.isArray(s.improve) ? s.improve.map(x => x.unit).join(', ') : '') || '—';
+        const unitName = (window.TestEngine && window.TestEngine.unitLabel) ? window.TestEngine.unitLabel(s.unit) : s.unit;
+        return '<tr>' +
+          '<td>' + date + '</td>' +
+          '<td>' + (s.level || '') + '</td>' +
+          '<td>' + unitName + '</td>' +
+          '<td>' + s.score + '/' + s.total + '</td>' +
+          '<td>' + s.percent + '%</td>' +
+          '<td class="text-amber-200/80">' + improve + '</td>' +
+          '</tr>';
+      }).join('');
+    }
+    load();
+  })();
+  </script>
+</body>
+</html>
