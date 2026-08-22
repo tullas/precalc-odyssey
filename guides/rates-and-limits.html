@@ -3,93 +3,83 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Average Rate of Change &amp; Limits | Precalculus Bridge to Calculus</title>
-  <meta name="description" content="Average rate of change and limits explained with diagrams: secant slopes, getting close on a graph, and how this prepares you for derivatives—without jargon overload." />
-  <meta name="robots" content="index, follow" />
+  <title>Rates and Limits | Interactive Secant Slope</title>
+  <meta name="description" content="Interactive average rate of change: move the second point and watch the secant slope update—bridge to the derivative idea." />
   <link rel="canonical" href="https://precalc-odyssey.pages.dev/guides/rates-and-limits.html" />
   <link rel="stylesheet" href="/guides/css/guide.css" />
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Average Rate of Change and Limits","description":"Rates and limits as a bridge to calculus.","author":{"@type":"Organization","name":"Hyper-Scale Lab"},"mainEntityOfPage":"https://precalc-odyssey.pages.dev/guides/rates-and-limits.html"}
-  </script>
+  <link rel="stylesheet" href="/guides/css/interactive.css" />
 </head>
 <body>
-  <header>
-    <p class="crumbs"><a href="/guides/">← Guides</a> · <a href="/">Home</a></p>
+  <div class="site-header"><div class="site-header-inner">
+    <a class="brand" href="/">Hyper-Scale Lab</a>
+    <nav><a href="/guides/">Guides</a><a href="/login.html">Log in</a><a class="cta-nav" href="/login.html">Practice</a></nav>
+  </div></div>
+  <header class="page-head">
+    <p class="crumbs"><a href="/guides/">← Guides</a></p>
     <h1>Rates of change and limits</h1>
-    <p class="muted">The honest bridge from precalculus graphs into calculus — still in everyday language.</p>
+    <p class="muted">Average rate as secant slope—and what happens as the interval shrinks.</p>
   </header>
   <main>
-    <p>You already use <strong>average rate of change</strong>: kilometers per hour on a trip, points per game across a season, degrees per hour as a room warms. Limits ask a more delicate question: <em>what are the outputs doing as we get near this input?</em> Together they prepare the idea of an instantaneous rate (a derivative) without requiring full calculus notation yet.</p>
+    <p>For <span class="mono">f(x) = x²</span>, the average rate from x₁ to x₂ is <span class="mono">(f(x₂)−f(x₁))/(x₂−x₁)</span>. Move x₂ toward x₁ and watch the secant get steeper toward the tangent idea.</p>
 
-    <h2>Average rate of change</h2>
-    <p>Between two inputs x₁ and x₂:</p>
-    <p class="mono">average rate = (f(x₂) − f(x₁)) / (x₂ − x₁)</p>
-    <p>In words: <strong>change in output divided by change in input</strong>. On a graph, that number is the slope of the <strong>secant line</strong> joining the two points.</p>
-
-    <figure class="diagram">
-      <svg viewBox="0 0 360 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Secant line on a curve">
-        <line x1="40" y1="220" x2="330" y2="220" stroke="#475569"/>
-        <line x1="40" y1="220" x2="40" y2="30" stroke="#475569"/>
-        <path d="M 50 200 Q 120 200 160 120 T 300 60" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
-        <line x1="100" y1="175" x2="260" y2="85" stroke="#fbbf24" stroke-width="2" stroke-dasharray="6 4"/>
-        <circle cx="100" cy="175" r="6" fill="#34d399"/>
-        <circle cx="260" cy="85" r="6" fill="#34d399"/>
-        <text x="70" y="195" fill="#94a3b8" font-size="11">(x₁, f(x₁))</text>
-        <text x="250" y="72" fill="#94a3b8" font-size="11">(x₂, f(x₂))</text>
-        <text x="150" y="120" fill="#fbbf24" font-size="12">secant slope = average rate</text>
+    <div class="interactive">
+      <h3>Secant slope explorer</h3>
+      <div class="badge-row">
+        <span class="badge">Interactive</span>
+        <span class="badge touch">Move x₂</span>
+      </div>
+      <p class="hint"><strong>Try it:</strong> Keep x₁ fixed at 1. Slide x₂ closer to 1. The yellow secant’s slope is the average rate—heading toward 2 (the instantaneous rate at x=1).</p>
+      <svg viewBox="0 0 360 240" xmlns="http://www.w3.org/2000/svg">
+        <line x1="40" y1="200" x2="340" y2="200" stroke="#334155"/>
+        <line x1="40" y1="200" x2="40" y2="20" stroke="#334155"/>
+        <path id="curve" fill="none" stroke="#38bdf8" stroke-width="2" d=""/>
+        <line id="sec" x1="0" y1="0" x2="0" y2="0" stroke="#fbbf24" stroke-width="2" stroke-dasharray="5 4"/>
+        <circle id="p1" cx="0" cy="0" r="5" fill="#34d399"/>
+        <circle id="p2" cx="0" cy="0" r="5" fill="#fbbf24"/>
       </svg>
-      <figcaption>The dashed secant’s slope is exactly the average rate between those two times or inputs.</figcaption>
-    </figure>
-
-    <div class="box tip">
-      <p style="margin:0"><strong>Linear case.</strong> If f(x) = 4x, the average rate between any two points is 4. The secant is the line itself. For curves, the average rate depends on which pair of points you pick.</p>
+      <div class="controls">
+        <label><span>x₂ (second input)</span><span id="x2Val">3</span></label>
+        <input type="range" id="x2Slider" min="1.1" max="4" step="0.1" value="3"/>
+      </div>
+      <div class="readout">
+        <div>Δy / Δx = <strong id="slope">4.00</strong></div>
+        <div>x₁ fixed at <strong>1</strong></div>
+      </div>
     </div>
 
-    <h2>What a limit is trying to say</h2>
-    <p>A limit asks: as x moves closer and closer to some value a, do the outputs f(x) settle toward a particular number L?</p>
-    <p>We write that idea as “the limit of f(x) as x approaches a is L.” You do <em>not</em> need the formal epsilon definition to use the idea on graphs and rational expressions in precalculus.</p>
-
-    <figure class="diagram">
-      <svg viewBox="0 0 360 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Function approaching a limit with a hole">
-        <line x1="40" y1="200" x2="330" y2="200" stroke="#475569"/>
-        <line x1="40" y1="200" x2="40" y2="30" stroke="#475569"/>
-        <path d="M 50 160 L 150 100" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
-        <path d="M 170 92 L 300 50" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
-        <circle cx="160" cy="96" r="7" fill="none" stroke="#fbbf24" stroke-width="2"/>
-        <line x1="160" y1="200" x2="160" y2="40" stroke="#334155" stroke-dasharray="3 3"/>
-        <line x1="40" y1="96" x2="320" y2="96" stroke="#334155" stroke-dasharray="3 3"/>
-        <text x="165" y="215" fill="#94a3b8" font-size="12">x → a</text>
-        <text x="280" y="90" fill="#94a3b8" font-size="12">y → L</text>
-        <text x="100" y="40" fill="#64748b" font-size="12">Open circle: maybe not defined at a — limit can still be L</text>
-      </svg>
-      <figcaption>Outputs approach height L even if the function has a hole at x = a.</figcaption>
-    </figure>
-
-    <h2>A classic algebraic example</h2>
-    <p>Consider <span class="mono">f(x) = 2x / x</span> for x ≠ 0. Algebra simplifies this to 2 wherever it is defined. As x approaches 0, the outputs stay at 2. The limit is 2, even though you must not divide by zero at x = 0.</p>
-
-    <div class="box warn">
-      <p style="margin:0"><strong>Common trap:</strong> “Plug in x = a” only works when f is continuous there. Limits are about <em>nearby</em> behavior. A hole, jump, or vertical asymptote changes the story.</p>
-    </div>
-
-    <h2>How this leads toward calculus</h2>
-    <p>If you shrink the secant interval so x₂ gets closer to x₁, the average rate often approaches a single number: the <strong>instantaneous</strong> rate at that point. That limiting slope is the derivative. Precalculus builds fluency with averages and “approaching”; calculus names the limit of those averages.</p>
-
-    <div class="box">
-      <p style="margin:0 0 0.75rem 0"><strong>Practice in the lab</strong></p>
-      <p class="muted" style="margin:0 0 0.75rem 0">AP → Rates &amp; Limits Intro: trip speeds, secant rates, and approaching a value.</p>
-      <a class="cta" href="/login.html">Open Hyper-Scale Lab</a>
-    </div>
-
-    <h2>Related guides</h2>
-    <ul>
-      <li><a href="/guides/what-is-precalculus.html">What is precalculus?</a></li>
-      <li><a href="/guides/parametric-equations.html">Parametric equations</a></li>
-      <li><a href="/guides/functions-and-transformations.html">Functions and transformations</a></li>
-    </ul>
+    <div class="box tip"><p style="margin:0">As x₂ → 1, the average rate approaches 2—the derivative of x² at x=1. That is the calculus idea, previewed here.</p></div>
+    <div class="box"><p style="margin:0 0 0.75rem"><strong>Practice</strong> — AP → Rates &amp; Limits</p><a class="cta" href="/login.html">Open lab</a></div>
   </main>
-  <footer>
-    <p>Hyper-Scale Lab · <a href="/guides/">All guides</a> · <a href="/login.html">Practice</a></p>
-  </footer>
+  <footer class="site-foot"><p><a href="/guides/">Guides</a></p></footer>
+  <script>
+  (function(){
+    var x1=1;
+    function mx(x){return 40+x*60;} function my(y){return 200-y*18;}
+    function f(x){return x*x;}
+    // curve
+    var d='',first=true;
+    for(var i=0;i<=50;i++){
+      var x=i/50*4.2; var y=f(x);
+      d+=(first?'M':'L')+mx(x).toFixed(1)+','+my(y).toFixed(1); first=false;
+    }
+    document.getElementById('curve').setAttribute('d',d);
+    function draw(x2){
+      var y1=f(x1), y2=f(x2);
+      var slope=(y2-y1)/(x2-x1);
+      document.getElementById('p1').setAttribute('cx',mx(x1));
+      document.getElementById('p1').setAttribute('cy',my(y1));
+      document.getElementById('p2').setAttribute('cx',mx(x2));
+      document.getElementById('p2').setAttribute('cy',my(y2));
+      document.getElementById('sec').setAttribute('x1',mx(x1));
+      document.getElementById('sec').setAttribute('y1',my(y1));
+      document.getElementById('sec').setAttribute('x2',mx(x2));
+      document.getElementById('sec').setAttribute('y2',my(y2));
+      document.getElementById('x2Val').textContent=x2.toFixed(1);
+      document.getElementById('slope').textContent=slope.toFixed(2);
+    }
+    document.getElementById('x2Slider').oninput=function(e){draw(parseFloat(e.target.value));};
+    draw(3);
+  })();
+  </script>
 </body>
 </html>

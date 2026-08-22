@@ -3,115 +3,74 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Parametric Equations Explained | Motion, Time &amp; Paths</title>
-  <meta name="description" content="Parametric equations explained with diagrams: x(t) and y(t) track where something is at each moment. Paths, timing, ferris wheels, and why animation uses a parameter t." />
-  <meta name="robots" content="index, follow" />
+  <title>Parametric Equations | Interactive Motion with Time</title>
+  <meta name="description" content="Interactive parametric equations: scrub time t and watch the particle move on the path." />
   <link rel="canonical" href="https://precalc-odyssey.pages.dev/guides/parametric-equations.html" />
   <link rel="stylesheet" href="/guides/css/guide.css" />
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Parametric Equations Explained","description":"Motion with a time parameter, with diagrams.","author":{"@type":"Organization","name":"Hyper-Scale Lab"},"mainEntityOfPage":"https://precalc-odyssey.pages.dev/guides/parametric-equations.html"}
-  </script>
+  <link rel="stylesheet" href="/guides/css/interactive.css" />
 </head>
 <body>
-  <header>
-    <p class="crumbs"><a href="/guides/">← Guides</a> · <a href="/">Home</a></p>
-    <h1>Parametric equations: following motion through time</h1>
-    <p class="muted">A path on a map is not enough when you also need to know <em>when</em> something was there.</p>
+  <div class="site-header"><div class="site-header-inner">
+    <a class="brand" href="/">Hyper-Scale Lab</a>
+    <nav><a href="/guides/">Guides</a><a href="/login.html">Log in</a><a class="cta-nav" href="/login.html">Practice</a></nav>
+  </div></div>
+  <header class="page-head">
+    <p class="crumbs"><a href="/guides/">← Guides</a></p>
+    <h1>Parametric equations: motion through time</h1>
+    <p class="muted">Position as a function of a clock parameter t.</p>
   </header>
   <main>
-    <p>A security camera does not only care that a person walked along a hallway. It cares about the <strong>timestamp</strong>. A game engine does not only store a curve; it asks “where is the character <em>on this frame</em>?” That shared idea is a <strong>parameter</strong> — often called <span class="mono">t</span> for time.</p>
+    <p>Example path: <span class="mono">x = 4 cos t</span>, <span class="mono">y = 4 sin t</span> — a circle. Scrub t to see where the particle is at each moment.</p>
 
-    <h2>Two stories, one clock</h2>
-    <p>A parametric description of a plane path looks like:</p>
-    <p class="mono">x = x(t) &nbsp;&nbsp;&nbsp; y = y(t)</p>
-    <p>Both coordinates are driven by the same clock. At each t you get one point (x(t), y(t)). As t runs, the point draws a path.</p>
-
-    <figure class="diagram">
-      <svg viewBox="0 0 380 270" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Particle moving along a path at times t0 t1 t2">
-        <line x1="40" y1="220" x2="350" y2="220" stroke="#475569" stroke-width="1.5"/>
-        <line x1="40" y1="220" x2="40" y2="30" stroke="#475569" stroke-width="1.5"/>
-        <text x="340" y="215" fill="#94a3b8" font-size="13">x</text>
-        <text x="48" y="40" fill="#94a3b8" font-size="13">y</text>
-        <!-- path -->
-        <path d="M 60 180 Q 140 40 220 120 T 320 80" fill="none" stroke="#1e3a5f" stroke-width="3"/>
-        <path d="M 60 180 Q 140 40 220 120 T 320 80" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="6 4"/>
-        <!-- points -->
-        <circle cx="60" cy="180" r="7" fill="#34d399"/>
-        <circle cx="150" cy="90" r="7" fill="#34d399"/>
-        <circle cx="250" cy="115" r="7" fill="#34d399"/>
-        <text x="48" y="200" fill="#94a3b8" font-size="11">t = 0</text>
-        <text x="155" y="78" fill="#94a3b8" font-size="11">t = 1</text>
-        <text x="258" y="105" fill="#94a3b8" font-size="11">t = 2</text>
-        <text x="100" y="255" fill="#64748b" font-size="12">Same path — different moments on the clock</text>
+    <div class="interactive">
+      <h3>Time scrubber</h3>
+      <div class="badge-row">
+        <span class="badge">Interactive</span>
+        <span class="badge touch">Scrub t</span>
+      </div>
+      <p class="hint"><strong>Try it:</strong> Move t from 0 to 2π. The green point is “now”; the faint ring is the full path.</p>
+      <svg viewBox="0 0 320 280" xmlns="http://www.w3.org/2000/svg">
+        <line x1="20" y1="140" x2="300" y2="140" stroke="#334155"/>
+        <line x1="160" y1="260" x2="160" y2="20" stroke="#334155"/>
+        <circle cx="160" cy="140" r="90" fill="none" stroke="#1e3a5f" stroke-width="2"/>
+        <line id="arm" x1="160" y1="140" x2="250" y2="140" stroke="#38bdf8" stroke-width="2"/>
+        <circle id="pulse" class="drag-ring" cx="250" cy="140" r="14"/>
+        <circle id="bob" cx="250" cy="140" r="8" fill="#34d399" stroke="#ecfdf5" stroke-width="2"/>
       </svg>
-      <figcaption>The dashed curve is the geometric path. The labeled dots are positions at different times.</figcaption>
-    </figure>
-
-    <h2>Why not only y = f(x)?</h2>
-    <p>A graph <span class="mono">y = f(x)</span> can only show one height per x. It cannot describe:</p>
-    <ul>
-      <li>A vertical segment (x fixed, y changing)</li>
-      <li>A loop that crosses itself</li>
-      <li>Going back along the same road later</li>
-    </ul>
-    <p>Parametric form can. It separates <strong>shape of the journey</strong> from <strong>schedule of the journey</strong>.</p>
-
-    <h2>A simple straight-line example</h2>
-    <p>Suppose <span class="mono">x = 2t</span> and <span class="mono">y = t</span>. At t = 0 you are at the origin. At t = 3 you are at (6, 3). Eliminating t gives <span class="mono">y = x/2</span> — the path is a line — but the parametric form also tells you <em>how fast</em> you move along that line.</p>
-
-    <figure class="diagram">
-      <svg viewBox="0 0 340 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Line path x=2t y=t">
-        <line x1="40" y1="200" x2="310" y2="200" stroke="#475569"/>
-        <line x1="40" y1="200" x2="40" y2="30" stroke="#475569"/>
-        <line x1="40" y1="200" x2="280" y2="80" stroke="#38bdf8" stroke-width="2.5"/>
-        <circle cx="40" cy="200" r="6" fill="#34d399"/>
-        <circle cx="160" cy="140" r="6" fill="#34d399"/>
-        <circle cx="280" cy="80" r="6" fill="#34d399"/>
-        <text x="48" y="195" fill="#94a3b8" font-size="11">t=0</text>
-        <text x="168" y="135" fill="#94a3b8" font-size="11">t=3 → (6,3)</text>
-        <text x="100" y="225" fill="#64748b" font-size="12">Path: y = x/2 &nbsp;|&nbsp; Schedule: x=2t, y=t</text>
-      </svg>
-      <figcaption>Geometry of the path versus the timing that places you on it.</figcaption>
-    </figure>
-
-    <h2>Circles and wheels</h2>
-    <p>A ferris-wheel seat is a classic parametric motion:</p>
-    <p class="mono">x = R cos t &nbsp;&nbsp;&nbsp; y = R sin t</p>
-    <p>As t increases, the seat goes around a circle of radius R. Ordinary <span class="mono">y = f(x)</span> cannot represent the full loop as a single function of x.</p>
-
-    <figure class="diagram">
-      <svg viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Circular parametric motion">
-        <circle cx="150" cy="130" r="80" fill="none" stroke="#1e2a38" stroke-width="2"/>
-        <line x1="150" y1="130" x2="210" y2="70" stroke="#38bdf8" stroke-width="2"/>
-        <circle cx="150" cy="130" r="4" fill="#64748b"/>
-        <circle cx="210" cy="70" r="8" fill="#34d399"/>
-        <circle cx="150" cy="50" r="5" fill="#38bdf8" opacity="0.5"/>
-        <circle cx="230" cy="130" r="5" fill="#38bdf8" opacity="0.35"/>
-        <text x="218" y="68" fill="#34d399" font-size="12">seat</text>
-        <text x="70" y="240" fill="#64748b" font-size="12">x = R cos t, &nbsp; y = R sin t</text>
-      </svg>
-      <figcaption>One parameter t spins the seat around the center.</figcaption>
-    </figure>
-
-    <div class="box warn">
-      <p style="margin:0"><strong>Common trap:</strong> Eliminating t shows the path but throws away timing. Two runners can share the same track equation and still finish at different times if their t-schedules differ.</p>
+      <div class="controls">
+        <label><span>t (radians)</span><span id="tVal">0</span></label>
+        <input type="range" id="tSlider" min="0" max="628" step="1" value="0"/>
+      </div>
+      <div class="readout">
+        <div>x = 4 cos t = <strong id="px">4.00</strong></div>
+        <div>y = 4 sin t = <strong id="py">0.00</strong></div>
+      </div>
     </div>
 
-    <div class="box">
-      <p style="margin:0 0 0.75rem 0"><strong>Practice in the lab</strong></p>
-      <p class="muted" style="margin:0 0 0.75rem 0">AP → Parametric Equations: robots, tosses, and circular motion with a time parameter.</p>
-      <a class="cta" href="/login.html">Open Hyper-Scale Lab</a>
-    </div>
-
-    <h2>Related guides</h2>
-    <ul>
-      <li><a href="/guides/polar-coordinates.html">Polar coordinates</a></li>
-      <li><a href="/guides/rates-and-limits.html">Rates and limits</a> — how fast something changes</li>
-      <li><a href="/guides/trigonometry-basics.html">Trigonometry basics</a></li>
-    </ul>
+    <div class="box"><p style="margin:0 0 0.75rem"><strong>Practice</strong> — AP → Parametric</p><a class="cta" href="/login.html">Open lab</a></div>
   </main>
-  <footer>
-    <p>Hyper-Scale Lab · <a href="/guides/">All guides</a> · <a href="/login.html">Practice</a></p>
-  </footer>
+  <footer class="site-foot"><p><a href="/guides/">Guides</a></p></footer>
+  <script>
+  (function(){
+    var CX=160,CY=140,R=90;
+    function draw(t){
+      var c=Math.cos(t), s=Math.sin(t);
+      var px=CX+R*c, py=CY-R*s;
+      document.getElementById('arm').setAttribute('x2',px);
+      document.getElementById('arm').setAttribute('y2',py);
+      document.getElementById('bob').setAttribute('cx',px);
+      document.getElementById('bob').setAttribute('cy',py);
+      document.getElementById('pulse').setAttribute('cx',px);
+      document.getElementById('pulse').setAttribute('cy',py);
+      document.getElementById('tVal').textContent=t.toFixed(2);
+      document.getElementById('px').textContent=(4*c).toFixed(2);
+      document.getElementById('py').textContent=(4*s).toFixed(2);
+    }
+    document.getElementById('tSlider').oninput=function(e){
+      draw(parseFloat(e.target.value)/100);
+    };
+    draw(0);
+  })();
+  </script>
 </body>
 </html>
