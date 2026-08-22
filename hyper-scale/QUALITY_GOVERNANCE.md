@@ -2,66 +2,59 @@
 
 Goal: you use the product; the system ships only work that passes mathematical, UX, and security checks.
 
-## Roles (logical agents)
+## Standing rule (never skip)
 
-### 1. Scenario Author
-- Plain-language context + question (no exam jargon).
-- Family, params, units, eval, target, symbolGlossary.
-- **workedSolution** paragraph for the post-answer modal.
+**Every question must pass the “stranger test”:**
 
-### 2. Math Verifier (must pass)
-- `eval(idealParams, atX)` matches target within tolerance.
-- Domain-safe samples.
-- Units and glossary complete.
+> Could a student who only reads the **title + context + question** (no prior card in the set) know what situation they are in and what number to find?
 
-### 3. UX Reviewer
-- Question states what to do; story matches graph axes.
-- Hints after 2 fails; solution after correct or 3 fails.
-- Worked solution explains *why*, not only the number.
+**Fail if any of these appear as the main question:**
+- `What is |⟨a,b⟩|?`
+- `x-component of …?`
+- `What is aₙ?` / bare formula prompts
+- Textbook exercise fragments with no story
 
-### 4. Consistency Guard
-- Unit counts and level tags correct.
-- Rerolls stay coherent for randomized templates.
+**Pass only if:**
+1. **Context** is 1–3 sentences of a real or easy-to-imagine situation.
+2. **Question** asks for a quantity in that story (words first; symbols only as support).
+3. **workedSolution** explains the idea in full sentences, then the calculation.
+4. **Glossary** defines every letter on screen.
 
-### 5. Security Agent
-- Auth, D1 parameterization, no secrets in frontend, CORS, XSS hygiene (see prior checklist).
+User feedback that something “feels like an exam paper” is an **automatic Author rewrite** — not optional polish.
 
 ## Self-study / auto-enhancement loop
 
-User feedback is treated as **mandatory product requirements**, not optional polish.
-
 ```
-1. User practices a section (self-study).
-2. User reports friction (cryptic question, thin solution, wrong graph, etc.).
-3. Author revises templates + workedSolution.
+1. User practices.
+2. User flags cryptic / thin / wrong items (screenshot or description).
+3. Author rewrites to stranger-test standard.
 4. Math Verifier + UX Reviewer + Security re-check.
 5. Ship → user practices again.
 ```
 
-Standing rules already applied from your feedback:
-- Plain language over exam style
-- Glossary for every symbol
-- Solution hidden until earned
-- Hints only after 2nd fail
-- Worked solution in modal (especially Trig)
-- Unique scenarios per unit (not only parameter rerolls)
-- Security agent on deploys
+You are not doing anything wrong when quality slips: the loop is how the system is supposed to correct itself. The missing piece was applying the stranger test as hard on **Honors** packs as on Standard Trig.
 
-When expanding (Honors, AP), the same loop applies before a unit is marked complete.
+## Prompt you can paste anytime (for me or Cloudflare AI)
+
+```
+Apply QUALITY_GOVERNANCE stranger-test to every scenario in [unit].
+Rewrite any question that is exam-fragment style.
+Require: story context, plain-language question, full workedSolution paragraph, glossary.
+Do not ship bare “What is |v|?” or “x-component of …?” prompts.
+```
+
+## Roles
+
+1. **Scenario Author** — story + stranger-test question + workedSolution  
+2. **Math Verifier** — eval matches target; domain-safe  
+3. **UX Reviewer** — stranger-test; hints/solution timing  
+4. **Consistency Guard** — level/unit tags; unique scenarios  
+5. **Security Agent** — auth/D1/XSS/secrets checklist  
 
 ## Levels
 
 | Level | Status |
 |-------|--------|
-| Standard | Core complete (4 × 25) |
-| Honors | In progress |
+| Standard | Core complete |
+| Honors | Complete; plain-language audit ongoing |
 | AP | Locked |
-
-## Honors unit map
-
-1. Sequences & Series
-2. Conic Sections
-3. Vectors (intro)
-4. Advanced Trig (identities & equations)
-
-Each targets 25 unique scenarios under the same gates.
