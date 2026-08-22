@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Allow: /login.html
+Allow: /hyper-scale/
+
+Sitemap: https://precalc-odyssey.pages.dev/sitemap.xml

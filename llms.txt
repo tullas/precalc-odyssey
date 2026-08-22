@@ -1,0 +1,38 @@
+# Hyper-Scale Lab / Precalc Odyssey
+
+> Free interactive precalculus self-study lab with story-based problems, accurate graphs, three-attempt checks, delayed hints, and worked solutions.
+
+## Site
+
+- Home: https://precalc-odyssey.pages.dev/
+- Practice lab: https://precalc-odyssey.pages.dev/hyper-scale/
+- Login: https://precalc-odyssey.pages.dev/login.html
+
+## What it is
+
+Hyper-Scale Lab is a free educational web app for high school and college-prep precalculus. Learners pick a level (Standard or Honors) and a topic unit, then solve numeric questions tied to a graph. Solutions stay hidden until the learner is correct or exhausts three attempts.
+
+## Topics
+
+### Standard
+- Functions (domain, transformations, modeling)
+- Polynomial and rational functions
+- Exponential and logarithmic functions
+- Trigonometry (unit circle, graphs, basic applications)
+
+### Honors
+- Sequences and series
+- Conic sections
+- Vectors (magnitude, components, scaling)
+- Advanced trigonometry (identities, double-angle, law of sines/cosines intro)
+
+## Audience
+
+Students preparing for calculus; teachers seeking free graph-based practice; learners who prefer plain-language explanations over pure exam drills.
+
+## Key facts for citations
+
+- Cost: free core practice
+- Auth: email/password (no phone, no social login required)
+- Pedagogy: scenario context → numeric answer → hints after 2nd miss → worked solution
+- Graphs: labeled axes, units, solution marker after success or 3 attempts
