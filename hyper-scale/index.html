@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Precalculus Practice Lab | Graphs, Functions, Trig – Hyper-Scale</title>
-  <meta name="description" content="Interactive precalculus lab: practice functions, polynomials, exponential/log, trigonometry, sequences, conics, and vectors with live graphs and worked solutions." />
+  <meta name="description" content="Interactive precalculus lab: practice functions, polynomials, exponential/log, trigonometry, sequences, conics, vectors, polar, parametric, matrices, and rates with live graphs." />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://precalc-odyssey.pages.dev/hyper-scale/" />
   <script src="https://cdn.tailwindcss.com"></script>
@@ -20,6 +20,10 @@
   <script src="scenarios-honors-conics.js"></script>
   <script src="scenarios-honors-vectors.js"></script>
   <script src="scenarios-honors-adv-trig.js"></script>
+  <script src="scenarios-ap-polar.js"></script>
+  <script src="scenarios-ap-parametric.js"></script>
+  <script src="scenarios-ap-matrices.js"></script>
+  <script src="scenarios-ap-rates-limits.js"></script>
   <script src="lab.js"></script>
   <script src="lab-solution.js"></script>
   <script>
@@ -173,8 +177,9 @@
     document.getElementById('levelPicker').classList.add('hidden');
     document.getElementById('unitPicker').classList.remove('hidden');
     document.getElementById('lab').classList.add('hidden');
+    const names = { standard: 'Standard', honors: 'Honors', ap: 'AP' };
     document.getElementById('unitPickerTitle').textContent =
-      (currentLevel === 'honors' ? 'Honors' : 'Standard') + ' — choose a section';
+      (names[currentLevel] || currentLevel) + ' — choose a section';
     const box = document.getElementById('unitCards');
     box.innerHTML = '';
     const counts = window.countByUnit ? window.countByUnit(currentLevel) : {};
