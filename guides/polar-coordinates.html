@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Polar Coordinates | Interactive r and θ</title>
-  <meta name="description" content="Interactive polar coordinates: change r and θ, see Cartesian x and y update live." />
+  <title>Polar Coordinates Explained | Distance, Direction &amp; Everyday Uses</title>
+  <meta name="description" content="Polar coordinates in depth: r and θ, conversion to x and y, radar and joystick intuition, with an interactive explorer." />
   <link rel="canonical" href="https://precalc-odyssey.pages.dev/guides/polar-coordinates.html" />
   <link rel="stylesheet" href="/guides/css/guide.css" />
   <link rel="stylesheet" href="/guides/css/interactive.css" />
@@ -17,10 +17,34 @@
   <header class="page-head">
     <p class="crumbs"><a href="/guides/">← Guides</a></p>
     <h1>Polar coordinates: distance and direction</h1>
-    <p class="muted">Locate a point by how far (r) and which way (θ).</p>
+    <p class="muted">When “how far?” and “which way?” are more natural than “how many blocks east and north.”</p>
   </header>
   <main>
-    <p>Polar form is <span class="mono">(r, θ)</span>. Convert with <span class="mono">x = r cos θ</span>, <span class="mono">y = r sin θ</span>. Drag θ and r below.</p>
+    <h2>Two ways to name a point</h2>
+    <p><strong>Cartesian</strong> coordinates (x, y) measure offset along fixed horizontal and vertical axes—great for city grids, spreadsheets, and most algebra graphs. <strong>Polar</strong> coordinates (r, θ) measure:</p>
+    <ul>
+      <li><strong>r</strong> — distance from a chosen center (the origin)</li>
+      <li><strong>θ</strong> — direction from a fixed reference ray (usually the positive x-axis), often counterclockwise</li>
+    </ul>
+    <p>Neither system is “more true.” Each matches different situations. If you stand at a lighthouse and report a ship, you naturally say range and bearing—polar language—not “847 meters east and 312 meters north” as the first sentence.</p>
+
+    <h2>Everyday and practical uses</h2>
+    <ul>
+      <li><strong>Radar and air traffic style reports</strong> — distance from the antenna plus angle around the horizon.</li>
+      <li><strong>Game joysticks and analog sticks</strong> — how far you push (intensity) and in which direction (angle).</li>
+      <li><strong>Speakers and stage lights</strong> — aim by angle; power or brightness often tied to distance from the source.</li>
+      <li><strong>Sprinklers and rotating cameras</strong> — fixed or varying reach while sweeping an angle.</li>
+      <li><strong>Circular motion</strong> — a point on a Ferris wheel has nearly constant r and changing θ.</li>
+      <li><strong>Graphics and robotics</strong> — turning toward a target is often an angle problem; driving forward is an r problem.</li>
+    </ul>
+    <p>When a problem is organized around a <em>center</em>, polar coordinates usually reduce clutter.</p>
+
+    <h2>Bridge to the map: x and y</h2>
+    <p>To plot on ordinary axes:</p>
+    <p class="mono">x = r · cos θ &nbsp;&nbsp;&nbsp; y = r · sin θ</p>
+    <p>In words: cosine picks the east–west share of the distance; sine picks the north–south share. Going the other way, distance is the Pythagorean length:</p>
+    <p class="mono">r = √(x² + y²)</p>
+    <p>(with θ chosen to match the correct quadrant).</p>
 
     <div class="interactive">
       <h3>Polar point explorer</h3>
@@ -28,22 +52,22 @@
         <span class="badge">Interactive</span>
         <span class="badge touch">Sliders for r and θ</span>
       </div>
-      <p class="hint"><strong>Try it:</strong> Increase r to move farther from the origin. Change θ to spin direction. Read Cartesian x, y live.</p>
-      <svg id="polSvg" class="grab" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+      <p class="hint"><strong>Try it:</strong> Increase r to move outward. Change θ to spin. Watch Cartesian x and y update—those are the conversion formulas in action.</p>
+      <svg id="polSvg" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Polar coordinates explorer">
         <circle cx="160" cy="160" r="40" fill="none" stroke="#1e2a38"/>
         <circle cx="160" cy="160" r="80" fill="none" stroke="#1e2a38"/>
         <circle cx="160" cy="160" r="120" fill="none" stroke="#1e2a38"/>
         <line x1="20" y1="160" x2="300" y2="160" stroke="#475569"/>
         <line x1="160" y1="300" x2="160" y2="20" stroke="#475569"/>
         <line id="ray" x1="160" y1="160" x2="280" y2="160" stroke="#38bdf8" stroke-width="2"/>
-        <circle id="pulse" class="drag-ring" cx="280" cy="160" r="14"/>
+        <circle id="pulse" class="drag-ring" cx="280" cy="160" r="14" aria-hidden="true"/>
         <circle id="pt" cx="280" cy="160" r="8" fill="#34d399" stroke="#ecfdf5" stroke-width="2"/>
-        <text x="160" y="310" text-anchor="middle" fill="#64748b" font-size="11">origin = radar center</text>
+        <text x="160" y="310" text-anchor="middle" fill="#94a3b8" font-size="11">origin = center</text>
       </svg>
       <div class="controls">
-        <label><span>r (distance)</span><span id="rVal">3</span></label>
+        <label for="rSlider"><span>r (distance)</span><span id="rVal">3</span></label>
         <input type="range" id="rSlider" min="0" max="4" step="0.1" value="3"/>
-        <label><span>θ (degrees)</span><span id="thVal">30°</span></label>
+        <label for="thSlider"><span>θ (degrees)</span><span id="thVal">30°</span></label>
         <input type="range" id="thSlider" min="0" max="360" step="1" value="30"/>
       </div>
       <div class="readout">
@@ -52,12 +76,28 @@
       </div>
     </div>
 
-    <div class="box"><p style="margin:0 0 0.75rem"><strong>Practice</strong> — AP → Polar</p><a class="cta" href="/login.html">Open lab</a></div>
+    <h2>Special case: constant r</h2>
+    <p>If every point shares the same r, you are describing a <strong>circle</strong> centered at the origin. The polar equation r = 6 means “everything six units from the center”—the track a robot follows if it keeps fixed distance from a beacon while angle changes.</p>
+
+    <div class="box warn">
+      <p style="margin:0"><strong>Trap:</strong> For first intuition, treat r ≥ 0 as distance. Some textbooks allow negative r (meaning “go the opposite direction”); learn the positive-r picture solidly first.</p>
+    </div>
+
+    <div class="box">
+      <p style="margin:0 0 0.75rem"><strong>Practice</strong> — AP → Polar Coordinates</p>
+      <a class="cta" href="/login.html">Open Hyper-Scale Lab</a>
+    </div>
+    <h2>Related</h2>
+    <ul>
+      <li><a href="/guides/trigonometry-basics.html">Trigonometry basics</a></li>
+      <li><a href="/guides/vectors-intro.html">Vectors</a></li>
+      <li><a href="/guides/parametric-equations.html">Parametric equations</a></li>
+    </ul>
   </main>
   <footer class="site-foot"><p><a href="/guides/">Guides</a></p></footer>
   <script>
   (function(){
-    var CX=160,CY=160,scale=30; // 1 unit = 30px
+    var CX=160,CY=160,scale=30;
     var r=3, th=30;
     function draw(){
       var rad=th*Math.PI/180;

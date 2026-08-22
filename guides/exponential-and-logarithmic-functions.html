@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Exponential and Logarithmic Functions | Interactive Growth</title>
-  <meta name="description" content="Interactive exponential growth and decay: change the base and watch the curve. Logs as inverse." />
+  <title>Exponential &amp; Log Functions Explained | Growth, Decay &amp; Everyday Uses</title>
+  <meta name="description" content="Understand exponential growth and decay and logarithms as inverse operations, with interactive curves and real examples: interest, cooling, population, pH, earthquakes." />
   <link rel="canonical" href="https://precalc-odyssey.pages.dev/guides/exponential-and-logarithmic-functions.html" />
   <link rel="stylesheet" href="/guides/css/guide.css" />
   <link rel="stylesheet" href="/guides/css/interactive.css" />
@@ -17,19 +17,36 @@
   <header class="page-head">
     <p class="crumbs"><a href="/guides/">← Guides</a></p>
     <h1>Exponential and logarithmic functions</h1>
-    <p class="muted">Growth, decay, and logs as the inverse question: “what exponent?”</p>
+    <p class="muted">When change multiplies instead of adding—and the inverse question: “what power got us here?”</p>
   </header>
   <main>
-    <p>Model <span class="mono">y = a · bˣ</span>: <strong>a</strong> is the start value, <strong>b</strong> is the growth factor per unit of x. Use the explorer to feel how b &gt; 1 grows and 0 &lt; b &lt; 1 decays.</p>
+    <h2>The core idea</h2>
+    <p>Linear change <em>adds</em> roughly the same amount each step (earn $50 more each month). <strong>Exponential</strong> change <em>multiplies</em> by roughly the same factor each step (a population that grows 3% per year, or a video that doubles views each day for a short streak). The formula family is:</p>
+    <p class="mono" style="font-size:1.05rem">y = a · bˣ</p>
+    <p>Here <strong>a</strong> is a starting value (what you have when x = 0), and <strong>b</strong> is the growth factor per unit of x. If b &gt; 1, the graph climbs faster and faster. If 0 &lt; b &lt; 1, it decays toward zero. If b = 1, nothing changes—a flat line.</p>
+
+    <h2>Where you already see this</h2>
+    <ul>
+      <li><strong>Bank interest / savings apps</strong> — Compound interest multiplies the balance by a factor each period. “7% per year” is exponential thinking, not a flat $7 added forever.</li>
+      <li><strong>Cooling coffee</strong> — A hot cup approaches room temperature; the gap shrinks by a fraction of itself over equal time intervals (Newton’s law of cooling is exponential decay in the temperature difference).</li>
+      <li><strong>Screen brightness or volume steps</strong> — Many devices use scales that feel even to humans but are based on multiplicative steps.</li>
+      <li><strong>Viral shares (short term)</strong> — If each person tells two new people, counts can explode—until limits kick in. The early phase is exponential-shaped.</li>
+      <li><strong>Radioactive half-life (science class)</strong> — Each half-life multiplies remaining amount by ½.</li>
+      <li><strong>pH and earthquake magnitude</strong> — These are <em>logarithmic</em> scales: equal steps on the scale mean multiplying the underlying quantity (acidity, energy), not adding a fixed amount.</li>
+    </ul>
+    <p>So when someone asks “what is this used for?” a fair answer is: <em>anywhere a percentage change or a doubling/halving rule is more honest than a fixed add-on.</em></p>
+
+    <h2>Reading the graph</h2>
+    <p>An exponential growth curve looks slow at first if you start small, then steepens. Decay looks steep at first, then flattens toward a floor. That shape is the visual signature. Linear graphs never “bend up” like true exponential growth.</p>
 
     <div class="interactive">
       <h3>Growth &amp; decay explorer</h3>
       <div class="badge-row">
         <span class="badge">Interactive</span>
-        <span class="badge touch">Move the sliders</span>
+        <span class="badge touch">Move a and b</span>
       </div>
-      <p class="hint"><strong>Try it:</strong> Set b above 1 for growth, between 0 and 1 for decay. Change a to rescale the starting height.</p>
-      <svg id="expSvg" viewBox="0 0 360 240" xmlns="http://www.w3.org/2000/svg">
+      <p class="hint"><strong>Try it:</strong> Set b = 2 (doubling). Set b = 0.5 (halving). Compare y at x = 0 and x = 2 in the readout.</p>
+      <svg id="expSvg" viewBox="0 0 360 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Exponential curve explorer">
         <line x1="40" y1="200" x2="340" y2="200" stroke="#334155"/>
         <line x1="40" y1="200" x2="40" y2="20" stroke="#334155"/>
         <path id="expPath" fill="none" stroke="#34d399" stroke-width="2.5" d=""/>
@@ -37,9 +54,9 @@
         <text id="expFormula" x="190" y="230" text-anchor="middle" fill="#7dd3fc" font-size="12" font-family="ui-monospace,monospace"></text>
       </svg>
       <div class="controls">
-        <label><span>a (start)</span><span id="aVal">1</span></label>
+        <label for="aSlider"><span>a (start value)</span><span id="aVal">1</span></label>
         <input type="range" id="aSlider" min="0.5" max="3" step="0.25" value="1"/>
-        <label><span>b (base / factor)</span><span id="bVal">1.5</span></label>
+        <label for="bSlider"><span>b (growth factor)</span><span id="bVal">1.5</span></label>
         <input type="range" id="bSlider" min="0.4" max="2.5" step="0.1" value="1.5"/>
       </div>
       <div class="preset-row">
@@ -53,8 +70,28 @@
       </div>
     </div>
 
-    <div class="box warn"><p style="margin:0"><strong>Trap:</strong> log is only defined for positive arguments in the reals.</p></div>
-    <div class="box"><p style="margin:0 0 0.75rem"><strong>Practice</strong> — Standard → Exp &amp; Log</p><a class="cta" href="/login.html">Open lab</a></div>
+    <h2>Logarithms: the inverse question</h2>
+    <p>If exponential asks “start at a, multiply by b, x times—what do you get?”, a <strong>logarithm</strong> asks the reverse: “I ended up with this amount; what exponent x produced it?”</p>
+    <p>Symbolically, if <span class="mono">y = bˣ</span> (with b &gt; 0, b ≠ 1), then <span class="mono">x = log_b(y)</span>. Logs undo exponentials the way subtraction undoes addition. On a graph, the log curve is the reflection of the exponential across the line y = x.</p>
+    <p><strong>Everyday log thinking:</strong> “How many doublings to go from 1 to 1024?” is a log base 2 question (answer 10). Earthquake magnitudes and pH compress huge ranges of raw values into smaller numbers humans can compare.</p>
+
+    <div class="box warn">
+      <p style="margin:0"><strong>Trap:</strong> In the real numbers used in this course, you cannot take the log of zero or a negative number. The argument of a log must be positive—just as the exponential y = bˣ (b &gt; 0) never outputs a negative.</p>
+    </div>
+
+    <h2>Connecting to later math</h2>
+    <p>Calculus will ask how fast exponential quantities change. The surprising fact is that the rate of change of eˣ is again eˣ—one reason base e appears in continuous growth. Precalculus builds fluency with the shapes and inverses first so that fact is interesting instead of opaque.</p>
+
+    <div class="box">
+      <p style="margin:0 0 0.75rem"><strong>Practice</strong> — Standard → Exponential &amp; Logarithmic</p>
+      <a class="cta" href="/login.html">Open Hyper-Scale Lab</a>
+    </div>
+    <h2>Related</h2>
+    <ul>
+      <li><a href="/guides/functions-and-transformations.html">Functions and transformations</a></li>
+      <li><a href="/guides/sequences-and-series.html">Sequences</a> (discrete multiply-by-r cousin)</li>
+      <li><a href="/guides/rates-and-limits.html">Rates and limits</a></li>
+    </ul>
   </main>
   <footer class="site-foot"><p><a href="/guides/">Guides</a></p></footer>
   <script>

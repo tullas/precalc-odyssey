@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vectors | Interactive Components &amp; Magnitude</title>
-  <meta name="description" content="Interactive vectors: change components, see magnitude and the arrow update live." />
+  <title>Vectors Explained | Magnitude, Direction &amp; Real-World Uses</title>
+  <meta name="description" content="Vectors in depth: components, magnitude, addition, with everyday examples from maps, physics, and games, plus an interactive component explorer." />
   <link rel="canonical" href="https://precalc-odyssey.pages.dev/guides/vectors-intro.html" />
   <link rel="stylesheet" href="/guides/css/guide.css" />
   <link rel="stylesheet" href="/guides/css/interactive.css" />
@@ -17,19 +17,35 @@
   <header class="page-head">
     <p class="crumbs"><a href="/guides/">← Guides</a></p>
     <h1>Vectors: magnitude and direction</h1>
-    <p class="muted">Arrows with size and direction—built from components.</p>
+    <p class="muted">Quantities that need both “how much” and “which way.”</p>
   </header>
   <main>
-    <p>Vector ⟨x, y⟩ has magnitude <span class="mono">√(x²+y²)</span>. Change the components and watch length and direction change together.</p>
+    <h2>Scalar vs vector</h2>
+    <p>A <strong>scalar</strong> is a pure amount: 5 kg, 20°C, $12. A <strong>vector</strong> carries amount <em>and</em> direction: 5 km east, a wind blowing 20 km/h from the north, a push diagonally up a ramp. If you only keep the size and throw away the direction, you lose the ability to aim, navigate, or balance forces.</p>
+
+    <h2>Where vectors show up outside class</h2>
+    <ul>
+      <li><strong>Walking directions</strong> — “Three blocks north, then two east” are components; the straight-line shortcut is the magnitude of the resultant.</li>
+      <li><strong>Phone GPS / maps</strong> — displacement from where you are to a pin is a vector; distance is its length.</li>
+      <li><strong>Sports</strong> — a pass has speed and direction; only speed is not enough to describe the play.</li>
+      <li><strong>Wind and current</strong> — pilots and captains combine velocity vectors to see the true path over ground.</li>
+      <li><strong>Game movement</strong> — character velocity is often stored as (vx, vy) each frame.</li>
+      <li><strong>Forces</strong> — weight pulls down; a cable pulls along its line; engineers add force vectors to see the net effect.</li>
+    </ul>
+
+    <h2>Components and magnitude</h2>
+    <p>In the plane we write ⟨x, y⟩: the eastward part and the northward part. The <strong>magnitude</strong> (length of the arrow) is</p>
+    <p class="mono">|v| = √(x² + y²)</p>
+    <p>That is the Pythagorean theorem—the same geometry as a ladder leaning on a wall. The classic 3-4-5 triangle is a vector magnitude in disguise: ⟨3, 4⟩ has length 5.</p>
 
     <div class="interactive">
       <h3>Component explorer</h3>
       <div class="badge-row">
         <span class="badge">Interactive</span>
-        <span class="badge touch">Move x and y</span>
+        <span class="badge touch">Change x and y</span>
       </div>
-      <p class="hint"><strong>Try it:</strong> Set x=3, y=4—magnitude should be 5 (the classic right triangle).</p>
-      <svg id="vecSvg" viewBox="0 0 320 260" xmlns="http://www.w3.org/2000/svg">
+      <p class="hint"><strong>Try it:</strong> Set x = 3, y = 4. Magnitude should read 5.00. Then try negative components and watch the arrow flip quadrant.</p>
+      <svg id="vecSvg" viewBox="0 0 320 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Vector components explorer">
         <line x1="40" y1="200" x2="300" y2="200" stroke="#334155"/>
         <line x1="40" y1="200" x2="40" y2="20" stroke="#334155"/>
         <line id="vx" x1="40" y1="200" x2="160" y2="200" stroke="#a78bfa" stroke-width="2" stroke-dasharray="5 4"/>
@@ -38,9 +54,9 @@
         <circle id="tip" cx="160" cy="80" r="6" fill="#34d399"/>
       </svg>
       <div class="controls">
-        <label><span>x component</span><span id="xVal">3</span></label>
+        <label for="xSlider"><span>x component</span><span id="xVal">3</span></label>
         <input type="range" id="xSlider" min="-5" max="6" step="0.5" value="3"/>
-        <label><span>y component</span><span id="yVal">4</span></label>
+        <label for="ySlider"><span>y component</span><span id="yVal">4</span></label>
         <input type="range" id="ySlider" min="-4" max="5" step="0.5" value="4"/>
       </div>
       <div class="readout">
@@ -49,7 +65,21 @@
       </div>
     </div>
 
-    <div class="box"><p style="margin:0 0 0.75rem"><strong>Practice</strong> — Honors → Vectors</p><a class="cta" href="/login.html">Open lab</a></div>
+    <h2>Adding vectors</h2>
+    <p>Add components separately: ⟨a, b⟩ + ⟨c, d⟩ = ⟨a+c, b+d⟩. Picture placing the tail of the second arrow at the tip of the first; the sum runs from the start of the first to the end of the second. That is how combined displacements or combined forces are built.</p>
+
+    <h2>Scaling</h2>
+    <p>Multiply by a number k: k⟨x, y⟩ = ⟨kx, ky⟩. Positive k longer or shorter in the same direction; negative k reverses direction. Magnitude becomes |k| times the original length—length itself is never negative.</p>
+
+    <div class="box">
+      <p style="margin:0 0 0.75rem"><strong>Practice</strong> — Honors → Vectors</p>
+      <a class="cta" href="/login.html">Open Hyper-Scale Lab</a>
+    </div>
+    <h2>Related</h2>
+    <ul>
+      <li><a href="/guides/polar-coordinates.html">Polar coordinates</a> (direction + distance packaging)</li>
+      <li><a href="/guides/trigonometry-basics.html">Trigonometry basics</a></li>
+    </ul>
   </main>
   <footer class="site-foot"><p><a href="/guides/">Guides</a></p></footer>
   <script>

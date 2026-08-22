@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rates and Limits | Interactive Secant Slope</title>
-  <meta name="description" content="Interactive average rate of change: move the second point and watch the secant slope update—bridge to the derivative idea." />
+  <title>Average Rate of Change &amp; Limits | Everyday Meaning + Interactive Secant</title>
+  <meta name="description" content="Average rate of change and limits explained with trip speeds, secant slopes, and what 'getting close' means—interactive secant explorer included." />
   <link rel="canonical" href="https://precalc-odyssey.pages.dev/guides/rates-and-limits.html" />
   <link rel="stylesheet" href="/guides/css/guide.css" />
   <link rel="stylesheet" href="/guides/css/interactive.css" />
@@ -17,10 +17,27 @@
   <header class="page-head">
     <p class="crumbs"><a href="/guides/">← Guides</a></p>
     <h1>Rates of change and limits</h1>
-    <p class="muted">Average rate as secant slope—and what happens as the interval shrinks.</p>
+    <p class="muted">How fast something changes on average—and what outputs do as you zoom toward a moment.</p>
   </header>
   <main>
-    <p>For <span class="mono">f(x) = x²</span>, the average rate from x₁ to x₂ is <span class="mono">(f(x₂)−f(x₁))/(x₂−x₁)</span>. Move x₂ toward x₁ and watch the secant get steeper toward the tangent idea.</p>
+    <h2>Average rate: you already use this</h2>
+    <p>If you drive 150 km in 2 hours, your <strong>average speed</strong> is 75 km/h. You may have gone faster and slower along the way; the average only cares about total change in position divided by total change in time:</p>
+    <p class="mono">average rate = (change in output) / (change in input)</p>
+    <p>On a graph of y versus x, that number is the slope of the <strong>secant line</strong> joining two points. Same idea as “rise over run” in algebra, now tied to a story: money per month, degrees per hour, points per game.</p>
+
+    <h2>Everyday examples</h2>
+    <ul>
+      <li><strong>Commute</strong> — distance over time is average speed.</li>
+      <li><strong>Savings</strong> — dollars added over months is average savings rate.</li>
+      <li><strong>Streaming progress</strong> — percent of a series watched over days.</li>
+      <li><strong>Heart rate recovery</strong> — beats-per-minute drop over the minutes after exercise.</li>
+      <li><strong>Phone storage</strong> — gigabytes used over weeks (average fill rate).</li>
+    </ul>
+    <p>None of these require calculus yet. They require careful reading of two measurements and a quotient.</p>
+
+    <h2>Why a second idea—limits—shows up</h2>
+    <p>Average rate depends on the window you pick. Shrink the window around one moment and, for many smooth graphs, the average rate settles toward a single number: the <strong>instantaneous</strong> rate at that moment. That limiting slope is what calculus later calls a derivative. Precalculus practices the average and the language of “approaching” so the derivative is a refinement, not a foreign object.</p>
+    <p>Limits also describe values a function heads toward even if a single input is messy (a hole in the graph, a canceled factor). The question is about <em>nearby</em> outputs, not only plugging in blindly.</p>
 
     <div class="interactive">
       <h3>Secant slope explorer</h3>
@@ -28,8 +45,8 @@
         <span class="badge">Interactive</span>
         <span class="badge touch">Move x₂</span>
       </div>
-      <p class="hint"><strong>Try it:</strong> Keep x₁ fixed at 1. Slide x₂ closer to 1. The yellow secant’s slope is the average rate—heading toward 2 (the instantaneous rate at x=1).</p>
-      <svg viewBox="0 0 360 240" xmlns="http://www.w3.org/2000/svg">
+      <p class="hint"><strong>Try it:</strong> For f(x) = x², x₁ stays at 1. Move x₂ toward 1. The yellow secant’s slope is the average rate—heading toward 2, the instantaneous rate at x = 1.</p>
+      <svg viewBox="0 0 360 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Secant slope on y equals x squared">
         <line x1="40" y1="200" x2="340" y2="200" stroke="#334155"/>
         <line x1="40" y1="200" x2="40" y2="20" stroke="#334155"/>
         <path id="curve" fill="none" stroke="#38bdf8" stroke-width="2" d=""/>
@@ -38,7 +55,7 @@
         <circle id="p2" cx="0" cy="0" r="5" fill="#fbbf24"/>
       </svg>
       <div class="controls">
-        <label><span>x₂ (second input)</span><span id="x2Val">3</span></label>
+        <label for="x2Slider"><span>x₂ (second input)</span><span id="x2Val">3</span></label>
         <input type="range" id="x2Slider" min="1.1" max="4" step="0.1" value="3"/>
       </div>
       <div class="readout">
@@ -47,8 +64,18 @@
       </div>
     </div>
 
-    <div class="box tip"><p style="margin:0">As x₂ → 1, the average rate approaches 2—the derivative of x² at x=1. That is the calculus idea, previewed here.</p></div>
-    <div class="box"><p style="margin:0 0 0.75rem"><strong>Practice</strong> — AP → Rates &amp; Limits</p><a class="cta" href="/login.html">Open lab</a></div>
+    <div class="box tip">
+      <p style="margin:0">As x₂ → 1, the average rate approaches 2. Calculus names that limit the derivative of x² at x = 1. You just felt the idea with a slider.</p>
+    </div>
+
+    <div class="box warn">
+      <p style="margin:0"><strong>Trap:</strong> “Just plug in x = a” only works when the function is well behaved there. Limits care about what happens <em>near</em> a—even if a itself is undefined.</p>
+    </div>
+
+    <div class="box">
+      <p style="margin:0 0 0.75rem"><strong>Practice</strong> — AP → Rates &amp; Limits</p>
+      <a class="cta" href="/login.html">Open Hyper-Scale Lab</a>
+    </div>
   </main>
   <footer class="site-foot"><p><a href="/guides/">Guides</a></p></footer>
   <script>
@@ -56,7 +83,6 @@
     var x1=1;
     function mx(x){return 40+x*60;} function my(y){return 200-y*18;}
     function f(x){return x*x;}
-    // curve
     var d='',first=true;
     for(var i=0;i<=50;i++){
       var x=i/50*4.2; var y=f(x);
