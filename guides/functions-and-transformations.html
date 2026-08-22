@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Functions and Transformations Explained | Precalculus Guide</title>
-  <meta name="description" content="Parent functions and transformations: shifts, stretches, reflections, domain and range—with diagrams for precalculus." />
+  <title>Functions and Transformations | Interactive Graph Shifts</title>
+  <meta name="description" content="Interactive precalculus transformations: shift and stretch y=x² live. See how h, k, and a move the parabola." />
   <link rel="canonical" href="https://precalc-odyssey.pages.dev/guides/functions-and-transformations.html" />
   <link rel="stylesheet" href="/guides/css/guide.css" />
+  <link rel="stylesheet" href="/guides/css/interactive.css" />
 </head>
 <body>
   <div class="site-header"><div class="site-header-inner">
@@ -19,54 +20,52 @@
     <p class="muted">How a formula becomes a graph—and how small changes move that graph.</p>
   </header>
   <main>
-    <p>A <strong>function</strong> assigns one output to each allowed input. Precalculus studies families of functions and how to <strong>transform</strong> their graphs without plotting dozens of points from scratch.</p>
+    <p>A <strong>function</strong> assigns one output to each allowed input. Precalculus studies families of functions and how to <strong>transform</strong> their graphs. The panel below starts from the parent parabola <span class="mono">y = x²</span> and lets you change the standard form <span class="mono">y = a(x − h)² + k</span> live.</p>
 
-    <h2>Parent shapes</h2>
-    <figure class="diagram">
-      <svg viewBox="0 0 360 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Parent function sketches">
-        <line x1="20" y1="70" x2="90" y2="70" stroke="#334155"/><line x1="55" y1="110" x2="55" y2="30" stroke="#334155"/>
-        <line x1="25" y1="95" x2="85" y2="45" stroke="#38bdf8" stroke-width="2"/>
-        <text x="30" y="130" fill="#94a3b8" font-size="10">y=x</text>
-        <line x1="110" y1="100" x2="180" y2="100" stroke="#334155"/><line x1="145" y1="120" x2="145" y2="30" stroke="#334155"/>
-        <path d="M 115 100 Q 145 20 175 100" fill="none" stroke="#34d399" stroke-width="2"/>
-        <text x="120" y="130" fill="#94a3b8" font-size="10">y=x²</text>
-        <line x1="200" y1="100" x2="270" y2="100" stroke="#334155"/><line x1="235" y1="120" x2="235" y2="30" stroke="#334155"/>
-        <path d="M 205 40 L 235 100 L 265 40" fill="none" stroke="#fbbf24" stroke-width="2"/>
-        <text x="210" y="130" fill="#94a3b8" font-size="10">y=|x|</text>
-        <line x1="290" y1="100" x2="350" y2="100" stroke="#334155"/><line x1="300" y1="120" x2="300" y2="30" stroke="#334155"/>
-        <path d="M 302 100 Q 330 100 348 50" fill="none" stroke="#a78bfa" stroke-width="2"/>
-        <text x="300" y="130" fill="#94a3b8" font-size="10">y=√x</text>
+    <div class="interactive">
+      <h3>Transformation explorer</h3>
+      <div class="badge-row">
+        <span class="badge">Interactive</span>
+        <span class="badge touch">Move the sliders</span>
+      </div>
+      <p class="hint"><strong>Try it:</strong> Change <strong>h</strong> (horizontal), <strong>k</strong> (vertical), and <strong>a</strong> (stretch / flip). The dashed gray curve is the parent; the blue curve is your transformed graph.</p>
+      <svg id="tfSvg" viewBox="0 0 360 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Interactive parabola transformations">
+        <line x1="30" y1="130" x2="330" y2="130" stroke="#334155"/>
+        <line x1="180" y1="240" x2="180" y2="20" stroke="#334155"/>
+        <text x="320" y="124" fill="#64748b" font-size="11">x</text>
+        <text x="186" y="30" fill="#64748b" font-size="11">y</text>
+        <path id="parentPath" fill="none" stroke="#475569" stroke-width="1.5" stroke-dasharray="4 3" d=""/>
+        <path id="transPath" fill="none" stroke="#38bdf8" stroke-width="2.5" d=""/>
+        <circle id="vertex" cx="180" cy="130" r="5" fill="#34d399"/>
+        <text id="formula" x="180" y="252" text-anchor="middle" fill="#7dd3fc" font-size="12" font-family="ui-monospace, monospace">y = (x − 0)² + 0</text>
       </svg>
-      <figcaption>Common parent shapes: line, parabola, V, square-root curve.</figcaption>
-    </figure>
-
-    <h2>Shifts and stretches</h2>
-    <p>Start with <span class="mono">y = f(x)</span>:</p>
-    <ul>
-      <li><span class="mono">f(x) + k</span> — vertical shift (up if k &gt; 0)</li>
-      <li><span class="mono">f(x − h)</span> — horizontal shift (<strong>right</strong> if h &gt; 0)</li>
-      <li><span class="mono">a·f(x)</span> — vertical stretch if |a| &gt; 1</li>
-      <li><span class="mono">−f(x)</span> — reflect over the x-axis</li>
-    </ul>
-
-    <figure class="diagram">
-      <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Horizontal shift of parabola">
-        <line x1="30" y1="150" x2="290" y2="150" stroke="#475569"/>
-        <line x1="80" y1="160" x2="80" y2="20" stroke="#475569"/>
-        <path d="M 40 150 Q 80 40 120 150" fill="none" stroke="#64748b" stroke-width="2" stroke-dasharray="4 3"/>
-        <path d="M 120 150 Q 160 40 200 150" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
-        <text x="50" y="30" fill="#64748b" font-size="11">y = x²</text>
-        <text x="150" y="30" fill="#38bdf8" font-size="11">y = (x−2)² → shifted right</text>
-      </svg>
-      <figcaption>f(x − 2) moves the graph right—not left. A common exam trap.</figcaption>
-    </figure>
+      <div class="controls">
+        <label><span>h (horizontal shift)</span><span id="hVal">0</span></label>
+        <input type="range" id="hSlider" min="-4" max="4" step="0.5" value="0"/>
+        <label><span>k (vertical shift)</span><span id="kVal">0</span></label>
+        <input type="range" id="kSlider" min="-3" max="3" step="0.5" value="0"/>
+        <label><span>a (stretch / flip)</span><span id="aVal">1</span></label>
+        <input type="range" id="aSlider" min="-2" max="2" step="0.25" value="1"/>
+      </div>
+      <div class="preset-row">
+        <button type="button" data-h="0" data-k="0" data-a="1">Parent</button>
+        <button type="button" data-h="2" data-k="0" data-a="1">Right 2</button>
+        <button type="button" data-h="0" data-k="2" data-a="1">Up 2</button>
+        <button type="button" data-h="0" data-k="0" data-a="-1">Flip</button>
+        <button type="button" data-h="1" data-k="-1" data-a="0.5">Wide + down</button>
+      </div>
+      <div class="readout">
+        <div>Vertex at <strong id="vertRead">(0, 0)</strong></div>
+        <div><strong id="dirRead">opens up</strong></div>
+      </div>
+    </div>
 
     <div class="box warn">
-      <p style="margin:0"><strong>Trap:</strong> <span class="mono">f(x − 2)</span> shifts <em>right</em>. The input must be 2 larger to feed f the same value.</p>
+      <p style="margin:0"><strong>Trap:</strong> In <span class="mono">(x − h)</span>, positive h moves the graph <em>right</em>. Try h = 2 on the slider and watch the vertex move right.</p>
     </div>
 
     <h2>Domain and range</h2>
-    <p><strong>Domain</strong> = allowed inputs. <strong>Range</strong> = possible outputs. Example: <span class="mono">√(x − 3)</span> needs x ≥ 3. Shifting the parent moves that starting point with it.</p>
+    <p><strong>Domain</strong> = allowed inputs. <strong>Range</strong> = possible outputs. For a parabola opening up with vertex k, the range is y ≥ k.</p>
 
     <div class="box">
       <p style="margin:0 0 0.75rem"><strong>Practice</strong> — Standard → Functions</p>
@@ -74,10 +73,65 @@
     </div>
     <h2>Related</h2>
     <ul>
-      <li><a href="/guides/polynomial-and-rational-functions.html">Polynomial and rational functions</a></li>
+      <li><a href="/guides/polynomial-and-rational-functions.html">Polynomial and rational</a></li>
       <li><a href="/guides/exponential-and-logarithmic-functions.html">Exp and log</a></li>
     </ul>
   </main>
   <footer class="site-foot"><p><a href="/guides/">Guides</a> · <a href="/login.html">Practice</a></p></footer>
+  <script>
+  (function () {
+    var h = 0, k = 0, a = 1;
+    var parent = document.getElementById('parentPath');
+    var trans = document.getElementById('transPath');
+    var vertex = document.getElementById('vertex');
+    var formula = document.getElementById('formula');
+
+    function mapX(x) { return 180 + x * 28; }
+    function mapY(y) { return 130 - y * 22; }
+
+    function pathFor(fn) {
+      var d = '', first = true;
+      for (var i = 0; i <= 80; i++) {
+        var x = -5 + i * (10 / 80);
+        var y = fn(x);
+        if (y < -5 || y > 6) { first = true; continue; }
+        var px = mapX(x), py = mapY(y);
+        d += (first ? 'M' : 'L') + px.toFixed(1) + ',' + py.toFixed(1);
+        first = false;
+      }
+      return d;
+    }
+
+    function draw() {
+      parent.setAttribute('d', pathFor(function (x) { return x * x; }));
+      trans.setAttribute('d', pathFor(function (x) { return a * (x - h) * (x - h) + k; }));
+      vertex.setAttribute('cx', mapX(h));
+      vertex.setAttribute('cy', mapY(k));
+      var as = (Math.abs(a - 1) < 0.01 ? '' : a + '·');
+      formula.textContent = 'y = ' + as + '(x − ' + h + ')² + ' + k;
+      document.getElementById('hVal').textContent = h;
+      document.getElementById('kVal').textContent = k;
+      document.getElementById('aVal').textContent = a;
+      document.getElementById('vertRead').textContent = '(' + h + ', ' + k + ')';
+      document.getElementById('dirRead').textContent = a > 0 ? 'opens up' : a < 0 ? 'opens down' : 'flat (a = 0)';
+    }
+
+    document.getElementById('hSlider').oninput = function (e) { h = parseFloat(e.target.value); draw(); };
+    document.getElementById('kSlider').oninput = function (e) { k = parseFloat(e.target.value); draw(); };
+    document.getElementById('aSlider').oninput = function (e) { a = parseFloat(e.target.value); draw(); };
+    document.querySelectorAll('.preset-row button').forEach(function (btn) {
+      btn.onclick = function () {
+        h = parseFloat(btn.getAttribute('data-h'));
+        k = parseFloat(btn.getAttribute('data-k'));
+        a = parseFloat(btn.getAttribute('data-a'));
+        document.getElementById('hSlider').value = h;
+        document.getElementById('kSlider').value = k;
+        document.getElementById('aSlider').value = a;
+        draw();
+      };
+    });
+    draw();
+  })();
+  </script>
 </body>
 </html>

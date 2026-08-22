@@ -1,0 +1,74 @@
+/* Shared interactive diagram chrome for all guides */
+.interactive {
+  background: #080c10;
+  border: 1px solid #1e3a5f;
+  border-radius: 12px;
+  padding: 1rem 1rem 1.15rem;
+  margin: 1.25rem 0;
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.1);
+}
+.interactive h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+  color: #e2e8f0;
+}
+.badge-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0 0 0.65rem; }
+.badge {
+  display: inline-flex; align-items: center; gap: 0.25rem;
+  font-size: 0.7rem; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase;
+  padding: 0.28rem 0.55rem; border-radius: 999px;
+  background: rgba(56, 189, 248, 0.15); color: #7dd3fc;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+.badge.touch {
+  background: rgba(52, 211, 153, 0.12); color: #6ee7b7;
+  border-color: rgba(52, 211, 153, 0.35);
+}
+.interactive .hint {
+  font-size: 0.88rem; color: #94a3b8; margin: 0 0 0.75rem; line-height: 1.45;
+}
+.interactive .hint strong { color: #e2e8f0; }
+.interactive svg {
+  display: block; width: 100%; max-width: 380px; height: auto;
+  margin: 0 auto; border-radius: 8px; background: #060a0e;
+}
+.interactive svg.grab { touch-action: none; cursor: grab; }
+.interactive svg.grab:active { cursor: grabbing; }
+.controls { max-width: 380px; margin: 0.75rem auto 0; }
+.controls label {
+  display: flex; justify-content: space-between;
+  font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.3rem;
+}
+.controls input[type=range] {
+  width: 100%; accent-color: #38bdf8; cursor: pointer; height: 1.4rem;
+}
+.readout {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem;
+  max-width: 380px; margin: 0.75rem auto 0;
+  font-family: ui-monospace, monospace; font-size: 0.78rem;
+}
+.readout div {
+  background: #121821; border: 1px solid #1e2a38; border-radius: 8px;
+  padding: 0.4rem 0.55rem; color: #94a3b8;
+}
+.readout strong { color: #7dd3fc; font-weight: 600; }
+.preset-row {
+  display: flex; flex-wrap: wrap; gap: 0.35rem;
+  max-width: 380px; margin: 0.55rem auto 0;
+}
+.preset-row button {
+  font-size: 0.72rem; padding: 0.3rem 0.55rem; border-radius: 999px;
+  border: 1px solid #334155; background: #121821; color: #cbd5e1; cursor: pointer;
+}
+.preset-row button:hover {
+  border-color: #38bdf8; color: #e0f2fe; background: #0c1929;
+}
+@keyframes pulse-ring {
+  0% { opacity: 0.65; }
+  70% { opacity: 0; }
+  100% { opacity: 0; }
+}
+.drag-ring {
+  fill: none; stroke: #34d399; stroke-width: 2;
+  pointer-events: none; animation: pulse-ring 1.8s ease-out infinite;
+}
