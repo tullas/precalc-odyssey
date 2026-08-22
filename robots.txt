@@ -1,6 +1,10 @@
 User-agent: *
 Allow: /
+
+# Public content for search engines
+Allow: /guides/
 Allow: /login.html
 Allow: /hyper-scale/
+Allow: /llms.txt
 
 Sitemap: https://precalc-odyssey.pages.dev/sitemap.xml
