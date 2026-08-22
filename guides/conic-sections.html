@@ -3,11 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Conic Sections Explained | Orbits, Reflectors &amp; Interactive Ellipse</title>
-  <meta name="description" content="Conic sections with real uses: satellite dishes, orbits, headlights, plus an interactive ellipse stretcher." />
+  <title>Conic Sections Deep Dive | Parabola, Ellipse, Hyperbola, Circle</title>
+  <meta name="description" content="Deep precalculus guide to conic sections: cone slices, focus-directrix, standard equations, eccentricity, real-world uses, and interactive explorers for parabola and ellipse." />
   <link rel="canonical" href="https://precalc-odyssey.pages.dev/guides/conic-sections.html" />
   <link rel="stylesheet" href="/guides/css/guide.css" />
   <link rel="stylesheet" href="/guides/css/interactive.css" />
+  <style>
+    .type-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.75rem;
+      margin: 1rem 0 1.5rem;
+    }
+    .type-card {
+      background: #0a1018;
+      border: 1px solid #1e2a38;
+      border-radius: 10px;
+      padding: 0.75rem;
+      text-align: center;
+    }
+    .type-card strong { display: block; color: #e2e8f0; margin-bottom: 0.35rem; font-size: 0.9rem; }
+    .type-card span { font-size: 0.75rem; color: #94a3b8; line-height: 1.35; }
+    .ecc-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin: 1rem 0; }
+    .ecc-table th, .ecc-table td {
+      border: 1px solid #1e2a38; padding: 0.5rem 0.65rem; text-align: left;
+    }
+    .ecc-table th { background: #0c1219; color: #94a3b8; font-weight: 600; }
+    .ecc-table td { color: #cbd5e1; }
+  </style>
 </head>
 <body>
   <div class="site-header"><div class="site-header-inner">
@@ -16,23 +39,115 @@
   </div></div>
   <header class="page-head">
     <p class="crumbs"><a href="/guides/">← Guides</a></p>
-    <h1>Conic sections</h1>
-    <p class="muted">Parabolas, circles, ellipses, hyperbolas—and why engineers and astronomers care.</p>
+    <h1>Conic sections — a deep guide</h1>
+    <p class="muted">One family of curves from geometry, algebra, and the physical world: parabola, circle, ellipse, hyperbola.</p>
   </header>
   <main>
-    <h2>Where the name comes from</h2>
-    <p>Slice a double cone with a plane and the cut edge is a <strong>conic section</strong>. In algebra the same shapes appear as second-degree equations in x and y. The geometry and the algebra describe one family.</p>
 
-    <h2>Real uses you can point to</h2>
+    <h2>1. Where the name comes from</h2>
+    <p>Take a double cone (two ice-cream cones tip-to-tip). Cut it with a flat plane. The edge of the cut is a <strong>conic section</strong>:</p>
+    <div class="type-grid">
+      <div class="type-card">
+        <strong>Circle</strong>
+        <span>Plane perpendicular to the axis</span>
+      </div>
+      <div class="type-card">
+        <strong>Ellipse</strong>
+        <span>Plane tilted, cuts one nappe completely</span>
+      </div>
+      <div class="type-card">
+        <strong>Parabola</strong>
+        <span>Plane parallel to a side generator</span>
+      </div>
+      <div class="type-card">
+        <strong>Hyperbola</strong>
+        <span>Plane steep enough to cut both nappes</span>
+      </div>
+    </div>
+    <p>In algebra class the same shapes appear as equations of degree 2 in x and y. Geometry and algebra are two languages for one family.</p>
+
+    <h2>2. One definition that unifies them: focus and directrix</h2>
+    <p>A powerful definition (Apollonius / modern textbooks):</p>
+    <div class="box tip">
+      <p style="margin:0">A conic is the set of points P such that the distance from P to a fixed point (the <strong>focus</strong>) is a constant multiple of the distance from P to a fixed line (the <strong>directrix</strong>).</p>
+    </div>
+    <p>That constant multiple is the <strong>eccentricity</strong> e:</p>
+    <p class="mono">e = (distance to focus) / (distance to directrix)</p>
+    <table class="ecc-table">
+      <thead>
+        <tr><th>Eccentricity e</th><th>Curve</th><th>Shape intuition</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>e = 0</td><td>Circle</td><td>Focus at center; no useful directrix in the same way</td></tr>
+        <tr><td>0 &lt; e &lt; 1</td><td>Ellipse</td><td>Closed oval; “mildly off-center”</td></tr>
+        <tr><td>e = 1</td><td>Parabola</td><td>Opens forever; balanced focus vs directrix</td></tr>
+        <tr><td>e &gt; 1</td><td>Hyperbola</td><td>Two branches; focus dominates</td></tr>
+      </tbody>
+    </table>
+    <p>So eccentricity is not decoration—it is the knob that turns one definition into four familiar shapes.</p>
+
+    <h2>3. Parabola — the “equal distance” curve</h2>
+    <p>For a parabola, e = 1: every point is <em>equally far</em> from the focus and the directrix. Standard vertical form centered at the origin:</p>
+    <p class="mono">x² = 4py &nbsp;&nbsp; or &nbsp;&nbsp; y = (1/(4p)) x²</p>
+    <p>Here p is the distance from vertex to focus (and from vertex to directrix). The vertex is the turning point; the axis of symmetry runs through focus and vertex.</p>
+
+    <h3>Why engineers care about parabolas</h3>
     <ul>
-      <li><strong>Parabola</strong> — satellite dishes and flashlight reflectors focus rays through a point (the focus). Arch shapes in some bridges approximate parabolas.</li>
-      <li><strong>Ellipse</strong> — planetary orbits (Kepler): the sun at one focus. Whispering galleries use elliptical reflection.</li>
-      <li><strong>Circle</strong> — special ellipse with equal axes; wheels, gears, compass curves.</li>
-      <li><strong>Hyperbola</strong> — some navigation systems and cooling-tower silhouettes; inverse-proportion style branches in models.</li>
+      <li><strong>Satellite dishes and radio telescopes</strong> — Parallel incoming rays reflect to the focus. Put a receiver there and you collect weak signals.</li>
+      <li><strong>Flashlights and headlights</strong> — Reverse the idea: a bulb at the focus sends out roughly parallel rays.</li>
+      <li><strong>Solar cookers</strong> — Same focusing principle for sunlight.</li>
+      <li><strong>Projectile paths (idealized)</strong> — Under constant gravity and no air resistance, the path of a thrown ball is a parabola.</li>
+      <li><strong>Some arches and cables</strong> — Approximations appear in architecture and suspension structures.</li>
     </ul>
+    <p>The reflection property is the “use case” most people can picture: energy in, concentrated at one point—or light at one point, sent out as a beam.</p>
 
-    <h2>Ellipse stretcher</h2>
-    <p>Equation idea: <span class="mono">x²/a² + y²/b² = 1</span>. When a = b you get a circle. Changing a and b stretches the oval—useful intuition before formal focus-directrix definitions.</p>
+    <div class="interactive">
+      <h3>Parabola: focus and directrix</h3>
+      <div class="badge-row">
+        <span class="badge">Interactive</span>
+        <span class="badge touch">Change p</span>
+      </div>
+      <p class="hint"><strong>Try it:</strong> p is distance from vertex to focus. The green dot is the focus; the yellow line is the directrix. The blue curve is points equidistant from both. Wider p → “flatter” bowl for the same window.</p>
+      <svg id="parSvg" viewBox="0 0 360 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Parabola focus and directrix">
+        <line x1="30" y1="200" x2="330" y2="200" stroke="#334155"/>
+        <line x1="180" y1="250" x2="180" y2="20" stroke="#334155"/>
+        <line id="dirLine" x1="30" y1="230" x2="330" y2="230" stroke="#fbbf24" stroke-width="2" stroke-dasharray="6 4"/>
+        <path id="parPath" fill="none" stroke="#38bdf8" stroke-width="2.5" d=""/>
+        <circle id="focusPt" cx="180" cy="170" r="6" fill="#34d399"/>
+        <circle cx="180" cy="200" r="4" fill="#94a3b8"/>
+        <text x="188" y="204" fill="#94a3b8" font-size="11">vertex</text>
+        <text id="focusLab" x="188" y="174" fill="#6ee7b7" font-size="11">focus</text>
+        <text id="dirLab" x="250" y="246" fill="#fbbf24" font-size="11">directrix</text>
+      </svg>
+      <div class="controls">
+        <label for="pSlider"><span>p (focus distance)</span><span id="pVal">1.2</span></label>
+        <input type="range" id="pSlider" min="0.5" max="2.5" step="0.1" value="1.2"/>
+      </div>
+      <div class="readout">
+        <div>Focus at (0, <strong id="fp">1.2</strong>)</div>
+        <div>Directrix y = <strong id="dp">−1.2</strong></div>
+      </div>
+    </div>
+
+    <h2>4. Ellipse — the closed oval</h2>
+    <p>An ellipse has two foci. A useful equivalent definition: the sum of distances from any point on the ellipse to the two foci is constant (equal to the major-axis length 2a).</p>
+    <p>Standard form, center at the origin, major axis horizontal:</p>
+    <p class="mono">x²/a² + y²/b² = 1 &nbsp;&nbsp; with &nbsp; a &gt; b &gt; 0</p>
+    <ul>
+      <li>a = semi-major axis (half the long diameter)</li>
+      <li>b = semi-minor axis (half the short diameter)</li>
+      <li>c = √(a² − b²) = distance from center to each focus</li>
+      <li>eccentricity e = c/a (between 0 and 1)</li>
+    </ul>
+    <p>When a = b, c = 0 and e = 0: the ellipse becomes a <strong>circle</strong>.</p>
+
+    <h3>Where ellipses appear</h3>
+    <ul>
+      <li><strong>Planetary orbits</strong> — Kepler’s first law: planets orbit in ellipses with the sun at one focus (not the center).</li>
+      <li><strong>Whispering galleries</strong> — Sound from one focus reflects to the other focus along many paths of equal total length.</li>
+      <li><strong>Medical lithotripsy</strong> — Some devices place the patient and energy source at the two foci of an ellipsoid so shock waves concentrate at the kidney stone.</li>
+      <li><strong>Tilted circles in drawings</strong> — A circle viewed at an angle looks elliptical; artists and CAD use that constantly.</li>
+    </ul>
 
     <div class="interactive">
       <h3>Ellipse stretcher</h3>
@@ -40,45 +155,154 @@
         <span class="badge">Interactive</span>
         <span class="badge touch">Change a and b</span>
       </div>
-      <p class="hint"><strong>Try it:</strong> Match a and b for a circle. Stretch a for a wide ellipse (orbit-like oval).</p>
-      <svg viewBox="0 0 320 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ellipse parameter explorer">
-        <line x1="20" y1="130" x2="300" y2="130" stroke="#334155"/>
-        <line x1="160" y1="240" x2="160" y2="20" stroke="#334155"/>
-        <ellipse id="ell" cx="160" cy="130" rx="100" ry="60" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
+      <p class="hint"><strong>Try it:</strong> Set a = b for a circle. Make a larger than b for a wide orbit-like oval. Readout shows eccentricity when a ≥ b.</p>
+      <svg viewBox="0 0 320 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ellipse parameter explorer">
+        <line x1="20" y1="140" x2="300" y2="140" stroke="#334155"/>
+        <line x1="160" y1="260" x2="160" y2="20" stroke="#334155"/>
+        <ellipse id="ell" cx="160" cy="140" rx="100" ry="60" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
+        <circle id="f1" cx="160" cy="140" r="4" fill="#34d399"/>
+        <circle id="f2" cx="160" cy="140" r="4" fill="#34d399"/>
       </svg>
       <div class="controls">
-        <label for="aSlider"><span>a (horizontal)</span><span id="aVal">3</span></label>
-        <input type="range" id="aSlider" min="1" max="4" step="0.25" value="3"/>
-        <label for="bSlider"><span>b (vertical)</span><span id="bVal">2</span></label>
-        <input type="range" id="bSlider" min="1" max="4" step="0.25" value="2"/>
+        <label for="aSlider"><span>a (horizontal semi-axis)</span><span id="aVal">3</span></label>
+        <input type="range" id="aSlider" min="1.5" max="4" step="0.25" value="3"/>
+        <label for="bSlider"><span>b (vertical semi-axis)</span><span id="bVal">2</span></label>
+        <input type="range" id="bSlider" min="1" max="3.5" step="0.25" value="2"/>
       </div>
       <div class="readout">
         <div><strong id="shape">ellipse</strong></div>
+        <div>e ≈ <strong id="ecc">0.75</strong></div>
         <div>a=<strong id="ar">3</strong>, b=<strong id="br">2</strong></div>
+        <div>c ≈ <strong id="cr">2.24</strong></div>
       </div>
     </div>
 
+    <h2>5. Circle — the special ellipse</h2>
+    <p class="mono">x² + y² = r²</p>
+    <p>Every point is at fixed distance r from the center. In the eccentricity table, e = 0. Circles are the default for wheels, gears, compass constructions, and “constant distance from a beacon” in polar form (r = constant).</p>
+
+    <h2>6. Hyperbola — two branches</h2>
+    <p>Eccentricity e &gt; 1. Standard horizontal form:</p>
+    <p class="mono">x²/a² − y²/b² = 1</p>
+    <p>There are two disconnected branches. Asymptotes y = ±(b/a)x guide the long-run slope. A difference-of-distances definition (difference to two foci is constant) mirrors the ellipse’s sum definition.</p>
+
+    <h3>Where hyperbolas appear</h3>
+    <ul>
+      <li><strong>Navigation (historical LORAN-style ideas)</strong> — Differences in signal time from two stations place you on a hyperbola.</li>
+      <li><strong>Cooling towers</strong> — Hyperboloid shapes (3D relatives) for structural and airflow reasons.</li>
+      <li><strong>Inverse relationships in models</strong> — Some xy = constant graphs are rectangular hyperbolas rotated 45°.</li>
+      <li><strong>Gravitational assist / some orbital paths</strong> — Unbound paths under inverse-square forces can be hyperbolic.</li>
+    </ul>
+
+    <h2>7. Recognizing equations (quick classification)</h2>
+    <p>For a general second-degree equation</p>
+    <p class="mono">Ax² + Bxy + Cy² + Dx + Ey + F = 0</p>
+    <p>the discriminant B² − 4AC roughly classifies the type (when the graph is non-degenerate):</p>
+    <ul>
+      <li>B² − 4AC &lt; 0 → ellipse (or circle, or empty/point)</li>
+      <li>B² − 4AC = 0 → parabola</li>
+      <li>B² − 4AC &gt; 0 → hyperbola</li>
+    </ul>
+    <p>Completing the square (and rotating if B ≠ 0) turns the equation into a standard form you can graph from a, b, and orientation.</p>
+
+    <h2>8. How the four curves relate in one sentence</h2>
+    <p>They are all “degree-2 curves” born from the same cone and the same focus–directrix idea; eccentricity decides whether the path closes (ellipse/circle), balances into an open bowl (parabola), or splits into two runaway branches (hyperbola).</p>
+
+    <div class="box tip">
+      <p style="margin:0"><strong>Study habit:</strong> For each new problem, ask: (1) Which type? (2) Where is the center/vertex? (3) What are a, b, or p? (4) Does a real application (focus, orbit, reflection) match this shape?</p>
+    </div>
+
+    <div class="box warn">
+      <p style="margin:0"><strong>Trap:</strong> “Oval-looking” is not enough—ellipses have a precise sum-of-distances property. Sketching without checking a, b, and orientation is the main source of exam errors.</p>
+    </div>
+
     <div class="box">
-      <p style="margin:0 0 0.75rem"><strong>Practice</strong> — Honors → Conic Sections</p>
+      <p style="margin:0 0 0.75rem"><strong>Practice</strong> — Honors → Conic Sections: story problems with graphs and worked solutions.</p>
       <a class="cta" href="/login.html">Open Hyper-Scale Lab</a>
     </div>
+
+    <h2>Related guides</h2>
+    <ul>
+      <li><a href="/guides/functions-and-transformations.html">Functions and transformations</a> (shifting standard forms)</li>
+      <li><a href="/guides/polynomial-and-rational-functions.html">Polynomial and rational</a></li>
+      <li><a href="/guides/polar-coordinates.html">Polar coordinates</a></li>
+      <li><a href="/guides/what-is-precalculus.html">What is precalculus?</a></li>
+    </ul>
   </main>
-  <footer class="site-foot"><p><a href="/guides/">Guides</a></p></footer>
+  <footer class="site-foot"><p><a href="/guides/">Guides</a> · <a href="/login.html">Practice</a></p></footer>
+
   <script>
-  (function(){
-    var scale=28;
-    function draw(a,b){
-      document.getElementById('ell').setAttribute('rx',a*scale);
-      document.getElementById('ell').setAttribute('ry',b*scale);
-      document.getElementById('aVal').textContent=a;
-      document.getElementById('bVal').textContent=b;
-      document.getElementById('ar').textContent=a;
-      document.getElementById('br').textContent=b;
-      document.getElementById('shape').textContent=Math.abs(a-b)<0.01?'circle':'ellipse';
+  (function () {
+    // --- Parabola explorer: y = x²/(4p), focus (0,p), directrix y=-p ---
+    // Screen: vertex at (180, 200), +y up in math → screen y decreases
+    var scale = 28;
+    function drawParabola(p) {
+      var d = '', first = true;
+      for (var i = 0; i <= 80; i++) {
+        var x = -5 + i * (10 / 80);
+        var y = (x * x) / (4 * p);
+        if (y > 6) { first = true; continue; }
+        var px = 180 + x * scale;
+        var py = 200 - y * scale;
+        d += (first ? 'M' : 'L') + px.toFixed(1) + ',' + py.toFixed(1);
+        first = false;
+      }
+      document.getElementById('parPath').setAttribute('d', d);
+      var fy = 200 - p * scale;
+      var dy = 200 + p * scale;
+      document.getElementById('focusPt').setAttribute('cy', fy);
+      document.getElementById('focusLab').setAttribute('y', fy + 4);
+      document.getElementById('dirLine').setAttribute('y1', dy);
+      document.getElementById('dirLine').setAttribute('y2', dy);
+      document.getElementById('dirLab').setAttribute('y', dy + 14);
+      document.getElementById('pVal').textContent = p.toFixed(1);
+      document.getElementById('fp').textContent = p.toFixed(1);
+      document.getElementById('dp').textContent = (-p).toFixed(1);
     }
-    document.getElementById('aSlider').oninput=function(e){draw(parseFloat(e.target.value),parseFloat(document.getElementById('bSlider').value));};
-    document.getElementById('bSlider').oninput=function(e){draw(parseFloat(document.getElementById('aSlider').value),parseFloat(e.target.value));};
-    draw(3,2);
+    document.getElementById('pSlider').oninput = function (e) {
+      drawParabola(parseFloat(e.target.value));
+    };
+    drawParabola(1.2);
+
+    // --- Ellipse explorer ---
+    var ellScale = 28;
+    function drawEllipse(a, b) {
+      // ensure positive
+      a = Math.max(a, 0.5); b = Math.max(b, 0.5);
+      document.getElementById('ell').setAttribute('rx', a * ellScale);
+      document.getElementById('ell').setAttribute('ry', b * ellScale);
+      var major = Math.max(a, b);
+      var minor = Math.min(a, b);
+      var c = Math.sqrt(Math.max(0, major * major - minor * minor));
+      var e = major > 0 ? c / major : 0;
+      // foci along the major axis
+      if (a >= b) {
+        document.getElementById('f1').setAttribute('cx', 160 - c * ellScale);
+        document.getElementById('f1').setAttribute('cy', 140);
+        document.getElementById('f2').setAttribute('cx', 160 + c * ellScale);
+        document.getElementById('f2').setAttribute('cy', 140);
+      } else {
+        document.getElementById('f1').setAttribute('cx', 160);
+        document.getElementById('f1').setAttribute('cy', 140 - c * ellScale);
+        document.getElementById('f2').setAttribute('cx', 160);
+        document.getElementById('f2').setAttribute('cy', 140 + c * ellScale);
+      }
+      document.getElementById('aVal').textContent = a;
+      document.getElementById('bVal').textContent = b;
+      document.getElementById('ar').textContent = a;
+      document.getElementById('br').textContent = b;
+      document.getElementById('cr').textContent = c.toFixed(2);
+      document.getElementById('ecc').textContent = e.toFixed(2);
+      document.getElementById('shape').textContent =
+        Math.abs(a - b) < 0.01 ? 'circle (e = 0)' : 'ellipse';
+    }
+    document.getElementById('aSlider').oninput = function (e) {
+      drawEllipse(parseFloat(e.target.value), parseFloat(document.getElementById('bSlider').value));
+    };
+    document.getElementById('bSlider').oninput = function (e) {
+      drawEllipse(parseFloat(document.getElementById('aSlider').value), parseFloat(e.target.value));
+    };
+    drawEllipse(3, 2);
   })();
   </script>
 </body>
