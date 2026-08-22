@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Functions and Transformations Explained | Precalculus Guide</title>
+  <meta name="description" content="Learn parent functions and transformations in precalculus: horizontal and vertical shifts, stretches, reflections, domain and range—with plain examples." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://precalc-odyssey.pages.dev/guides/functions-and-transformations.html" />
+  <meta property="og:title" content="Functions and Transformations Explained" />
+  <meta property="og:description" content="Parent functions, shifts, stretches, and reflections for precalculus students." />
+  <meta property="og:url" content="https://precalc-odyssey.pages.dev/guides/functions-and-transformations.html" />
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Functions and Transformations Explained","description":"Parent functions and graph transformations for precalculus.","author":{"@type":"Organization","name":"Hyper-Scale Lab"},"mainEntityOfPage":"https://precalc-odyssey.pages.dev/guides/functions-and-transformations.html"}
+  </script>
+  <style>
+    :root { --bg:#0b0f14; --card:#121821; --line:#1e2a38; --text:#e8eef5; --muted:#94a3b8; --sky:#38bdf8; }
+    body { margin:0; font-family:system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.65; }
+    a { color:var(--sky); } main, header, footer { max-width:720px; margin:0 auto; padding:1.25rem; }
+    h1 { font-size:1.75rem; line-height:1.25; } h2 { font-size:1.2rem; margin-top:2rem; color:#fff; }
+    .muted { color:var(--muted); } code, .mono { font-family:ui-monospace,monospace; color:#7dd3fc; }
+    .box { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:1rem 1.15rem; margin:1.25rem 0; }
+    table { width:100%; border-collapse:collapse; font-size:0.95rem; margin:1rem 0; }
+    th, td { border:1px solid var(--line); padding:0.5rem 0.65rem; text-align:left; }
+    th { background:var(--card); } footer { border-top:1px solid var(--line); color:var(--muted); font-size:0.85rem; margin-top:2rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <p><a href="/guides/">← All guides</a> · <a href="/">Home</a></p>
+    <h1>Functions and transformations</h1>
+    <p class="muted">The spine of precalculus: how a formula becomes a graph, and how small changes move that graph.</p>
+  </header>
+  <main>
+    <p>A <strong>function</strong> assigns exactly one output to each allowed input. In precalculus you study families of functions—linear, quadratic, absolute value, square root, reciprocal, exponential, and more—and you learn to <strong>transform</strong> their graphs without plotting dozens of points from scratch.</p>
+
+    <h2>Parent functions</h2>
+    <p>A parent function is the simplest member of a family. Examples:</p>
+    <table>
+      <tr><th>Family</th><th>Parent</th><th>Shape idea</th></tr>
+      <tr><td>Linear</td><td class="mono">y = x</td><td>Straight diagonal line</td></tr>
+      <tr><td>Quadratic</td><td class="mono">y = x²</td><td>Parabola opening up</td></tr>
+      <tr><td>Absolute value</td><td class="mono">y = |x|</td><td>V shape</td></tr>
+      <tr><td>Square root</td><td class="mono">y = √x</td><td>Slow rise from the origin</td></tr>
+      <tr><td>Reciprocal</td><td class="mono">y = 1/x</td><td>Two branches; vertical asymptote at x = 0</td></tr>
+    </table>
+
+    <h2>The basic transformations</h2>
+    <p>Start with a parent <span class="mono">y = f(x)</span>. These rules are used constantly:</p>
+    <table>
+      <tr><th>Change</th><th>New formula</th><th>What happens to the graph</th></tr>
+      <tr><td>Vertical shift</td><td class="mono">y = f(x) + k</td><td>Up if k &gt; 0, down if k &lt; 0</td></tr>
+      <tr><td>Horizontal shift</td><td class="mono">y = f(x − h)</td><td>Right if h &gt; 0, left if h &lt; 0</td></tr>
+      <tr><td>Vertical stretch</td><td class="mono">y = a·f(x)</td><td>|a| &gt; 1 stretches; 0 &lt; |a| &lt; 1 compresses</td></tr>
+      <tr><td>Reflection</td><td class="mono">y = −f(x)</td><td>Flips over the x-axis</td></tr>
+      <tr><td>Reflection</td><td class="mono">y = f(−x)</td><td>Flips over the y-axis</td></tr>
+    </table>
+    <p>A common student trap: <span class="mono">f(x − 2)</span> moves the graph <em>right</em>, not left. Think “the inside needs a larger x to feed the same input to f.”</p>
+
+    <h2>Domain and range</h2>
+    <p><strong>Domain</strong> = allowed inputs. <strong>Range</strong> = possible outputs. Transformations can change both. For example, <span class="mono">y = √(x − 3)</span> has domain x ≥ 3 because you cannot take the square root of a negative number in the real numbers. Shifting the parent <span class="mono">√x</span> three units right moves the starting point with it.</p>
+
+    <h2>Why this matters</h2>
+    <p>Word problems rarely hand you a bare <span class="mono">x²</span>. They hand you “starts at 50, grows, then levels off” or “the lowest point is at hour 3.” Transformations are how you turn that language into a formula and check it against a graph.</p>
+
+    <div class="box">
+      <p style="margin:0"><strong>Practice:</strong> In Hyper-Scale Lab, open <strong>Standard → Functions</strong> for scenario-based problems with labeled graphs. <a href="/login.html">Start free practice</a>.</p>
+    </div>
+
+    <h2>Related guides</h2>
+    <ul>
+      <li><a href="/guides/what-is-precalculus.html">What is precalculus?</a></li>
+      <li><a href="/guides/exponential-and-logarithmic-functions.html">Exponential and logarithmic functions</a></li>
+      <li><a href="/guides/trigonometry-basics.html">Trigonometry basics</a></li>
+    </ul>
+  </main>
+  <footer>
+    <p>Hyper-Scale Lab · <a href="/guides/">All guides</a> · <a href="/login.html">Practice</a></p>
+  </footer>
+</body>
+</html>

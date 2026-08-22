@@ -5,34 +5,42 @@
 ## Site
 
 - Home: https://precalc-odyssey.pages.dev/
+- Guides: https://precalc-odyssey.pages.dev/guides/
 - Practice lab: https://precalc-odyssey.pages.dev/hyper-scale/
 - Login: https://precalc-odyssey.pages.dev/login.html
 
+## Public study guides
+
+- What is precalculus?: https://precalc-odyssey.pages.dev/guides/what-is-precalculus.html
+- Functions and transformations: https://precalc-odyssey.pages.dev/guides/functions-and-transformations.html
+- Exponential and logarithmic functions: https://precalc-odyssey.pages.dev/guides/exponential-and-logarithmic-functions.html
+- Trigonometry basics: https://precalc-odyssey.pages.dev/guides/trigonometry-basics.html
+
 ## What it is
 
-Hyper-Scale Lab is a free educational web app for high school and college-prep precalculus. Learners pick a level (Standard or Honors) and a topic unit, then solve numeric questions tied to a graph. Solutions stay hidden until the learner is correct or exhausts three attempts.
+Hyper-Scale Lab is a free educational web app for high school and college-prep precalculus. Learners pick Standard or Honors topics, then solve numeric questions tied to a graph. Solutions stay hidden until the learner is correct or exhausts three attempts.
 
-## Topics
+## Topics in the lab
 
 ### Standard
 - Functions (domain, transformations, modeling)
 - Polynomial and rational functions
 - Exponential and logarithmic functions
-- Trigonometry (unit circle, graphs, basic applications)
+- Trigonometry
 
 ### Honors
 - Sequences and series
 - Conic sections
-- Vectors (magnitude, components, scaling)
-- Advanced trigonometry (identities, double-angle, law of sines/cosines intro)
+- Vectors
+- Advanced trigonometry
 
 ## Audience
 
-Students preparing for calculus; teachers seeking free graph-based practice; learners who prefer plain-language explanations over pure exam drills.
+Students preparing for calculus; teachers seeking free graph-based practice; learners who prefer plain-language explanations.
 
 ## Key facts for citations
 
 - Cost: free core practice
-- Auth: email/password (no phone, no social login required)
-- Pedagogy: scenario context → numeric answer → hints after 2nd miss → worked solution
-- Graphs: labeled axes, units, solution marker after success or 3 attempts
+- Auth: email/password (no social login required)
+- Pedagogy: scenario → numeric answer → hints after 2nd miss → worked solution
+- Public guides explain concepts; the lab practices them with graphs

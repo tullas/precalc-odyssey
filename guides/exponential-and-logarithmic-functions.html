@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exponential and Logarithmic Functions | Precalculus Guide</title>
+  <meta name="description" content="Understand exponential growth and decay, logarithms as inverse operations, common bases, and how to read exp/log graphs in precalculus." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://precalc-odyssey.pages.dev/guides/exponential-and-logarithmic-functions.html" />
+  <meta property="og:title" content="Exponential and Logarithmic Functions" />
+  <meta property="og:description" content="Growth, decay, and logs as the inverse of exponents—explained for precalculus." />
+  <meta property="og:url" content="https://precalc-odyssey.pages.dev/guides/exponential-and-logarithmic-functions.html" />
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Exponential and Logarithmic Functions","description":"Growth, decay, and logarithms for precalculus students.","author":{"@type":"Organization","name":"Hyper-Scale Lab"},"mainEntityOfPage":"https://precalc-odyssey.pages.dev/guides/exponential-and-logarithmic-functions.html"}
+  </script>
+  <style>
+    :root { --bg:#0b0f14; --card:#121821; --line:#1e2a38; --text:#e8eef5; --muted:#94a3b8; --sky:#38bdf8; }
+    body { margin:0; font-family:system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.65; }
+    a { color:var(--sky); } main, header, footer { max-width:720px; margin:0 auto; padding:1.25rem; }
+    h1 { font-size:1.75rem; line-height:1.25; } h2 { font-size:1.2rem; margin-top:2rem; color:#fff; }
+    .muted { color:var(--muted); } .mono { font-family:ui-monospace,monospace; color:#7dd3fc; }
+    .box { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:1rem 1.15rem; margin:1.25rem 0; }
+    footer { border-top:1px solid var(--line); color:var(--muted); font-size:0.85rem; margin-top:2rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <p><a href="/guides/">← All guides</a> · <a href="/">Home</a></p>
+    <h1>Exponential and logarithmic functions</h1>
+    <p class="muted">How quantities multiply over time—and how logarithms undo that process.</p>
+  </header>
+  <main>
+    <p>An <strong>exponential function</strong> has the variable in the exponent, such as <span class="mono">y = a · bˣ</span>. If the base <span class="mono">b</span> is greater than 1, values grow faster and faster. If 0 &lt; b &lt; 1, values decay toward zero. That pattern models populations, investments, cooling, and some epidemics better than a straight line.</p>
+
+    <h2>Reading the parameters</h2>
+    <ul>
+      <li><span class="mono">a</span> — starting amount when x = 0 (the vertical intercept for many models)</li>
+      <li><span class="mono">b</span> — growth factor per unit of x. For example b = 1.05 means “multiply by 1.05 each step” (about 5% growth)</li>
+      <li><span class="mono">x</span> — time or step count in the story</li>
+    </ul>
+    <p>Linear change <em>adds</em> the same amount each time. Exponential change <em>multiplies</em> by the same factor. Mixing those ideas up is one of the most common precalculus mistakes.</p>
+
+    <h2>What is a logarithm?</h2>
+    <p>A logarithm answers: “To what power must I raise this base to get this number?” So <span class="mono">log₂(8) = 3</span> because 2³ = 8. Logs are the inverse of exponential functions. If a model says “amount = 100 · 2ᵗ,” a log helps you solve for the time t when the amount hits a target.</p>
+
+    <h2>Common bases</h2>
+    <ul>
+      <li><strong>Base 10</strong> — common log, often written log</li>
+      <li><strong>Base e</strong> (≈ 2.718) — natural log, written ln; appears in continuous growth models</li>
+      <li><strong>Base 2</strong> — natural for doubling processes</li>
+    </ul>
+
+    <h2>Graph sense</h2>
+    <p>Exponential growth curves get steep. Exponential decay levels off toward a horizontal asymptote (often y = 0). Log graphs rise quickly at first for small positive x, then more slowly—and they are only defined for positive inputs.</p>
+
+    <div class="box">
+      <p style="margin:0"><strong>Practice:</strong> Use <strong>Standard → Exponential &amp; Log</strong> in the lab for story problems (savings, decay, doubling) with graphs. <a href="/login.html">Start free practice</a>.</p>
+    </div>
+
+    <h2>Related guides</h2>
+    <ul>
+      <li><a href="/guides/functions-and-transformations.html">Functions and transformations</a></li>
+      <li><a href="/guides/what-is-precalculus.html">What is precalculus?</a></li>
+      <li><a href="/guides/trigonometry-basics.html">Trigonometry basics</a></li>
+    </ul>
+  </main>
+  <footer>
+    <p>Hyper-Scale Lab · <a href="/guides/">All guides</a> · <a href="/login.html">Practice</a></p>
+  </footer>
+</body>
+</html>
