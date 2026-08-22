@@ -3,79 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Precalculus Practice Online Free | Hyper-Scale Lab – Functions, Trig, Exponential</title>
-  <meta name="description" content="Free precalculus self-study lab: functions, polynomials, exponential and log, trigonometry, sequences, conics, and vectors. Interactive graphs, worked solutions, and 3-attempt practice—no social login required." />
-  <meta name="keywords" content="precalculus, pre-calculus, calculus prep, functions, trigonometry, exponential functions, logarithmic functions, self-study math, interactive graph math, high school math practice" />
+  <title>Precalculus Practice Online Free | Hyper-Scale Lab – Functions, Trig, Polar</title>
+  <meta name="description" content="Free precalculus self-study: functions, trig, polar, parametric, matrices, rates & limits. Interactive graphs, diagram guides, worked solutions." />
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <link rel="canonical" href="https://precalc-odyssey.pages.dev/" />
-  <meta property="og:type" content="website" />
   <meta property="og:title" content="Hyper-Scale Lab – Free Precalculus Practice with Graphs" />
-  <meta property="og:description" content="Story-based precalculus problems with accurate graphs, hints after failed attempts, and full worked solutions. Standard and Honors." />
+  <meta property="og:description" content="Story-based problems, diagram guides, and worked solutions. Standard, Honors, and AP topics." />
   <meta property="og:url" content="https://precalc-odyssey.pages.dev/" />
-  <meta property="og:site_name" content="Precalc Odyssey / Hyper-Scale Lab" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Free Precalculus Lab with Interactive Graphs" />
-  <meta name="twitter:description" content="Practice functions, trig, exp/log, and more. Self-study with worked solutions." />
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebSite",
-        "name": "Hyper-Scale Lab / Precalc Odyssey",
-        "url": "https://precalc-odyssey.pages.dev/",
-        "description": "Free interactive precalculus practice with graphs and worked solutions."
-      },
-      {
-        "@type": "Course",
-        "name": "Precalculus Self-Study Lab",
-        "description": "Interactive precalculus covering functions, polynomial and rational functions, exponential and logarithmic functions, trigonometry, sequences and series, conic sections, vectors, and advanced trig.",
-        "provider": { "@type": "Organization", "name": "Hyper-Scale Lab", "url": "https://precalc-odyssey.pages.dev/" },
-        "educationalLevel": "High School / College Prep",
-        "isAccessibleForFree": true
-      },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Is this precalculus practice free?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes. Hyper-Scale Lab is free for self-study. Create an account with email; no paid tier required for core content." }
-          },
-          {
-            "@type": "Question",
-            "name": "What topics are covered?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Standard: functions, polynomial and rational, exponential and log, trigonometry. Honors: sequences, conics, vectors, advanced trig. Free written guides explain the ideas; the lab practices them with graphs." }
-          },
-          {
-            "@type": "Question",
-            "name": "Is this useful for calculus preparation?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes. Function sense, graphs, exponential growth, and trigonometry are the usual bridge into calculus." }
-          }
-        ]
-      }
-    ]
-  }
-  </script>
   <style>
     :root { --bg: #0b0f14; --card: #121821; --line: #1e2a38; --text: #e8eef5; --muted: #94a3b8; --sky: #38bdf8; }
     * { box-sizing: border-box; }
-    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.55; }
+    body { margin: 0; font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.55; }
     a { color: var(--sky); }
     header { max-width: 960px; margin: 0 auto; padding: 1.25rem 1.25rem 0; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
     .brand { font-weight: 700; font-size: 1.15rem; color: #fff; text-decoration: none; }
-    nav { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+    nav { display: flex; gap: 0.5rem; flex-wrap: wrap; }
     .btn { display: inline-block; padding: 0.6rem 1.1rem; border-radius: 0.6rem; text-decoration: none; font-weight: 600; font-size: 0.95rem; }
     .btn-primary { background: #0284c7; color: #fff; }
     .btn-ghost { border: 1px solid var(--line); color: var(--text); }
     main { max-width: 960px; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
     h1 { font-size: clamp(1.6rem, 4vw, 2.25rem); line-height: 1.2; margin: 1.5rem 0 0.75rem; }
     .lead { color: var(--muted); font-size: 1.05rem; max-width: 42rem; }
-    .grid { display: grid; gap: 1rem; margin: 2rem 0; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .grid { display: grid; gap: 1rem; margin: 1.25rem 0 2rem; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
     .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 1.1rem 1.2rem; }
     .card h2 { margin: 0 0 0.4rem; font-size: 1.05rem; color: #fff; }
     .card p { margin: 0; color: var(--muted); font-size: 0.92rem; }
-    h2.section { margin-top: 2.5rem; font-size: 1.25rem; }
+    h2.section { margin-top: 2rem; font-size: 1.25rem; }
     ul.topics { columns: 2; gap: 1.5rem; color: var(--muted); padding-left: 1.2rem; }
     @media (max-width: 560px) { ul.topics { columns: 1; } }
     footer { max-width: 960px; margin: 0 auto; padding: 2rem 1.25rem 3rem; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--line); }
@@ -83,9 +36,8 @@
   <script>
     (function () {
       try {
-        var t = localStorage.getItem('precalc_token');
-        var u = localStorage.getItem('precalc_user');
-        if (t && u) window.location.replace('/hyper-scale/');
+        if (localStorage.getItem('precalc_token') && localStorage.getItem('precalc_user'))
+          window.location.replace('/hyper-scale/');
       } catch (e) {}
     })();
   </script>
@@ -99,90 +51,39 @@
       <a class="btn btn-primary" href="/login.html">Start free practice</a>
     </nav>
   </header>
-
   <main>
     <h1>Free precalculus practice with interactive graphs</h1>
-    <p class="lead">
-      Hyper-Scale Lab is a self-study precalculus site: story-based problems, accurate graphs with units,
-      three attempts, delayed hints, and full worked solutions. Built for high school and college-prep students
-      who want to understand functions—not only memorize answers.
-    </p>
+    <p class="lead">Story-based problems, labeled graphs, three attempts, worked solutions, and free guides with diagrams — Standard, Honors, and AP topics.</p>
     <p style="margin-top:1.25rem">
       <a class="btn btn-primary" href="/login.html">Create free account</a>
       <a class="btn btn-ghost" href="/guides/" style="margin-left:0.5rem">Read free guides</a>
     </p>
 
-    <div class="grid">
-      <div class="card">
-        <h2>Read the graph</h2>
-        <p>Axes labeled with story units. Solution markers stay hidden until you solve it or use all attempts.</p>
-      </div>
-      <div class="card">
-        <h2>Learn from mistakes</h2>
-        <p>Three tries. Hints after the second miss. A clear “how we get there” write-up every time.</p>
-      </div>
-      <div class="card">
-        <h2>Standard &amp; Honors</h2>
-        <p>From parent functions through trig, sequences, conics, and vectors—many unique scenarios per section.</p>
-      </div>
-    </div>
-
     <h2 class="section" id="guides">Free study guides</h2>
     <div class="grid">
-      <div class="card">
-        <h2><a href="/guides/what-is-precalculus.html">What is precalculus?</a></h2>
-        <p>How it bridges algebra and calculus, and what to practice first.</p>
-      </div>
-      <div class="card">
-        <h2><a href="/guides/functions-and-transformations.html">Functions &amp; transformations</a></h2>
-        <p>Parent functions, shifts, stretches, domain and range.</p>
-      </div>
-      <div class="card">
-        <h2><a href="/guides/exponential-and-logarithmic-functions.html">Exp &amp; log functions</a></h2>
-        <p>Growth, decay, and logs as inverse operations.</p>
-      </div>
-      <div class="card">
-        <h2><a href="/guides/trigonometry-basics.html">Trigonometry basics</a></h2>
-        <p>Unit circle, sine/cosine, radians, and waves.</p>
-      </div>
+      <div class="card"><h2><a href="/guides/what-is-precalculus.html">What is precalculus?</a></h2><p>Bridge to calculus.</p></div>
+      <div class="card"><h2><a href="/guides/functions-and-transformations.html">Functions &amp; transformations</a></h2><p>Parents, shifts, stretches.</p></div>
+      <div class="card"><h2><a href="/guides/exponential-and-logarithmic-functions.html">Exp &amp; log</a></h2><p>Growth and decay.</p></div>
+      <div class="card"><h2><a href="/guides/trigonometry-basics.html">Trigonometry basics</a></h2><p>Unit circle and waves.</p></div>
+      <div class="card"><h2><a href="/guides/polar-coordinates.html">Polar coordinates</a></h2><p>Distance and direction.</p></div>
+      <div class="card"><h2><a href="/guides/parametric-equations.html">Parametric equations</a></h2><p>Motion with time.</p></div>
+      <div class="card"><h2><a href="/guides/matrices-intro.html">Matrices</a></h2><p>Tables that transform.</p></div>
+      <div class="card"><h2><a href="/guides/rates-and-limits.html">Rates &amp; limits</a></h2><p>Toward calculus.</p></div>
     </div>
 
-    <h2 class="section" id="topics">Precalculus topics covered</h2>
+    <h2 class="section">Topics in the lab</h2>
     <ul class="topics">
-      <li>Functions: domain, transformations, modeling</li>
-      <li>Polynomial and rational functions</li>
-      <li>Exponential and logarithmic growth &amp; decay</li>
-      <li>Trigonometry: unit circle, graphs, identities intro</li>
-      <li>Sequences and series (Honors)</li>
-      <li>Conic sections (Honors)</li>
-      <li>Vectors intro (Honors)</li>
-      <li>Advanced trigonometry (Honors)</li>
+      <li>Functions, polynomials, rational</li>
+      <li>Exponential and logarithmic</li>
+      <li>Trigonometry (standard &amp; advanced)</li>
+      <li>Sequences, conics, vectors (Honors)</li>
+      <li>Polar, parametric, matrices (AP)</li>
+      <li>Rates of change and limits intro (AP)</li>
     </ul>
-
-    <h2 class="section">Who this is for</h2>
-    <p class="lead">
-      Students preparing for calculus, teachers looking for free graph-based practice, and anyone reviewing
-      pre-calculus without a paywall or social-media login.
-    </p>
-
-    <h2 class="section">FAQ</h2>
-    <div class="card" style="margin-bottom:0.75rem">
-      <h2>Is it free?</h2>
-      <p>Yes. Core practice is free. Sign up with email only.</p>
-    </div>
-    <div class="card" style="margin-bottom:0.75rem">
-      <h2>Does it help with calculus?</h2>
-      <p>Yes. Strong function sense, graphs, and exp/log/trig are the usual bridge into calculus.</p>
-    </div>
-    <div class="card">
-      <h2>How is this different from a worksheet?</h2>
-      <p>Problems are scenario-based; the graph matches the story; solutions explain steps in plain language.</p>
-    </div>
   </main>
-
   <footer>
-    <p><strong>Hyper-Scale Lab</strong> · Precalc Odyssey · Free precalculus self-study</p>
-    <p><a href="/guides/">Guides</a> · <a href="/login.html">Log in</a> · <a href="/sitemap.xml">Sitemap</a> · <a href="/llms.txt">llms.txt</a></p>
+    <p><strong>Hyper-Scale Lab</strong> · Free precalculus self-study</p>
+    <p><a href="/guides/">Guides</a> · <a href="/login.html">Log in</a> · <a href="/sitemap.xml">Sitemap</a></p>
   </footer>
 </body>
 </html>
