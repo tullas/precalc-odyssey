@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sequences and Series | Interactive Arithmetic &amp; Geometric</title>
-  <meta name="description" content="Interactive sequences: switch arithmetic vs geometric and watch terms build." />
+  <title>Sequences and Series Explained | Patterns, Sums &amp; Real Uses</title>
+  <meta name="description" content="Arithmetic and geometric sequences explained with everyday patterns, partial sums, and an interactive sequence builder." />
   <link rel="canonical" href="https://precalc-odyssey.pages.dev/guides/sequences-and-series.html" />
   <link rel="stylesheet" href="/guides/css/guide.css" />
   <link rel="stylesheet" href="/guides/css/interactive.css" />
@@ -17,24 +17,36 @@
   <header class="page-head">
     <p class="crumbs"><a href="/guides/">← Guides</a></p>
     <h1>Sequences and series</h1>
-    <p class="muted">Lists that follow a rule—add the same amount, or multiply by the same factor.</p>
+    <p class="muted">Ordered lists with a rule—and what happens when you add the terms up.</p>
   </header>
   <main>
+    <h2>Sequence vs series</h2>
+    <p>A <strong>sequence</strong> is a list: a₁, a₂, a₃, … each position n has a term aₙ. A <strong>series</strong> is what you get when you add terms—often the partial sum of the first N terms. “How much after 12 deposits?” is a series question; “what is the 12th deposit?” is a sequence question.</p>
+
+    <h2>Arithmetic: steady steps</h2>
+    <p>Each term adds the same <strong>common difference</strong> d. Example: 3, 7, 11, 15 (d = 4). Formula:</p>
+    <p class="mono">aₙ = a₁ + (n − 1)·d</p>
+    <p><strong>Real-life feel:</strong> a salary that rises by the same dollar amount each year; seats numbered down a row; a workout that adds 2 push-ups every session.</p>
+
+    <h2>Geometric: steady multipliers</h2>
+    <p>Each term multiplies by the same <strong>common ratio</strong> r. Example: 2, 6, 18, 54 (r = 3). Formula:</p>
+    <p class="mono">aₙ = a₁ · rⁿ⁻¹</p>
+    <p><strong>Real-life feel:</strong> a photo scaled by 90% each time you compress; a chain letter style growth model; interest that multiplies a balance; half-life style decay with r = ½.</p>
+
     <div class="interactive">
       <h3>Sequence builder</h3>
       <div class="badge-row">
         <span class="badge">Interactive</span>
-        <span class="badge touch">Change d or r</span>
+        <span class="badge touch">Arithmetic or geometric</span>
       </div>
-      <p class="hint"><strong>Try it:</strong> Arithmetic adds d each step. Geometric multiplies by r. Bars show the first six terms.</p>
-      <svg id="seqSvg" viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg"></svg>
+      <p class="hint"><strong>Try it:</strong> Switch modes. Arithmetic adds d; geometric multiplies by r. Bars show the first six terms starting at 2.</p>
+      <svg id="seqSvg" viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sequence term bars"></svg>
       <div class="controls">
-        <label><span>Mode</span></label>
         <div class="preset-row">
           <button type="button" id="modeA">Arithmetic (+d)</button>
           <button type="button" id="modeG">Geometric (×r)</button>
         </div>
-        <label><span id="paramLabel">d (common difference)</span><span id="paramVal">3</span></label>
+        <label for="paramSlider"><span id="paramLabel">d (common difference)</span><span id="paramVal">3</span></label>
         <input type="range" id="paramSlider" min="1" max="5" step="1" value="3"/>
       </div>
       <div class="readout">
@@ -42,7 +54,15 @@
         <div>a₁ = <strong>2</strong></div>
       </div>
     </div>
-    <div class="box"><p style="margin:0 0 0.75rem"><strong>Practice</strong> — Honors → Sequences</p><a class="cta" href="/login.html">Open lab</a></div>
+
+    <div class="box warn">
+      <p style="margin:0"><strong>Trap:</strong> If gaps between terms grow, it is usually geometric, not arithmetic. Arithmetic has constant gaps.</p>
+    </div>
+
+    <div class="box">
+      <p style="margin:0 0 0.75rem"><strong>Practice</strong> — Honors → Sequences &amp; Series</p>
+      <a class="cta" href="/login.html">Open Hyper-Scale Lab</a>
+    </div>
   </main>
   <footer class="site-foot"><p><a href="/guides/">Guides</a></p></footer>
   <script>

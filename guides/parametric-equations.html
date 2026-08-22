@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Parametric Equations | Interactive Motion with Time</title>
-  <meta name="description" content="Interactive parametric equations: scrub time t and watch the particle move on the path." />
+  <title>Parametric Equations Explained | Time, Paths &amp; Real Motion</title>
+  <meta name="description" content="Parametric equations in depth: why time matters, animation and physics intuition, and an interactive time scrubber on a circular path." />
   <link rel="canonical" href="https://precalc-odyssey.pages.dev/guides/parametric-equations.html" />
   <link rel="stylesheet" href="/guides/css/guide.css" />
   <link rel="stylesheet" href="/guides/css/interactive.css" />
@@ -17,28 +17,40 @@
   <header class="page-head">
     <p class="crumbs"><a href="/guides/">← Guides</a></p>
     <h1>Parametric equations: motion through time</h1>
-    <p class="muted">Position as a function of a clock parameter t.</p>
+    <p class="muted">A path is not enough when you also need to know when something was there.</p>
   </header>
   <main>
-    <p>Example path: <span class="mono">x = 4 cos t</span>, <span class="mono">y = 4 sin t</span> — a circle. Scrub t to see where the particle is at each moment.</p>
+    <h2>The idea</h2>
+    <p>A graph y = f(x) answers “what height for this x?” It cannot easily describe a vertical segment, a loop, or going back along the same road later. <strong>Parametric equations</strong> give both coordinates as functions of a third variable—often time t:</p>
+    <p class="mono">x = x(t), &nbsp; y = y(t)</p>
+    <p>One clock drives both. As t runs, the point (x(t), y(t)) traces a path—and the schedule of that motion is built in.</p>
+
+    <h2>Where this shows up</h2>
+    <ul>
+      <li><strong>Animation and games</strong> — every frame is a value of t; position is updated each tick.</li>
+      <li><strong>GPS tracks</strong> — not only the road shape, but timestamps along it.</li>
+      <li><strong>Ferris wheels and gears</strong> — angle or time parameter spins a point on a circle.</li>
+      <li><strong>Thrown ball (physics)</strong> — horizontal and vertical positions both depend on time.</li>
+      <li><strong>Security camera footage</strong> — “where at 3:02?” is parametric thinking.</li>
+    </ul>
 
     <div class="interactive">
-      <h3>Time scrubber</h3>
+      <h3>Time scrubber (circular path)</h3>
       <div class="badge-row">
         <span class="badge">Interactive</span>
         <span class="badge touch">Scrub t</span>
       </div>
-      <p class="hint"><strong>Try it:</strong> Move t from 0 to 2π. The green point is “now”; the faint ring is the full path.</p>
-      <svg viewBox="0 0 320 280" xmlns="http://www.w3.org/2000/svg">
+      <p class="hint"><strong>Try it:</strong> x = 4 cos t, y = 4 sin t. Move t through a full turn and watch the point orbit. Path is the ring; t is the schedule.</p>
+      <svg viewBox="0 0 320 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Parametric circular motion">
         <line x1="20" y1="140" x2="300" y2="140" stroke="#334155"/>
         <line x1="160" y1="260" x2="160" y2="20" stroke="#334155"/>
         <circle cx="160" cy="140" r="90" fill="none" stroke="#1e3a5f" stroke-width="2"/>
         <line id="arm" x1="160" y1="140" x2="250" y2="140" stroke="#38bdf8" stroke-width="2"/>
-        <circle id="pulse" class="drag-ring" cx="250" cy="140" r="14"/>
+        <circle id="pulse" class="drag-ring" cx="250" cy="140" r="14" aria-hidden="true"/>
         <circle id="bob" cx="250" cy="140" r="8" fill="#34d399" stroke="#ecfdf5" stroke-width="2"/>
       </svg>
       <div class="controls">
-        <label><span>t (radians)</span><span id="tVal">0</span></label>
+        <label for="tSlider"><span>t (radians)</span><span id="tVal">0</span></label>
         <input type="range" id="tSlider" min="0" max="628" step="1" value="0"/>
       </div>
       <div class="readout">
@@ -47,7 +59,14 @@
       </div>
     </div>
 
-    <div class="box"><p style="margin:0 0 0.75rem"><strong>Practice</strong> — AP → Parametric</p><a class="cta" href="/login.html">Open lab</a></div>
+    <div class="box warn">
+      <p style="margin:0"><strong>Trap:</strong> Eliminating t shows the geometric path but discards timing. Two runners can share a track equation and still finish at different times.</p>
+    </div>
+
+    <div class="box">
+      <p style="margin:0 0 0.75rem"><strong>Practice</strong> — AP → Parametric</p>
+      <a class="cta" href="/login.html">Open Hyper-Scale Lab</a>
+    </div>
   </main>
   <footer class="site-foot"><p><a href="/guides/">Guides</a></p></footer>
   <script>
@@ -66,9 +85,7 @@
       document.getElementById('px').textContent=(4*c).toFixed(2);
       document.getElementById('py').textContent=(4*s).toFixed(2);
     }
-    document.getElementById('tSlider').oninput=function(e){
-      draw(parseFloat(e.target.value)/100);
-    };
+    document.getElementById('tSlider').oninput=function(e){draw(parseFloat(e.target.value)/100);};
     draw(0);
   })();
   </script>

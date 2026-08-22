@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Polynomial &amp; Rational Functions | Interactive Asymptotes</title>
-  <meta name="description" content="Interactive rational function: move the vertical asymptote and see how the graph breaks." />
+  <title>Polynomial &amp; Rational Functions | Graphs, Asymptotes &amp; Uses</title>
+  <meta name="description" content="Polynomial and rational functions explained: end behavior, zeros, asymptotes, real-world modeling, and an interactive asymptote explorer." />
   <link rel="canonical" href="https://precalc-odyssey.pages.dev/guides/polynomial-and-rational-functions.html" />
   <link rel="stylesheet" href="/guides/css/guide.css" />
   <link rel="stylesheet" href="/guides/css/interactive.css" />
@@ -17,10 +17,36 @@
   <header class="page-head">
     <p class="crumbs"><a href="/guides/">← Guides</a></p>
     <h1>Polynomial and rational functions</h1>
-    <p class="muted">End behavior, zeros, and where rational graphs break.</p>
+    <p class="muted">Smooth polynomial curves—and rational graphs that break along asymptotes.</p>
   </header>
   <main>
-    <p>For <span class="mono">y = 1/(x − c)</span>, the line x = c is a vertical asymptote—the graph never crosses it. Slide c to move the break.</p>
+    <h2>Polynomials: sums of powers</h2>
+    <p>A <strong>polynomial</strong> combines powers of x with coefficients—like <span class="mono">x³ − 4x</span> or <span class="mono">2x² + 3x − 1</span>. They are the smooth, unbroken curves of precalculus: no sudden vertical walls. Degree (highest power) and the leading coefficient control the big-picture shape at the far left and right—called <strong>end behavior</strong>.</p>
+    <ul>
+      <li>Odd degree, positive leading coefficient: down on the left, up on the right (like y = x³).</li>
+      <li>Even degree, positive leading coefficient: up on both ends (like y = x²).</li>
+    </ul>
+    <p><strong>Zeros</strong> are inputs that make the output zero—x-intercepts. Factoring reveals many of them. Multiplicity (repeated factors) decides whether the graph crosses or bounces at an intercept.</p>
+
+    <h2>Where polynomials appear</h2>
+    <ul>
+      <li><strong>Area and volume formulas</strong> expanded in a variable side length</li>
+      <li><strong>Simple physics models</strong> (position under constant acceleration involves t²)</li>
+      <li><strong>Economics cost/revenue sketches</strong> in intro models</li>
+      <li><strong>Design curves</strong> approximated by polynomial pieces in graphics</li>
+    </ul>
+
+    <h2>Rational functions: ratios</h2>
+    <p>A <strong>rational</strong> function is a quotient of polynomials, such as <span class="mono">(x+1)/(x−2)</span>. Division by zero is forbidden, so values of x that zero the denominator (without a matching canceling factor) typically create a <strong>vertical asymptote</strong>—a vertical line the graph approaches but does not cross, shooting toward ±∞.</p>
+    <p>As |x| grows, many rationals settle toward a horizontal line (a <strong>horizontal asymptote</strong>), which describes long-run behavior—like a concentration approaching a limit.</p>
+
+    <h2>Everyday rational intuition</h2>
+    <ul>
+      <li><strong>Sharing a fixed amount</strong> — pizza slices per person ≈ total / number of people (a 1/x shape).</li>
+      <li><strong>Speed = distance/time</strong> — for fixed distance, time in the denominator.</li>
+      <li><strong>Unit prices</strong> — cost per item when packing more into a bulk deal.</li>
+      <li><strong>Density</strong> — mass/volume style ratios in science.</li>
+    </ul>
 
     <div class="interactive">
       <h3>Vertical asymptote explorer</h3>
@@ -28,8 +54,8 @@
         <span class="badge">Interactive</span>
         <span class="badge touch">Move c</span>
       </div>
-      <p class="hint"><strong>Try it:</strong> Change c. The yellow dashed line is x = c. Branches jump around that forbidden vertical line.</p>
-      <svg viewBox="0 0 360 240" xmlns="http://www.w3.org/2000/svg">
+      <p class="hint"><strong>Try it:</strong> Graph of y = 1/(x − c). The yellow dashed line is the asymptote x = c. Slide c and watch the break move.</p>
+      <svg viewBox="0 0 360 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Rational asymptote explorer">
         <line x1="30" y1="120" x2="330" y2="120" stroke="#334155"/>
         <line x1="180" y1="220" x2="180" y2="20" stroke="#334155"/>
         <line id="asym" x1="180" y1="20" x2="180" y2="220" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="5 4"/>
@@ -37,7 +63,7 @@
         <path id="right" fill="none" stroke="#38bdf8" stroke-width="2.5" d=""/>
       </svg>
       <div class="controls">
-        <label><span>c in y = 1/(x − c)</span><span id="cVal">0</span></label>
+        <label for="cSlider"><span>c in y = 1/(x − c)</span><span id="cVal">0</span></label>
         <input type="range" id="cSlider" min="-2" max="2" step="0.25" value="0"/>
       </div>
       <div class="readout">
@@ -46,7 +72,14 @@
       </div>
     </div>
 
-    <div class="box"><p style="margin:0 0 0.75rem"><strong>Practice</strong> — Standard → Polynomial &amp; Rational</p><a class="cta" href="/login.html">Open lab</a></div>
+    <div class="box warn">
+      <p style="margin:0"><strong>Trap:</strong> Canceling a common factor can turn an asymptote into a hole. Always check what canceled before sketching.</p>
+    </div>
+
+    <div class="box">
+      <p style="margin:0 0 0.75rem"><strong>Practice</strong> — Standard → Polynomial &amp; Rational</p>
+      <a class="cta" href="/login.html">Open Hyper-Scale Lab</a>
+    </div>
   </main>
   <footer class="site-foot"><p><a href="/guides/">Guides</a></p></footer>
   <script>

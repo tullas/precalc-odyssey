@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Matrices | Interactive Scale Transform</title>
-  <meta name="description" content="Interactive matrix scaling: change the scale factor and watch a shape grow or shrink." />
+  <title>Matrices Explained | Transforms, Graphics &amp; Interactive Scale</title>
+  <meta name="description" content="Matrices as tables that transform points: graphics scaling, determinants as area factors, interactive scale explorer." />
   <link rel="canonical" href="https://precalc-odyssey.pages.dev/guides/matrices-intro.html" />
   <link rel="stylesheet" href="/guides/css/guide.css" />
   <link rel="stylesheet" href="/guides/css/interactive.css" />
@@ -17,10 +17,22 @@
   <header class="page-head">
     <p class="crumbs"><a href="/guides/">← Guides</a></p>
     <h1>Matrices: tables that transform</h1>
-    <p class="muted">A scale matrix stretches every point from the origin.</p>
+    <p class="muted">Organized numbers that take a point in and send a new point out.</p>
   </header>
   <main>
-    <p>Matrix <span class="mono">[[k,0],[0,k]]</span> multiplies both components by k. Determinant is k²—area scale factor.</p>
+    <h2>What a matrix is for</h2>
+    <p>A matrix is a rectangular grid of numbers. In this course the useful picture is a <strong>machine</strong>: feed it a vector (a point), get a new vector. That is how software scales, rotates, and skews images and game objects.</p>
+
+    <h2>Where you meet the idea</h2>
+    <ul>
+      <li><strong>Photo apps</strong> — resize and rotate are transformations; under the hood they often use matrices.</li>
+      <li><strong>Games</strong> — moving cameras and objects in 2D/3D.</li>
+      <li><strong>Spreadsheets</strong> — grids of related numbers (without geometry yet).</li>
+      <li><strong>Science data</strong> — mixing components in structured ways.</li>
+    </ul>
+
+    <h2>Scale example</h2>
+    <p>The matrix <span class="mono">[[k, 0], [0, k]]</span> multiplies both coordinates by k. Areas scale by k² (the determinant). Try k = 2: sides double, area quadruples.</p>
 
     <div class="interactive">
       <h3>Scale transform</h3>
@@ -28,15 +40,15 @@
         <span class="badge">Interactive</span>
         <span class="badge touch">Change k</span>
       </div>
-      <p class="hint"><strong>Try it:</strong> Gray square = before. Green = after scaling by k. Watch area grow with k².</p>
-      <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+      <p class="hint"><strong>Try it:</strong> Gray = before. Green = after scaling by k from the origin.</p>
+      <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Matrix scale explorer">
         <line x1="40" y1="200" x2="280" y2="200" stroke="#334155"/>
         <line x1="40" y1="200" x2="40" y2="30" stroke="#334155"/>
         <rect id="before" x="40" y="140" width="60" height="60" fill="#1e293b" stroke="#64748b" stroke-width="1.5"/>
         <rect id="after" x="40" y="80" width="120" height="120" fill="rgba(16,185,129,0.15)" stroke="#34d399" stroke-width="2"/>
       </svg>
       <div class="controls">
-        <label><span>k (scale)</span><span id="kVal">2</span></label>
+        <label for="kSlider"><span>k (scale)</span><span id="kVal">2</span></label>
         <input type="range" id="kSlider" min="0.5" max="3" step="0.25" value="2"/>
       </div>
       <div class="readout">
@@ -44,7 +56,15 @@
         <div>side × k</div>
       </div>
     </div>
-    <div class="box"><p style="margin:0 0 0.75rem"><strong>Practice</strong> — AP → Matrices</p><a class="cta" href="/login.html">Open lab</a></div>
+
+    <div class="box warn">
+      <p style="margin:0"><strong>Trap:</strong> Matrix multiplication order matters. Scale-then-rotate is not always the same as rotate-then-scale.</p>
+    </div>
+
+    <div class="box">
+      <p style="margin:0 0 0.75rem"><strong>Practice</strong> — AP → Matrices</p>
+      <a class="cta" href="/login.html">Open Hyper-Scale Lab</a>
+    </div>
   </main>
   <footer class="site-foot"><p><a href="/guides/">Guides</a></p></footer>
   <script>

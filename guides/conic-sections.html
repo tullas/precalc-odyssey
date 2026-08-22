@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Conic Sections | Interactive Ellipse Stretch</title>
-  <meta name="description" content="Interactive ellipse: change a and b semi-axes and see the shape stretch." />
+  <title>Conic Sections Explained | Orbits, Reflectors &amp; Interactive Ellipse</title>
+  <meta name="description" content="Conic sections with real uses: satellite dishes, orbits, headlights, plus an interactive ellipse stretcher." />
   <link rel="canonical" href="https://precalc-odyssey.pages.dev/guides/conic-sections.html" />
   <link rel="stylesheet" href="/guides/css/guide.css" />
   <link rel="stylesheet" href="/guides/css/interactive.css" />
@@ -17,10 +17,22 @@
   <header class="page-head">
     <p class="crumbs"><a href="/guides/">← Guides</a></p>
     <h1>Conic sections</h1>
-    <p class="muted">Curves from slicing a cone—ellipse explorer below.</p>
+    <p class="muted">Parabolas, circles, ellipses, hyperbolas—and why engineers and astronomers care.</p>
   </header>
   <main>
-    <p>Ellipse: <span class="mono">x²/a² + y²/b² = 1</span>. When a = b you get a circle. Stretch a or b to feel the oval.</p>
+    <h2>Where the name comes from</h2>
+    <p>Slice a double cone with a plane and the cut edge is a <strong>conic section</strong>. In algebra the same shapes appear as second-degree equations in x and y. The geometry and the algebra describe one family.</p>
+
+    <h2>Real uses you can point to</h2>
+    <ul>
+      <li><strong>Parabola</strong> — satellite dishes and flashlight reflectors focus rays through a point (the focus). Arch shapes in some bridges approximate parabolas.</li>
+      <li><strong>Ellipse</strong> — planetary orbits (Kepler): the sun at one focus. Whispering galleries use elliptical reflection.</li>
+      <li><strong>Circle</strong> — special ellipse with equal axes; wheels, gears, compass curves.</li>
+      <li><strong>Hyperbola</strong> — some navigation systems and cooling-tower silhouettes; inverse-proportion style branches in models.</li>
+    </ul>
+
+    <h2>Ellipse stretcher</h2>
+    <p>Equation idea: <span class="mono">x²/a² + y²/b² = 1</span>. When a = b you get a circle. Changing a and b stretches the oval—useful intuition before formal focus-directrix definitions.</p>
 
     <div class="interactive">
       <h3>Ellipse stretcher</h3>
@@ -28,16 +40,16 @@
         <span class="badge">Interactive</span>
         <span class="badge touch">Change a and b</span>
       </div>
-      <p class="hint"><strong>Try it:</strong> Set a = b for a circle. Make a larger than b for a wide ellipse.</p>
-      <svg viewBox="0 0 320 260" xmlns="http://www.w3.org/2000/svg">
+      <p class="hint"><strong>Try it:</strong> Match a and b for a circle. Stretch a for a wide ellipse (orbit-like oval).</p>
+      <svg viewBox="0 0 320 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ellipse parameter explorer">
         <line x1="20" y1="130" x2="300" y2="130" stroke="#334155"/>
         <line x1="160" y1="240" x2="160" y2="20" stroke="#334155"/>
         <ellipse id="ell" cx="160" cy="130" rx="100" ry="60" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
       </svg>
       <div class="controls">
-        <label><span>a (horizontal semi-axis)</span><span id="aVal">3</span></label>
+        <label for="aSlider"><span>a (horizontal)</span><span id="aVal">3</span></label>
         <input type="range" id="aSlider" min="1" max="4" step="0.25" value="3"/>
-        <label><span>b (vertical semi-axis)</span><span id="bVal">2</span></label>
+        <label for="bSlider"><span>b (vertical)</span><span id="bVal">2</span></label>
         <input type="range" id="bSlider" min="1" max="4" step="0.25" value="2"/>
       </div>
       <div class="readout">
@@ -45,7 +57,11 @@
         <div>a=<strong id="ar">3</strong>, b=<strong id="br">2</strong></div>
       </div>
     </div>
-    <div class="box"><p style="margin:0 0 0.75rem"><strong>Practice</strong> — Honors → Conics</p><a class="cta" href="/login.html">Open lab</a></div>
+
+    <div class="box">
+      <p style="margin:0 0 0.75rem"><strong>Practice</strong> — Honors → Conic Sections</p>
+      <a class="cta" href="/login.html">Open Hyper-Scale Lab</a>
+    </div>
   </main>
   <footer class="site-foot"><p><a href="/guides/">Guides</a></p></footer>
   <script>

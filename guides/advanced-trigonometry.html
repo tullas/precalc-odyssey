@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Advanced Trigonometry | Interactive Wave Amplitude &amp; Period</title>
-  <meta name="description" content="Interactive sine wave: change amplitude and period live for y = A sin(Bx)." />
+  <title>Advanced Trigonometry | Waves, Identities &amp; Real Signals</title>
+  <meta name="description" content="Advanced trig: amplitude, period, identities, and real wave examples—sound, daylight, AC—with interactive A and B controls." />
   <link rel="canonical" href="https://precalc-odyssey.pages.dev/guides/advanced-trigonometry.html" />
   <link rel="stylesheet" href="/guides/css/guide.css" />
   <link rel="stylesheet" href="/guides/css/interactive.css" />
@@ -17,28 +17,39 @@
   <header class="page-head">
     <p class="crumbs"><a href="/guides/">← Guides</a></p>
     <h1>Advanced trigonometry</h1>
-    <p class="muted">Wave features: amplitude and period.</p>
+    <p class="muted">Beyond the unit circle: shaping waves and using identities as tools.</p>
   </header>
   <main>
-    <p>Model <span class="mono">y = A sin(Bx)</span>. |A| is amplitude (peak height). Period is <span class="mono">2π/|B|</span>.</p>
+    <h2>Why go further than sin and cos of acute angles?</h2>
+    <p>Once sine and cosine are coordinates on the unit circle, the same functions model anything that repeats: sound pressure, seasonal daylight, alternating current, a spinning wheel’s height. Engineers tune <strong>amplitude</strong> (how tall the wave is) and <strong>period</strong> (how long one cycle lasts). The model</p>
+    <p class="mono">y = A sin(Bx)</p>
+    <p>puts those knobs in the formula: |A| is amplitude; period is 2π/|B|.</p>
+
+    <h2>Real signals</h2>
+    <ul>
+      <li><strong>Audio</strong> — louder is larger amplitude; pitch relates to frequency (linked to B).</li>
+      <li><strong>Day length over a year</strong> — roughly wave-like around a midline.</li>
+      <li><strong>Ferris wheel height vs time</strong> — sinusoidal in the ideal model.</li>
+      <li><strong>Heart monitors and sensors</strong> — repeating patterns analyzed with wave language.</li>
+    </ul>
 
     <div class="interactive">
       <h3>Wave controls</h3>
       <div class="badge-row">
         <span class="badge">Interactive</span>
-        <span class="badge touch">A and B sliders</span>
+        <span class="badge touch">A and B</span>
       </div>
-      <p class="hint"><strong>Try it:</strong> Raise A for taller waves. Raise B to pack more cycles into the same window (shorter period).</p>
-      <svg viewBox="0 0 360 160" xmlns="http://www.w3.org/2000/svg">
+      <p class="hint"><strong>Try it:</strong> Raise A for taller waves. Raise B to fit more cycles in the window (shorter period).</p>
+      <svg viewBox="0 0 360 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Amplitude and period explorer">
         <line x1="20" y1="80" x2="340" y2="80" stroke="#334155"/>
         <line id="maxL" x1="20" y1="30" x2="340" y2="30" stroke="#1e293b" stroke-dasharray="3 3"/>
         <line id="minL" x1="20" y1="130" x2="340" y2="130" stroke="#1e293b" stroke-dasharray="3 3"/>
         <path id="wave" fill="none" stroke="#38bdf8" stroke-width="2.5" d=""/>
       </svg>
       <div class="controls">
-        <label><span>A (amplitude)</span><span id="AVal">1</span></label>
+        <label for="ASlider"><span>A (amplitude)</span><span id="AVal">1</span></label>
         <input type="range" id="ASlider" min="0.25" max="2" step="0.25" value="1"/>
-        <label><span>B (frequency factor)</span><span id="BVal">1</span></label>
+        <label for="BSlider"><span>B (frequency factor)</span><span id="BVal">1</span></label>
         <input type="range" id="BSlider" min="0.5" max="3" step="0.25" value="1"/>
       </div>
       <div class="readout">
@@ -46,7 +57,19 @@
         <div>period 2π/|B| ≈ <strong id="per">6.28</strong></div>
       </div>
     </div>
-    <div class="box"><p style="margin:0 0 0.75rem"><strong>Practice</strong> — Honors → Advanced Trig</p><a class="cta" href="/login.html">Open lab</a></div>
+
+    <h2>Identities as rewrite rules</h2>
+    <p>The Pythagorean identity <span class="mono">sin²θ + cos²θ = 1</span> is the unit circle in algebra form. Double-angle formulas let you rewrite sin(2θ) or cos(2θ) when a model or equation needs it. Treat them as tools—like factoring—not as decoration.</p>
+
+    <div class="box">
+      <p style="margin:0 0 0.75rem"><strong>Practice</strong> — Honors → Advanced Trig</p>
+      <a class="cta" href="/login.html">Open Hyper-Scale Lab</a>
+    </div>
+    <h2>Related</h2>
+    <ul>
+      <li><a href="/guides/trigonometry-basics.html">Trigonometry basics</a></li>
+      <li><a href="/guides/parametric-equations.html">Parametric equations</a></li>
+    </ul>
   </main>
   <footer class="site-foot"><p><a href="/guides/">Guides</a></p></footer>
   <script>
