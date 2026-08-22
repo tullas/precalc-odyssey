@@ -1,34 +1,34 @@
 # Hyper-Scale Lab / Precalc Odyssey
 
-> Free interactive precalculus self-study lab with story-based problems, graphs, worked solutions, and public study guides with diagrams.
+> Free interactive precalculus lab with graphs, worked solutions, and a full public guide library with diagrams.
 
 ## Site
-
 - Home: https://precalc-odyssey.pages.dev/
 - Guides: https://precalc-odyssey.pages.dev/guides/
-- Practice lab: https://precalc-odyssey.pages.dev/hyper-scale/
-- Login: https://precalc-odyssey.pages.dev/login.html
+- Lab: https://precalc-odyssey.pages.dev/hyper-scale/
 
-## Public study guides
+## All study guides
 
-### Core
-- What is precalculus?: https://precalc-odyssey.pages.dev/guides/what-is-precalculus.html
-- Functions and transformations: https://precalc-odyssey.pages.dev/guides/functions-and-transformations.html
-- Exponential and logarithmic functions: https://precalc-odyssey.pages.dev/guides/exponential-and-logarithmic-functions.html
-- Trigonometry basics: https://precalc-odyssey.pages.dev/guides/trigonometry-basics.html
+### Overview
+- https://precalc-odyssey.pages.dev/guides/what-is-precalculus.html
 
-### AP-style (with diagrams)
-- Polar coordinates: https://precalc-odyssey.pages.dev/guides/polar-coordinates.html
-- Parametric equations: https://precalc-odyssey.pages.dev/guides/parametric-equations.html
+### Standard
+- Functions: https://precalc-odyssey.pages.dev/guides/functions-and-transformations.html
+- Polynomial & rational: https://precalc-odyssey.pages.dev/guides/polynomial-and-rational-functions.html
+- Exp & log: https://precalc-odyssey.pages.dev/guides/exponential-and-logarithmic-functions.html
+- Trigonometry: https://precalc-odyssey.pages.dev/guides/trigonometry-basics.html
+
+### Honors
+- Sequences & series: https://precalc-odyssey.pages.dev/guides/sequences-and-series.html
+- Conic sections: https://precalc-odyssey.pages.dev/guides/conic-sections.html
+- Vectors: https://precalc-odyssey.pages.dev/guides/vectors-intro.html
+- Advanced trig: https://precalc-odyssey.pages.dev/guides/advanced-trigonometry.html
+
+### AP
+- Polar: https://precalc-odyssey.pages.dev/guides/polar-coordinates.html
+- Parametric: https://precalc-odyssey.pages.dev/guides/parametric-equations.html
 - Matrices: https://precalc-odyssey.pages.dev/guides/matrices-intro.html
-- Rates and limits: https://precalc-odyssey.pages.dev/guides/rates-and-limits.html
+- Rates & limits: https://precalc-odyssey.pages.dev/guides/rates-and-limits.html
 
 ## Lab levels
-
-- Standard: functions, poly/rational, exp/log, trigonometry
-- Honors: sequences, conics, vectors, advanced trig
-- AP: polar, parametric, matrices, rates & limits
-
-## Pedagogy
-
-Scenario context → numeric answer (3 attempts) → hints after 2nd miss → worked solution. Guides explain ideas in plain language with SVG diagrams; the lab practices them.
+Standard, Honors, and AP — each unit links to its guide via “Study guide first” and “Read guide.”
