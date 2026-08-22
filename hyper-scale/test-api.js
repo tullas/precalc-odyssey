@@ -7,21 +7,15 @@
 
   function getUser() {
     try {
-      const raw = localStorage.getItem('hs_user') || localStorage.getItem('precalc_user');
+      const raw = localStorage.getItem('precalc_user') || localStorage.getItem('hs_user');
       if (raw) return JSON.parse(raw);
-    } catch (e) {}
-    try {
-      const token = localStorage.getItem('hs_token') || localStorage.getItem('precalc_token');
-      if (token && token.includes('.')) {
-        // opaque token — still send user id from login payload if stored
-      }
     } catch (e) {}
     return null;
   }
 
   function getAuthHeaders() {
     const h = { 'Content-Type': 'application/json' };
-    const token = localStorage.getItem('hs_token') || localStorage.getItem('precalc_token') || localStorage.getItem('token');
+    const token = localStorage.getItem('precalc_token') || localStorage.getItem('hs_token') || localStorage.getItem('token');
     if (token) h['Authorization'] = 'Bearer ' + token;
     return h;
   }
@@ -29,18 +23,30 @@
   function saveLocal(record) {
     let list = [];
     try { list = JSON.parse(localStorage.getItem(LS_KEY) || '[]'); } catch (e) {}
+    const user = getUser();
+    const email = user && user.email;
+    // scope history per email when possible
+    const key = email ? LS_KEY + ':' + email.toLowerCase() : LS_KEY;
+    try { list = JSON.parse(localStorage.getItem(key) || '[]'); } catch (e) { list = []; }
     list.unshift(record);
     if (list.length > 50) list = list.slice(0, 50);
-    localStorage.setItem(LS_KEY, JSON.stringify(list));
+    localStorage.setItem(key, JSON.stringify(list));
+    localStorage.setItem(LS_KEY, JSON.stringify(list)); // mirror default
     return list;
   }
 
   function loadLocal() {
+    const user = getUser();
+    const email = user && user.email;
+    const key = email ? LS_KEY + ':' + email.toLowerCase() : LS_KEY;
+    try {
+      const scoped = JSON.parse(localStorage.getItem(key) || 'null');
+      if (scoped) return scoped;
+    } catch (e) {}
     try { return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); } catch (e) { return []; }
   }
 
   async function submitSession(payload) {
-    // payload: { sessionId, userId, email, level, unit, score, total, percent, improve, details }
     saveLocal({
       id: payload.sessionId,
       level: payload.level,
@@ -72,8 +78,11 @@
   }
 
   async function fetchReport(userId) {
+    const user = getUser() || {};
     try {
-      const q = userId ? ('?user_id=' + encodeURIComponent(userId)) : '';
+      let q = '';
+      if (userId) q = '?user_id=' + encodeURIComponent(userId);
+      else if (user.email) q = '?email=' + encodeURIComponent(user.email);
       const res = await fetch(API_BASE + '/test/report' + q, {
         method: 'GET',
         headers: getAuthHeaders()
