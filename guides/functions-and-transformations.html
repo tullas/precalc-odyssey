@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Functions and Transformations | Interactive Graph Shifts</title>
-  <meta name="description" content="Interactive precalculus transformations: shift and stretch y=x² live. See how h, k, and a move the parabola." />
+  <title>Functions and Transformations Explained | Shifts, Stretches &amp; Real Uses</title>
+  <meta name="description" content="Deep precalculus guide to functions and transformations: what a function is, how h, k, and a move graphs, everyday examples, and an interactive parabola explorer." />
   <link rel="canonical" href="https://precalc-odyssey.pages.dev/guides/functions-and-transformations.html" />
   <link rel="stylesheet" href="/guides/css/guide.css" />
   <link rel="stylesheet" href="/guides/css/interactive.css" />
@@ -17,10 +17,47 @@
   <header class="page-head">
     <p class="crumbs"><a href="/guides/">← Guides</a></p>
     <h1>Functions and transformations</h1>
-    <p class="muted">How a formula becomes a graph—and how small changes move that graph.</p>
+    <p class="muted">The spine of precalculus: rules that turn inputs into outputs, and the simple moves that reshape their graphs.</p>
   </header>
   <main>
-    <p>A <strong>function</strong> assigns one output to each allowed input. Precalculus studies families of functions and how to <strong>transform</strong> their graphs. The panel below starts from the parent parabola <span class="mono">y = x²</span> and lets you change the standard form <span class="mono">y = a(x − h)² + k</span> live.</p>
+    <h2>What is a function, really?</h2>
+    <p>A <strong>function</strong> is a reliable rule: you hand it an allowed input, and it returns exactly one output. Think of a vending machine that always drops the same snack for the same button, or a thermostat that maps “current temperature” to “heater on or off.” In math we write <span class="mono">y = f(x)</span> or “f of x,” but the idea is the same—no guessing, no two different answers for the same input.</p>
+    <p>That reliability is why functions model the world. If the same cause could produce two effects at random, prediction would fall apart. Precalculus trains you to <em>see</em> those rules as graphs and formulas, then to adjust them when the story shifts (a later start time, a taller peak, a mirror image).</p>
+
+    <h2>Why transformations matter in daily life</h2>
+    <p>You rarely meet a bare <span class="mono">x²</span> in a word problem. You meet “the same shape, but the lowest point is at hour 3” or “twice as steep.” Those are transformations. Everyday analogues:</p>
+    <ul>
+      <li><strong>Schedule shift</strong> — A bus route is the same loop, but every stop runs 15 minutes later. That is a horizontal shift in time.</li>
+      <li><strong>Volume on a speaker</strong> — Same song waveform, multiplied by a louder factor. That is a vertical stretch.</li>
+      <li><strong>Mirror selfie vs rear camera</strong> — Left and right swap. That is a reflection.</li>
+      <li><strong>Temperature scales</strong> — Celsius and Fahrenheit describe the same “hotness” with a stretch and a shift; the graph of one against the other is a transformed line.</li>
+      <li><strong>App notifications</strong> — “Snooze 10 minutes” shifts a reminder along the time axis without changing what the reminder is.</li>
+    </ul>
+    <p>Once you can name those moves, formula-writing stops feeling like magic and starts feeling like adjusting a template.</p>
+
+    <h2>Parent functions: the templates</h2>
+    <p>A <strong>parent function</strong> is the simplest member of a family—the default shape before you move it. Common parents:</p>
+    <ul>
+      <li><span class="mono">y = x</span> — straight diagonal (constant rate of change)</li>
+      <li><span class="mono">y = x²</span> — parabola (symmetric bowl)</li>
+      <li><span class="mono">y = |x|</span> — V shape (distance from zero)</li>
+      <li><span class="mono">y = √x</span> — slow rise from the origin (only x ≥ 0)</li>
+      <li><span class="mono">y = 1/x</span> — two branches with a vertical break at x = 0</li>
+    </ul>
+    <p>You memorize the parent the way a designer memorizes a default layout, then apply transformations instead of plotting fifty new points from scratch.</p>
+
+    <h2>The three moves you will use constantly</h2>
+    <p>Start with a parent <span class="mono">y = f(x)</span>. The standard “vertex form” style adjustments are:</p>
+    <ul>
+      <li><span class="mono">y = f(x) + k</span> — <strong>vertical shift</strong>: up if k &gt; 0, down if k &lt; 0. Adds a constant height to every output.</li>
+      <li><span class="mono">y = f(x − h)</span> — <strong>horizontal shift</strong>: right if h &gt; 0, left if h &lt; 0. The inside of f must see the same value as before, so the graph slides along x.</li>
+      <li><span class="mono">y = a · f(x)</span> — <strong>vertical stretch or compression</strong>: |a| &gt; 1 stretches away from the x-axis; 0 &lt; |a| &lt; 1 squashes; negative a also flips over the x-axis.</li>
+    </ul>
+    <p>Combined for a parabola: <span class="mono">y = a(x − h)² + k</span>. Here (h, k) is the vertex—the turning point of the bowl.</p>
+
+    <div class="box warn">
+      <p style="margin:0"><strong>The classic trap:</strong> <span class="mono">f(x − 2)</span> moves the graph <em>right</em>, not left. Why? To feed f the input 0, you now need x = 2. The whole story slides toward larger x. Try it in the explorer below with h = 2 and watch the vertex move right.</p>
+    </div>
 
     <div class="interactive">
       <h3>Transformation explorer</h3>
@@ -28,23 +65,23 @@
         <span class="badge">Interactive</span>
         <span class="badge touch">Move the sliders</span>
       </div>
-      <p class="hint"><strong>Try it:</strong> Change <strong>h</strong> (horizontal), <strong>k</strong> (vertical), and <strong>a</strong> (stretch / flip). The dashed gray curve is the parent; the blue curve is your transformed graph.</p>
+      <p class="hint"><strong>Try it:</strong> Gray dashed curve = parent <span class="mono">y = x²</span>. Blue = <span class="mono">y = a(x − h)² + k</span>. Change h, k, and a and read the vertex.</p>
       <svg id="tfSvg" viewBox="0 0 360 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Interactive parabola transformations">
         <line x1="30" y1="130" x2="330" y2="130" stroke="#334155"/>
         <line x1="180" y1="240" x2="180" y2="20" stroke="#334155"/>
-        <text x="320" y="124" fill="#64748b" font-size="11">x</text>
-        <text x="186" y="30" fill="#64748b" font-size="11">y</text>
+        <text x="320" y="124" fill="#94a3b8" font-size="11">x</text>
+        <text x="186" y="30" fill="#94a3b8" font-size="11">y</text>
         <path id="parentPath" fill="none" stroke="#475569" stroke-width="1.5" stroke-dasharray="4 3" d=""/>
         <path id="transPath" fill="none" stroke="#38bdf8" stroke-width="2.5" d=""/>
         <circle id="vertex" cx="180" cy="130" r="5" fill="#34d399"/>
         <text id="formula" x="180" y="252" text-anchor="middle" fill="#7dd3fc" font-size="12" font-family="ui-monospace, monospace">y = (x − 0)² + 0</text>
       </svg>
       <div class="controls">
-        <label><span>h (horizontal shift)</span><span id="hVal">0</span></label>
+        <label for="hSlider"><span>h (horizontal shift)</span><span id="hVal">0</span></label>
         <input type="range" id="hSlider" min="-4" max="4" step="0.5" value="0"/>
-        <label><span>k (vertical shift)</span><span id="kVal">0</span></label>
+        <label for="kSlider"><span>k (vertical shift)</span><span id="kVal">0</span></label>
         <input type="range" id="kSlider" min="-3" max="3" step="0.5" value="0"/>
-        <label><span>a (stretch / flip)</span><span id="aVal">1</span></label>
+        <label for="aSlider"><span>a (stretch / flip)</span><span id="aVal">1</span></label>
         <input type="range" id="aSlider" min="-2" max="2" step="0.25" value="1"/>
       </div>
       <div class="preset-row">
@@ -60,21 +97,27 @@
       </div>
     </div>
 
-    <div class="box warn">
-      <p style="margin:0"><strong>Trap:</strong> In <span class="mono">(x − h)</span>, positive h moves the graph <em>right</em>. Try h = 2 on the slider and watch the vertex move right.</p>
-    </div>
+    <h2>Domain and range in plain language</h2>
+    <p><strong>Domain</strong> is the set of inputs the rule accepts. <strong>Range</strong> is the set of outputs it can produce. A square-root parent only accepts x ≥ 0 because negative inputs are not real square roots in this course. Shifting that graph right with <span class="mono">√(x − 3)</span> moves the “starting gate” to x = 3—domain becomes x ≥ 3. For an upward parabola with vertex height k, outputs never go below k, so the range is y ≥ k.</p>
+    <p>Asking domain and range is asking: “What situations is this model even allowed to describe?” and “What results could we ever see?”</p>
 
-    <h2>Domain and range</h2>
-    <p><strong>Domain</strong> = allowed inputs. <strong>Range</strong> = possible outputs. For a parabola opening up with vertex k, the range is y ≥ k.</p>
+    <h2>A mini story you can model</h2>
+    <p>A ball’s height (in meters) after t seconds is roughly a downward parabola. If the peak is 5 m at t = 2 s, you are looking for something like <span class="mono">h = a(t − 2)² + 5</span> with a negative. The transformation language tells you where to put the vertex before you stress about the exact value of a.</p>
+
+    <div class="box tip">
+      <p style="margin:0"><strong>Study habit:</strong> For any new formula, ask three questions: What is the parent? What shifted or stretched? What does that mean in the units of the story (hours, meters, dollars)?</p>
+    </div>
 
     <div class="box">
-      <p style="margin:0 0 0.75rem"><strong>Practice</strong> — Standard → Functions</p>
+      <p style="margin:0 0 0.75rem"><strong>Practice in the lab</strong> — Standard → Functions: story problems with graphs and worked solutions.</p>
       <a class="cta" href="/login.html">Open Hyper-Scale Lab</a>
     </div>
-    <h2>Related</h2>
+
+    <h2>Related guides</h2>
     <ul>
-      <li><a href="/guides/polynomial-and-rational-functions.html">Polynomial and rational</a></li>
-      <li><a href="/guides/exponential-and-logarithmic-functions.html">Exp and log</a></li>
+      <li><a href="/guides/polynomial-and-rational-functions.html">Polynomial and rational functions</a></li>
+      <li><a href="/guides/exponential-and-logarithmic-functions.html">Exponential and logarithmic functions</a></li>
+      <li><a href="/guides/what-is-precalculus.html">What is precalculus?</a></li>
     </ul>
   </main>
   <footer class="site-foot"><p><a href="/guides/">Guides</a> · <a href="/login.html">Practice</a></p></footer>
@@ -85,10 +128,8 @@
     var trans = document.getElementById('transPath');
     var vertex = document.getElementById('vertex');
     var formula = document.getElementById('formula');
-
     function mapX(x) { return 180 + x * 28; }
     function mapY(y) { return 130 - y * 22; }
-
     function pathFor(fn) {
       var d = '', first = true;
       for (var i = 0; i <= 80; i++) {
@@ -101,7 +142,6 @@
       }
       return d;
     }
-
     function draw() {
       parent.setAttribute('d', pathFor(function (x) { return x * x; }));
       trans.setAttribute('d', pathFor(function (x) { return a * (x - h) * (x - h) + k; }));
@@ -115,7 +155,6 @@
       document.getElementById('vertRead').textContent = '(' + h + ', ' + k + ')';
       document.getElementById('dirRead').textContent = a > 0 ? 'opens up' : a < 0 ? 'opens down' : 'flat (a = 0)';
     }
-
     document.getElementById('hSlider').oninput = function (e) { h = parseFloat(e.target.value); draw(); };
     document.getElementById('kSlider').oninput = function (e) { k = parseFloat(e.target.value); draw(); };
     document.getElementById('aSlider').oninput = function (e) { a = parseFloat(e.target.value); draw(); };
