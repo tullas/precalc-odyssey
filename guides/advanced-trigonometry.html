@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Advanced Trigonometry | Identities, Double-Angle, Solving</title>
+  <meta name="description" content="Advanced precalculus trigonometry: Pythagorean identity, double-angle, solving equations, and wave features—with diagrams." />
+  <link rel="canonical" href="https://precalc-odyssey.pages.dev/guides/advanced-trigonometry.html" />
+  <link rel="stylesheet" href="/guides/css/guide.css" />
+</head>
+<body>
+  <div class="site-header"><div class="site-header-inner">
+    <a class="brand" href="/">Hyper-Scale Lab</a>
+    <nav><a href="/guides/">Guides</a><a href="/login.html">Log in</a><a class="cta-nav" href="/login.html">Practice</a></nav>
+  </div></div>
+  <header class="page-head">
+    <p class="crumbs"><a href="/guides/">← Guides</a></p>
+    <h1>Advanced trigonometry</h1>
+    <p class="muted">Identities, double angles, and reading richer wave models.</p>
+  </header>
+  <main>
+    <p>After the unit circle and basic graphs, trigonometry becomes a toolkit: rewrite expressions, solve for angles, and model waves with amplitude, period, and midline. This guide builds on <a href="/guides/trigonometry-basics.html">trigonometry basics</a>.</p>
+
+    <h2>The identity that never fails</h2>
+    <p class="mono">sin²θ + cos²θ = 1</p>
+    <p>It is the unit circle equation x² + y² = 1 in trig clothes. The graph of sin² + cos² is a flat line at height 1.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 280 160" xmlns="http://www.w3.org/2000/svg" role="img">
+        <circle cx="100" cy="80" r="50" fill="none" stroke="#1e2a38" stroke-width="2"/>
+        <line x1="100" y1="80" x2="140" y2="45" stroke="#38bdf8" stroke-width="2"/>
+        <circle cx="140" cy="45" r="5" fill="#34d399"/>
+        <text x="150" y="50" fill="#94a3b8" font-size="12">(cos θ, sin θ)</text>
+        <text x="40" y="150" fill="#64748b" font-size="12">On the unit circle, the point always satisfies cos²+sin²=1</text>
+      </svg>
+      <figcaption>Pythagorean identity from geometry.</figcaption>
+    </figure>
+
+    <h2>Double-angle ideas</h2>
+    <p>Sometimes a model needs sine or cosine of <em>twice</em> an angle:</p>
+    <p class="mono">sin(2θ) = 2 sinθ cosθ</p>
+    <p class="mono">cos(2θ) = cos²θ − sin²θ</p>
+    <p>These are algebra tools for simplifying and for solving equations.</p>
+
+    <h2>Waves with amplitude and midline</h2>
+    <p><span class="mono">y = A sin(Bx) + D</span> stretches height by |A|, changes period via B, and shifts the middle line to y = D. Reading max and min from the formula is a core precalculus skill.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" role="img">
+        <line x1="20" y1="80" x2="300" y2="80" stroke="#475569"/>
+        <line x1="20" y1="40" x2="300" y2="40" stroke="#334155" stroke-dasharray="4 3"/>
+        <line x1="20" y1="120" x2="300" y2="120" stroke="#334155" stroke-dasharray="4 3"/>
+        <path d="M 20 80 Q 50 20 80 80 T 140 80 T 200 80 T 260 80 T 300 80" fill="none" stroke="#38bdf8" stroke-width="2"/>
+        <text x="250" y="35" fill="#94a3b8" font-size="11">max</text>
+        <text x="250" y="135" fill="#94a3b8" font-size="11">min</text>
+        <text x="120" y="75" fill="#64748b" font-size="11">midline</text>
+      </svg>
+      <figcaption>Amplitude is distance from midline to peak.</figcaption>
+    </figure>
+
+    <div class="box">
+      <p style="margin:0 0 0.75rem"><strong>Practice</strong></p>
+      <p class="muted" style="margin:0 0 0.75rem">Honors → Advanced Trig</p>
+      <a class="cta" href="/login.html">Open Hyper-Scale Lab</a>
+    </div>
+    <h2>Related</h2>
+    <ul>
+      <li><a href="/guides/trigonometry-basics.html">Trigonometry basics</a></li>
+      <li><a href="/guides/parametric-equations.html">Parametric equations</a></li>
+    </ul>
+  </main>
+  <footer class="site-foot"><p><a href="/guides/">All guides</a> · <a href="/login.html">Practice</a></p></footer>
+</body>
+</html>

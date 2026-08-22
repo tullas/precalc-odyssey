@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Polynomial &amp; Rational Functions | Precalculus Guide with Diagrams</title>
+  <meta name="description" content="Polynomial and rational functions explained: end behavior, zeros, asymptotes, and graphs—with clear diagrams for precalculus self-study." />
+  <link rel="canonical" href="https://precalc-odyssey.pages.dev/guides/polynomial-and-rational-functions.html" />
+  <link rel="stylesheet" href="/guides/css/guide.css" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Polynomial and Rational Functions","author":{"@type":"Organization","name":"Hyper-Scale Lab"}}</script>
+</head>
+<body>
+  <div class="site-header"><div class="site-header-inner">
+    <a class="brand" href="/">Hyper-Scale Lab</a>
+    <nav><a href="/guides/">Guides</a><a href="/login.html">Log in</a><a class="cta-nav" href="/login.html">Practice</a></nav>
+  </div></div>
+  <header class="page-head">
+    <p class="crumbs"><a href="/guides/">← Guides</a></p>
+    <h1>Polynomial and rational functions</h1>
+    <p class="muted">How graphs behave at the ends, where they cross the axis, and where rational graphs “break.”</p>
+  </header>
+  <main>
+    <p>A <strong>polynomial</strong> is built from powers of x added together—like <span class="mono">x³ − 4x</span>. A <strong>rational</strong> function is a ratio of polynomials—like <span class="mono">(x+1)/(x−2)</span>. Both show up in models of volume, cost, concentration, and more. The skill is reading the graph’s story: rises, falls, intercepts, and forbidden lines.</p>
+
+    <h2>End behavior of polynomials</h2>
+    <p>For large |x|, the highest-degree term dominates. An odd degree with positive leading coefficient goes <em>down on the left, up on the right</em> (like y = x³). Even degree with positive leading coefficient goes <em>up on both ends</em> (like y = x²).</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 360 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cubic vs quadratic end behavior">
+        <line x1="20" y1="100" x2="170" y2="100" stroke="#475569"/>
+        <line x1="95" y1="180" x2="95" y2="20" stroke="#475569"/>
+        <path d="M 30 160 Q 60 160 95 100 T 160 40" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
+        <text x="40" y="190" fill="#94a3b8" font-size="11">odd degree (like x³)</text>
+        <line x1="190" y1="100" x2="340" y2="100" stroke="#475569"/>
+        <line x1="265" y1="180" x2="265" y2="20" stroke="#475569"/>
+        <path d="M 200 40 Q 265 160 330 40" fill="none" stroke="#34d399" stroke-width="2.5"/>
+        <text x="210" y="190" fill="#94a3b8" font-size="11">even degree (like x²)</text>
+      </svg>
+      <figcaption>Left: cubic-style ends. Right: parabola-style ends (both up when leading coefficient is positive).</figcaption>
+    </figure>
+
+    <h2>Zeros: where the graph meets the x-axis</h2>
+    <p>A zero is an input that makes the output zero—an x-intercept. Factoring often reveals them: <span class="mono">(x−2)(x+1)=0</span> gives x = 2 and x = −1. Multiplicity (how many times a factor repeats) affects whether the graph <em>crosses</em> or <em>bounces</em> at that intercept.</p>
+
+    <h2>Rational functions and asymptotes</h2>
+    <p>Division by zero is not allowed. If the denominator is zero at x = a (and the numerator is not also zero there in a canceling way), the graph typically has a <strong>vertical asymptote</strong>—a vertical line it never crosses, approaching ±∞ nearby.</p>
+    <p>As |x| grows, many rationals approach a horizontal line (a <strong>horizontal asymptote</strong>) when the degrees of numerator and denominator allow it.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Rational graph with vertical and horizontal asymptotes">
+        <line x1="30" y1="110" x2="300" y2="110" stroke="#475569"/>
+        <line x1="160" y1="200" x2="160" y2="20" stroke="#475569"/>
+        <line x1="200" y1="20" x2="200" y2="200" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <line x1="30" y1="70" x2="300" y2="70" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <path d="M 40 50 Q 120 55 185 30" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
+        <path d="M 215 190 Q 250 150 290 130" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
+        <text x="205" y="35" fill="#fbbf24" font-size="11">vertical asymptote</text>
+        <text x="210" y="65" fill="#a78bfa" font-size="11">horizontal asymptote</text>
+      </svg>
+      <figcaption>Dashed lines guide the eye; the curve approaches them but does not cross the vertical barrier.</figcaption>
+    </figure>
+
+    <div class="box warn">
+      <p style="margin:0"><strong>Common trap:</strong> Canceling a common factor can remove a hole or change a vertical asymptote into a removable discontinuity. Always check what was canceled before sketching.</p>
+    </div>
+
+    <div class="box">
+      <p style="margin:0 0 0.75rem"><strong>Practice</strong></p>
+      <p class="muted" style="margin:0 0 0.75rem">Standard → Polynomial &amp; Rational in the lab.</p>
+      <a class="cta" href="/login.html">Open Hyper-Scale Lab</a>
+    </div>
+    <h2>Related</h2>
+    <ul>
+      <li><a href="/guides/functions-and-transformations.html">Functions and transformations</a></li>
+      <li><a href="/guides/rates-and-limits.html">Rates and limits</a></li>
+    </ul>
+  </main>
+  <footer class="site-foot"><p><a href="/guides/">All guides</a> · <a href="/login.html">Practice</a></p></footer>
+</body>
+</html>

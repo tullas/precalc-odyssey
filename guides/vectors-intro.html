@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vectors Explained | Magnitude, Direction &amp; Components</title>
+  <meta name="description" content="Vectors in plain language: magnitude, direction, components, addition, and scaling—with diagrams for precalculus and physics-ready intuition." />
+  <link rel="canonical" href="https://precalc-odyssey.pages.dev/guides/vectors-intro.html" />
+  <link rel="stylesheet" href="/guides/css/guide.css" />
+</head>
+<body>
+  <div class="site-header"><div class="site-header-inner">
+    <a class="brand" href="/">Hyper-Scale Lab</a>
+    <nav><a href="/guides/">Guides</a><a href="/login.html">Log in</a><a class="cta-nav" href="/login.html">Practice</a></nav>
+  </div></div>
+  <header class="page-head">
+    <p class="crumbs"><a href="/guides/">← Guides</a></p>
+    <h1>Vectors: magnitude and direction</h1>
+    <p class="muted">Arrows that carry both “how much” and “which way.”</p>
+  </header>
+  <main>
+    <p>A <strong>vector</strong> is a quantity with size and direction—displacement, velocity, force. On paper we draw an arrow. In coordinates we write components ⟨x, y⟩: how far east and how far north from the tail to the tip.</p>
+
+    <h2>Components and magnitude</h2>
+    <p>The length (magnitude) of ⟨x, y⟩ is the straight-line distance:</p>
+    <p class="mono">|v| = √(x² + y²)</p>
+    <p>That is the Pythagorean theorem—the same 3-4-5 idea as a ladder against a wall.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Vector components">
+        <line x1="40" y1="180" x2="280" y2="180" stroke="#475569"/>
+        <line x1="40" y1="180" x2="40" y2="30" stroke="#475569"/>
+        <line x1="40" y1="180" x2="200" y2="80" stroke="#38bdf8" stroke-width="3"/>
+        <polygon points="200,80 188,88 196,96" fill="#38bdf8"/>
+        <line x1="40" y1="180" x2="200" y2="180" stroke="#a78bfa" stroke-width="2" stroke-dasharray="5 4"/>
+        <line x1="200" y1="180" x2="200" y2="80" stroke="#34d399" stroke-width="2" stroke-dasharray="5 4"/>
+        <text x="100" y="200" fill="#a78bfa" font-size="12">x component</text>
+        <text x="210" y="140" fill="#34d399" font-size="12">y component</text>
+        <text x="100" y="120" fill="#38bdf8" font-size="13">v</text>
+      </svg>
+      <figcaption>Arrow = vector. Dashed legs = components. Length = √(x²+y²).</figcaption>
+    </figure>
+
+    <h2>Adding vectors</h2>
+    <p>Add components separately: ⟨a, b⟩ + ⟨c, d⟩ = ⟨a+c, b+d⟩. Geometrically, place the tail of the second arrow at the tip of the first—the sum is the arrow from the start of the first to the end of the second (the parallelogram rule).</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Vector addition">
+        <line x1="40" y1="140" x2="140" y2="140" stroke="#38bdf8" stroke-width="2.5"/>
+        <polygon points="140,140 128,134 128,146" fill="#38bdf8"/>
+        <line x1="140" y1="140" x2="180" y2="60" stroke="#34d399" stroke-width="2.5"/>
+        <polygon points="180,60 168,68 176,76" fill="#34d399"/>
+        <line x1="40" y1="140" x2="180" y2="60" stroke="#fbbf24" stroke-width="2.5"/>
+        <polygon points="180,60 166,64 172,76" fill="#fbbf24"/>
+        <text x="70" y="160" fill="#38bdf8" font-size="12">u</text>
+        <text x="160" y="110" fill="#34d399" font-size="12">v</text>
+        <text x="90" y="90" fill="#fbbf24" font-size="12">u+v</text>
+      </svg>
+      <figcaption>Tip-to-tail addition: the yellow arrow is the resultant.</figcaption>
+    </figure>
+
+    <h2>Scaling</h2>
+    <p>Multiply by a number k: k⟨x, y⟩ = ⟨kx, ky⟩. If |k| &gt; 1 the arrow lengthens; if k is negative it reverses direction.</p>
+
+    <div class="box warn">
+      <p style="margin:0"><strong>Common trap:</strong> Magnitude is never negative. Direction can reverse when you scale by a negative number, but length is |k| times the original length.</p>
+    </div>
+
+    <div class="box">
+      <p style="margin:0 0 0.75rem"><strong>Practice</strong></p>
+      <p class="muted" style="margin:0 0 0.75rem">Honors → Vectors</p>
+      <a class="cta" href="/login.html">Open Hyper-Scale Lab</a>
+    </div>
+    <h2>Related</h2>
+    <ul>
+      <li><a href="/guides/polar-coordinates.html">Polar coordinates</a> — another way to store direction and distance</li>
+      <li><a href="/guides/trigonometry-basics.html">Trigonometry basics</a></li>
+    </ul>
+  </main>
+  <footer class="site-foot"><p><a href="/guides/">All guides</a> · <a href="/login.html">Practice</a></p></footer>
+</body>
+</html>
